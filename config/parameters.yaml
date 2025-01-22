@@ -1,0 +1,31 @@
+# Snakemake config file for long-read assembly, classification and antibiotic resistance screening
+
+### 1. Input/output parameters ###
+
+input_directory: "reads/Quadram/reads/"
+output_directory: "data/tmp/"
+
+samples:
+ - LG_0352_blank_d1_N40S
+ - MG22BF_0015_N40S
+ - MG22LB_0004_N40S
+ - MG22LB_0028_N40S
+ - MG22LB_0007_N40S
+ - MG22LB_0029_N40S
+ - MG22LB_0013_N40S
+ - MG22LB_0031_N40S
+ - MG22LB_0016_N40S
+ - MG22LG_0332_N40S
+ - MG22LB_0024_N40S
+
+### 2. Tool-specific parameters ###
+
+flye:
+  threads: 15
+
+kma:
+  threads: 16
+  database: "/mnt/data/db/KMA/ResFinder/ResFinder"
+
+centrifuger:
+  threads: 12

@@ -1,0 +1,8 @@
+name: centrifuger
+
+channels:
+ - bioconda
+ - conda-forge
+
+dependencies:
+ - centrifuger=1.0.6
