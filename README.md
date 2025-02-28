@@ -89,9 +89,10 @@ mv *.dmp ~/.taxonkit/
 ## Future ideas
 
  - change the order: 1) screen ARG, 2) mask, 3) assign taxonomy
+(Because taxonomic classification can be influenced by ARG!)
  - rename subdirectories in Snakefile to be more descriptive of contents;
 e.g., 'flye' --> 'assemblies'
- - add quality control tools: fastp?, metaQUAST, multiQC
+ - add quality control tools: fastp? (reads), metaQUAST (assemblies), multiQC (combine in one report)
  - add R? scripts to combine relevant output from different tools
  - include downstream processing scripts (RMarkdown) for statistical analyses
 and visualisation
