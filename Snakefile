@@ -29,24 +29,29 @@ import operator
 configfile: Path("config/parameters.yaml")
 
 
-INPUT_DIR = config["input_directory"]
-SAMPLES = config["samples"]
+# Read the input directory and automatically discover
+# input files with '.fastq.gz' extension.
+INPUT_DIR = Path(config["input_directory"])
+INPUT_FILES = list(INPUT_DIR.glob("*.fastq.gz"))
+SAMPLES = [file.stem.replace(".fastq", "") for file in INPUT_FILES]
+
+OUTPUT_DIR = config["output_directory"]
 
 ### Step 2: Specify output files ###
 
 
 rule all:
     input:
-        expand("assemblies/Quadram/{sample}/assembly.fasta", sample=SAMPLES),
+        expand(OUTPUT_DIR + "flye/{sample}/assembly.fasta", sample=SAMPLES),
         expand(
-            "resistance_genes/{sample}.hmm.{suffix}",
+            OUTPUT_DIR + "kma/{sample}.hmm.{suffix}",
             sample=SAMPLES,
             suffix=["aln", "frag.gz", "fsa", "res"],
         ),
         expand(
-            "classifications/Quadram/{sample}/centrifuger_masked{extension}",
+            OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked{extension}",
             sample=SAMPLES,
-            extension=[".tsv", "-quant.tsv", ".kreport.txt"]
+            extension=[".tsv", "-quant.tsv"],
         ),
 
 
@@ -55,11 +60,11 @@ rule all:
 
 rule metagenomic_assembly:
     input:
-        INPUT_DIR + "{sample}.fastq.gz",
+        INPUT_DIR / "{sample}.fastq.gz",
     output:
-        "assemblies/Quadram/{sample}/assembly.fasta",
+        OUTPUT_DIR + "flye/{sample}/assembly.fasta",
     params:
-        output_dir="assemblies/Quadram/{sample}",
+        output_dir=OUTPUT_DIR + "flye/{sample}",
         settings="--meta",
     conda:
         "envs/flye.yaml"
@@ -77,15 +82,15 @@ flye {params.settings} --threads {threads} --nano-hq {input}\
 
 rule screen_antibiotic_resistance_genes:
     input:
-        "assemblies/Quadram/{sample}/assembly.fasta",
+        OUTPUT_DIR + "flye/{sample}/assembly.fasta",
     output:
-        aln="resistance_genes/{sample}.hmm.aln",
-        frag="resistance_genes/{sample}.hmm.frag.gz",
-        fsa="resistance_genes/{sample}.hmm.fsa",
-        res="resistance_genes/{sample}.hmm.res",
+        aln=OUTPUT_DIR + "kma/{sample}.hmm.aln",
+        frag=OUTPUT_DIR + "kma/{sample}.hmm.frag.gz",
+        fsa=OUTPUT_DIR + "kma/{sample}.hmm.fsa",
+        res=OUTPUT_DIR + "kma/{sample}.hmm.res",
     params:
         db=config["kma"]["database"],
-        prefix="resistance_genes/{sample}.hmm",
+        prefix=OUTPUT_DIR + "kma/{sample}.hmm",
     conda:
         "envs/kma.yaml"
     threads: config["kma"]["threads"]
@@ -101,11 +106,11 @@ kma -t {threads} -bcNano -t_db {params.db} -i {input} -o {params.prefix} -ont -h
 
 rule mask_resistance_gene_positions:
     input:
-        frag="resistance_genes/{sample}.hmm.frag.gz",
-        assembly="assemblies/Quadram/{sample}/assembly.fasta",
+        frag=OUTPUT_DIR + "kma/{sample}.hmm.frag.gz",
+        assembly=OUTPUT_DIR + "flye/{sample}/assembly.fasta",
     output:
-        gene_locations="resistance_genes/{sample}.locations.txt",
-        masked_assembly="assemblies/Quadram/{sample}/assembly_ARG_masked.fasta",
+        gene_locations=OUTPUT_DIR + "kma/{sample}.locations.txt",
+        masked_assembly=OUTPUT_DIR + "flye/{sample}/assembly_ARG_masked.fasta",
     conda:
         "envs/bedtools.yaml"
     threads: 1
@@ -124,12 +129,11 @@ maskFastaFromBed -fi {input.assembly} -bed {output.gene_locations} -fo {output.m
 
 rule taxonomic_classification:
     input:
-        fasta="assemblies/Quadram/{sample}/assembly_ARG_masked.fasta",
+        fasta=OUTPUT_DIR + "flye/{sample}/assembly_ARG_masked.fasta",
         db="/mnt/data/db/centrifuger/cfr_hpv+gbsarscov2.1.cfr",
     output:
-        tsv="classifications/Quadram/{sample}/centrifuger_masked.tsv",
-        quant="classifications/Quadram/{sample}/centrifuger_masked-quant.tsv",
-        report="classifications/Quadram/{sample}/centrifuger_masked.kreport.txt",
+        tsv=OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked.tsv",
+        quant=OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked-quant.tsv",
     params:
         db="/mnt/data/db/centrifuger/cfr_hpv+gbsarscov2",
     conda:
@@ -144,5 +148,4 @@ rule taxonomic_classification:
 centrifuger -u {input.fasta} -t {threads} -x {params.db} > {output.tsv}
 
 centrifuger-quant -x {params.db} -c {output.tsv} > {output.quant}
-centrifuger-kreport -x {params.db} {output.tsv} > {output.report}
         """
