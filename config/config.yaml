@@ -1,5 +1,5 @@
-jobs: 20
-#use-conda: true
+jobs: 12
+use-conda: true
 jobname: Smk-{name}.{jobid}
 printshellcmds: true
 latency-wait: 20

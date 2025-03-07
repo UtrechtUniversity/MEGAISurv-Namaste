@@ -42,16 +42,24 @@ OUTPUT_DIR = config["output_directory"]
 
 rule all:
     input:
+        # Metagenomic assemblies (by Flye)
         expand(OUTPUT_DIR + "flye/{sample}/assembly.fasta", sample=SAMPLES),
         expand(
             OUTPUT_DIR + "kma/{sample}.hmm.{suffix}",
             sample=SAMPLES,
             suffix=["aln", "frag.gz", "fsa", "res"],
         ),
+        # Taxonomic classifications (by Centrifuger)
         expand(
             OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked{extension}",
             sample=SAMPLES,
             extension=[".tsv", "-quant.tsv"],
+        ),
+        # Microbiota profiles (TaxonKit + custom R script)
+        expand(
+            OUTPUT_DIR + "microbiota_profiles/{sample}-per_{unit}.tsv",
+            sample=SAMPLES,
+            unit=["contig", "species"],
         ),
 
 
@@ -62,7 +70,8 @@ rule metagenomic_assembly:
     input:
         INPUT_DIR / "{sample}.fastq.gz",
     output:
-        OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+        assembly=OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+        info=OUTPUT_DIR + "flye/{sample}/assembly_info.txt",
     params:
         output_dir=OUTPUT_DIR + "flye/{sample}",
         settings="--meta",
@@ -149,3 +158,41 @@ centrifuger -u {input.fasta} -t {threads} -x {params.db} > {output.tsv}
 
 centrifuger-quant -x {params.db} -c {output.tsv} > {output.quant}
         """
+
+
+rule lookup_taxids:
+    input:
+        OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked.tsv",
+    output:
+        OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked+taxa.tsv",
+    threads: 1
+    conda:
+        "envs/taxonkit.yaml"
+    log:
+        "log/lookup_taxids/{sample}.txt",
+    benchmark:
+        "log/benchmark/lookup_taxids/{sample}.txt"
+    shell:
+        """
+taxonkit reformat {input} -I 3 -f '{{s}}\t{{k}};{{p}};{{c}};{{o}};{{f}};{{g}};{{s}}' -F > {output}
+        """
+
+
+rule generate_microbiota_profiles:
+    input:
+        assembly_info=OUTPUT_DIR + "flye/{sample}/assembly_info.txt",
+        classifications=OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked+taxa.tsv",
+    output:
+        per_contig=OUTPUT_DIR + "microbiota_profiles/{sample}-per_contig.tsv",
+        per_species=OUTPUT_DIR + "microbiota_profiles/{sample}-per_species.tsv",
+    params:
+        sample="{sample}",
+    conda:
+        "envs/R_tidyverse.yaml"
+    threads: 1
+    log:
+        "log/generate_profiles/{sample}.txt",
+    benchmark:
+        "log/benchmark/generate_profiles/{sample}.txt"
+    script:
+        "scripts/generate_profiles.R"
