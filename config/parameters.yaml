@@ -22,3 +22,7 @@ kma:
 
 centrifuger:
   threads: 12
+
+genomad:
+  threads: 12
+  database: "data/genomad_db/"

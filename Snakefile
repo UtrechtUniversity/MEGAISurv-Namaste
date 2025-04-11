@@ -66,6 +66,12 @@ rule all:
             sample=SAMPLES,
             unit=["contig", "species"],
         ),
+        # Chromosome/plasmid/virus predictions (geNomad)
+        expand(
+            OUTPUT_DIR
+        + "genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
+            sample=SAMPLES,
+        ),
 
 
 ### Step 3: Define processing steps that generate the output ###
@@ -242,3 +248,30 @@ rule generate_microbiota_profiles:
         "log/benchmark/generate_profiles/{sample}.txt"
     script:
         "scripts/generate_profiles.R"
+
+
+rule genomad:
+    input:
+        fasta=OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+        db=config["genomad"]["database"],
+    output:
+        aggregated_classification=OUTPUT_DIR
+        + "genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
+        plasmid_summary=OUTPUT_DIR
+        + "genomad/{sample}/assembly_summary/assembly_plasmid_summary.tsv",
+        virus_summary=OUTPUT_DIR
+        + "genomad/{sample}/assembly_summary/assembly_virus_summary.tsv",
+    params:
+        output_dir=OUTPUT_DIR + "genomad/{sample}/",
+    conda:
+        "envs/genomad.yaml"
+    threads: config["genomad"]["threads"]
+    log:
+        "log/genomad/{sample}.txt",
+    benchmark:
+        "log/benchmark/genomad/{sample}.txt"
+    shell:
+        """
+genomad end-to-end -t {threads} --cleanup --enable-score-calibration\
+ {input.fasta} {params.output_dir} {input.db} > {log} 2>&1
+        """
