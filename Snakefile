@@ -96,7 +96,7 @@ rule metagenomic_assembly:
     shell:
         """
 flye {params.settings} --threads {threads} --nano-hq {input}\
- --out-dir {params.output_dir}
+ --out-dir {params.output_dir} > {log} 2>&1
         """
 
 
@@ -118,7 +118,7 @@ rule assess_assembly:
         "log/benchmark/assess_assembly/{sample}.txt"
     shell:
         """
-metaquast.py -o {params.output_dir} -t {threads} {input}
+metaquast.py -o {params.output_dir} -t {threads} {input} > {log} 2>&1
         """
 
 
@@ -161,7 +161,8 @@ rule screen_antibiotic_resistance_genes:
         "log/benchmark/kma/{sample}.txt"
     shell:
         """
-kma -t {threads} -bcNano -t_db {params.db} -i {input} -o {params.prefix} -ont -hmm
+kma -t {threads} -bcNano -t_db {params.db} -i {input} -o {params.prefix}\
+ -ont -hmm > {log} 2>&1
         """
 
 
@@ -184,7 +185,8 @@ rule mask_resistance_gene_positions:
 # Cut contig ID, start and stop positions from file
 zcat {input.frag} | cut -f 7-9 | sort | uniq > {output.gene_locations}
 
-maskFastaFromBed -fi {input.assembly} -bed {output.gene_locations} -fo {output.masked_assembly}
+maskFastaFromBed -fi {input.assembly} -bed {output.gene_locations}\
+ -fo {output.masked_assembly} > {log} 2>&1
         """
 
 
@@ -206,9 +208,10 @@ rule taxonomic_classification:
         "log/benchmark/centrifuger/{sample}.txt"
     shell:
         """
-centrifuger -u {input.fasta} -t {threads} -x {params.db} > {output.tsv}
+centrifuger -u {input.fasta} -t {threads} -x {params.db} > {output.tsv}\
+ 2> {log}
 
-centrifuger-quant -x {params.db} -c {output.tsv} > {output.quant}
+centrifuger-quant -x {params.db} -c {output.tsv} > {output.quant} 2> {log}
         """
 
 
@@ -226,7 +229,9 @@ rule lookup_taxids:
         "log/benchmark/lookup_taxids/{sample}.txt"
     shell:
         """
-taxonkit reformat {input} -I 3 -f '{{s}}\t{{k}};{{p}};{{c}};{{o}};{{f}};{{g}};{{s}}' -F > {output}
+taxonkit reformat {input} -I 3\
+ -f '{{s}}\t{{k}};{{p}};{{c}};{{o}};{{f}};{{g}};{{s}}' -F\
+ > {output} 2> {log}
         """
 
 
