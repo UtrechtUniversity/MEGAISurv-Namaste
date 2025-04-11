@@ -44,6 +44,11 @@ rule all:
     input:
         # Metagenomic assemblies (by Flye)
         expand(OUTPUT_DIR + "flye/{sample}/assembly.fasta", sample=SAMPLES),
+        # Assembly assessment reports (by metaQUAST)
+        expand(OUTPUT_DIR + "quast/{sample}/metaquast.log", sample=SAMPLES),
+        # Simple assembly statistics (by seqkit)
+        OUTPUT_DIR + "flye/assembly_statistics-seqkit.tsv",
+        # Antibiotic resistance gene screening (by KMA)
         expand(
             OUTPUT_DIR + "kma/{sample}.hmm.{suffix}",
             sample=SAMPLES,
@@ -86,6 +91,47 @@ rule metagenomic_assembly:
         """
 flye {params.settings} --threads {threads} --nano-hq {input}\
  --out-dir {params.output_dir}
+        """
+
+
+rule assess_assembly:
+    input:
+        OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+    output:
+        report=OUTPUT_DIR + "quast/{sample}/report.html",
+        icarus=OUTPUT_DIR + "quast/{sample}/icarus.html",
+        log=OUTPUT_DIR + "quast/{sample}/metaquast.log",
+    params:
+        output_dir=OUTPUT_DIR + "quast/{sample}"
+    conda:
+        "envs/quast.yaml"
+    threads: config["metaquast"]["threads"]
+    log:
+        "log/assess_assembly/{sample}.txt"
+    benchmark:
+        "log/benchmark/assess_assembly/{sample}.txt"
+    shell:
+        """
+metaquast.py -o {params.output_dir} -t {threads} {input}
+        """
+
+
+rule simple_assembly_statistics:
+    input:
+        expand(OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+               sample = SAMPLES),
+    output:
+        OUTPUT_DIR + "flye/assembly_statistics-seqkit.tsv",
+    conda:
+        "envs/seqkit.yaml"
+    threads: config["simple_stats"]["threads"]
+    log:
+        "log/simple_assembly_statistics.txt"
+    benchmark:
+        "log/benchmark/simple_assembly_statistics.txt"
+    shell:
+        """
+seqkit stats -Ta -j {threads} > {output} 2> {log}
         """
 
 

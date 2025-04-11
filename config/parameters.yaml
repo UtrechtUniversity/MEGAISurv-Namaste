@@ -10,6 +10,12 @@ output_directory: "data/tmp/"
 flye:
   threads: 12
 
+metaquast:
+  threads: 3
+
+simple_stats:
+  threads: 4
+
 kma:
   threads: 12
   database: "/mnt/data/db/KMA/ResFinder/ResFinder"
