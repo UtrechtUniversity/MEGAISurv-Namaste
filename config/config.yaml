@@ -2,6 +2,6 @@ jobs: 12
 use-conda: true
 jobname: Smk-{name}.{jobid}
 printshellcmds: true
-latency-wait: 20
+latency-wait: 5
 rerun-incomplete: true
 keep-going: true
