@@ -7,6 +7,9 @@ output_directory: "data/tmp/"
 
 ### 2. Tool-specific parameters ###
 
+fastplong:
+  threads: 3
+
 flye:
   threads: 12
 

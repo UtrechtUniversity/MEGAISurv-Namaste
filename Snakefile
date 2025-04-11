@@ -5,10 +5,10 @@ Department: Clinical Infectiology (KLIF), Infectious Diseases & Immunology,
   Biomolecular Health Sciences, Faculty of Veterinary Medicine
 Date: 2025-01-17
 
-Workflow for assembling MinION long-read metagenomes,
-taxonomic classification and identification of antibiotic
-resistance genes, based on previous work by Aldert Zomer
-(from the same department).
+Workflow for assembling MinION long-read metagenomes, taxonomic classification
+and identification of antibiotic resistance genes, based on previous work by
+Aldert Zomer (from the same department). Now extended with raw read quality-
+control and filtering.
 
 Input: (Gzipped) Fastq files of relevant metagenomic samples
 Output: (various)
@@ -77,22 +77,44 @@ rule all:
 ### Step 3: Define processing steps that generate the output ###
 
 
-rule metagenomic_assembly:
+rule read_quality_control:
     input:
         INPUT_DIR / "{sample}.fastq.gz",
     output:
-        assembly=OUTPUT_DIR + "flye/{sample}/assembly.fasta",
-        info=OUTPUT_DIR + "flye/{sample}/assembly_info.txt",
+        filtered=OUTPUT_DIR + "filtered/{sample}.fastq.gz",
+        json=OUTPUT_DIR + "read_qc/{sample}.json",
+        html=OUTPUT_DIR + "read_qc/{sample}.html",
+    conda:
+        "envs/fastplong.yaml"
+    threads: config["fastplong"]["threads"]
+    log:
+        "log/read_qc/{sample}.txt"
+    benchmark:
+        "log/benchmark/read_qc/{sample}.txt"
+    shell:
+        """
+fastplong --in {input} --out {output.filtered}\
+ --json {output.json} --html {output.html}\
+ --thread {threads} > {log} 2>&1
+        """
+
+
+rule metagenomic_assembly:
+    input:
+        OUTPUT_DIR + "filtered/{sample}.fastq.gz",
+    output:
+        assembly=OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
+        info=OUTPUT_DIR + "assembly/{sample}/assembly_info.txt",
     params:
-        output_dir=OUTPUT_DIR + "flye/{sample}",
+        output_dir=OUTPUT_DIR + "assembly/{sample}",
         settings="--meta",
     conda:
         "envs/flye.yaml"
     threads: config["flye"]["threads"]
     log:
-        "log/flye/{sample}.txt",
+        "log/assembly/{sample}.txt",
     benchmark:
-        "log/benchmark/flye/{sample}.txt"
+        "log/benchmark/assembly/{sample}.txt"
     shell:
         """
 flye {params.settings} --threads {threads} --nano-hq {input}\
