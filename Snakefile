@@ -69,7 +69,7 @@ rule all:
         # Chromosome/plasmid/virus predictions (geNomad)
         expand(
             OUTPUT_DIR
-        + "genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
+            + "genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
             sample=SAMPLES,
         ),
 
@@ -88,7 +88,7 @@ rule read_quality_control:
         "envs/fastplong.yaml"
     threads: config["fastplong"]["threads"]
     log:
-        "log/read_qc/{sample}.txt"
+        "log/read_qc/{sample}.txt",
     benchmark:
         "log/benchmark/read_qc/{sample}.txt"
     shell:
@@ -124,18 +124,18 @@ flye {params.settings} --threads {threads} --nano-hq {input}\
 
 rule assess_assembly:
     input:
-        OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+        OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
     output:
         report=OUTPUT_DIR + "quast/{sample}/report.html",
         icarus=OUTPUT_DIR + "quast/{sample}/icarus.html",
         log=OUTPUT_DIR + "quast/{sample}/metaquast.log",
     params:
-        output_dir=OUTPUT_DIR + "quast/{sample}"
+        output_dir=OUTPUT_DIR + "quast/{sample}",
     conda:
         "envs/quast.yaml"
     threads: config["metaquast"]["threads"]
     log:
-        "log/assess_assembly/{sample}.txt"
+        "log/assess_assembly/{sample}.txt",
     benchmark:
         "log/benchmark/assess_assembly/{sample}.txt"
     shell:
@@ -146,15 +146,14 @@ metaquast.py -o {params.output_dir} -t {threads} {input} > {log} 2>&1
 
 rule simple_assembly_statistics:
     input:
-        expand(OUTPUT_DIR + "flye/{sample}/assembly.fasta",
-               sample = SAMPLES),
+        expand(OUTPUT_DIR + "assembly/{sample}/assembly.fasta", sample=SAMPLES),
     output:
-        OUTPUT_DIR + "flye/assembly_statistics-seqkit.tsv",
+        OUTPUT_DIR + "assembly/assembly_statistics-seqkit.tsv",
     conda:
         "envs/seqkit.yaml"
     threads: config["simple_stats"]["threads"]
     log:
-        "log/simple_assembly_statistics.txt"
+        "log/simple_assembly_statistics.txt",
     benchmark:
         "log/benchmark/simple_assembly_statistics.txt"
     shell:
@@ -165,7 +164,7 @@ seqkit stats -Ta -j {threads} > {output} 2> {log}
 
 rule screen_antibiotic_resistance_genes:
     input:
-        OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+        OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
     output:
         aln=OUTPUT_DIR + "kma/{sample}.hmm.aln",
         frag=OUTPUT_DIR + "kma/{sample}.hmm.frag.gz",
@@ -191,10 +190,10 @@ kma -t {threads} -bcNano -t_db {params.db} -i {input} -o {params.prefix}\
 rule mask_resistance_gene_positions:
     input:
         frag=OUTPUT_DIR + "kma/{sample}.hmm.frag.gz",
-        assembly=OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+        assembly=OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
     output:
         gene_locations=OUTPUT_DIR + "kma/{sample}.locations.txt",
-        masked_assembly=OUTPUT_DIR + "flye/{sample}/assembly_ARG_masked.fasta",
+        masked_assembly=OUTPUT_DIR + "assembly/{sample}/assembly_ARG_masked.fasta",
     conda:
         "envs/bedtools.yaml"
     threads: 1
@@ -214,7 +213,7 @@ maskFastaFromBed -fi {input.assembly} -bed {output.gene_locations}\
 
 rule taxonomic_classification:
     input:
-        fasta=OUTPUT_DIR + "flye/{sample}/assembly_ARG_masked.fasta",
+        fasta=OUTPUT_DIR + "assembly/{sample}/assembly_ARG_masked.fasta",
         db="/mnt/data/db/centrifuger/cfr_hpv+gbsarscov2.1.cfr",
     output:
         tsv=OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked.tsv",
@@ -259,7 +258,7 @@ taxonkit reformat {input} -I 3\
 
 rule generate_microbiota_profiles:
     input:
-        assembly_info=OUTPUT_DIR + "flye/{sample}/assembly_info.txt",
+        assembly_info=OUTPUT_DIR + "assembly/{sample}/assembly_info.txt",
         classifications=OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked+taxa.tsv",
     output:
         per_contig=OUTPUT_DIR + "microbiota_profiles/{sample}-per_contig.tsv",
@@ -279,7 +278,7 @@ rule generate_microbiota_profiles:
 
 rule genomad:
     input:
-        fasta=OUTPUT_DIR + "flye/{sample}/assembly.fasta",
+        fasta=OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
         db=config["genomad"]["database"],
     output:
         aggregated_classification=OUTPUT_DIR
