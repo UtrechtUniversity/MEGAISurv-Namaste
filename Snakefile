@@ -43,11 +43,11 @@ OUTPUT_DIR = config["output_directory"]
 rule all:
     input:
         # Metagenomic assemblies (by Flye)
-        expand(OUTPUT_DIR + "flye/{sample}/assembly.fasta", sample=SAMPLES),
+        expand(OUTPUT_DIR + "assembly/{sample}/assembly.fasta", sample=SAMPLES),
         # Assembly assessment reports (by metaQUAST)
         expand(OUTPUT_DIR + "quast/{sample}/metaquast.log", sample=SAMPLES),
         # Simple assembly statistics (by seqkit)
-        OUTPUT_DIR + "flye/assembly_statistics-seqkit.tsv",
+        OUTPUT_DIR + "assembly/assembly_statistics-seqkit.tsv",
         # Antibiotic resistance gene screening (by KMA)
         expand(
             OUTPUT_DIR + "kma/{sample}.hmm.{suffix}",
