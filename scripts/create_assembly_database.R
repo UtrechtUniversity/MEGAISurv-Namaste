@@ -231,3 +231,12 @@ write_csv(
   x = db_with_mge,
   file = here("data", "processed", "assembly_database.csv")
 )
+
+duplicates <- read_delim(here("data", "samples_with_multiple_runs.tsv"))
+deduplicated_db <- db_with_mge %>%
+  filter(! sample %in% duplicates$run)
+
+write_csv(
+  x = deduplicated_db,
+  file = here("data", "processed", "assembly_database-deduplicated.csv")
+)
