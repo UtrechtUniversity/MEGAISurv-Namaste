@@ -85,9 +85,10 @@ find_alt_gene <- function(x) {
 
 ## 2. Assembly stats (length, depth and circularity)
 
-read_stats <- function(filename){
-  # Cut the sample name from the file path
-  sample_name <- str_split_1(string = filename, pattern = "/")[9]
+read_stats <- function(filename, name_position){
+  # Cut the sample name from the file path using the name's position in the
+  # absolute file path (counting from the end: 1 = last, 2 = second last, etc.)
+  sample_name <- str_split_1(string = filename, pattern = "/") %>% tail(name_position) %>% head(1)
   
   df <- read_delim(
     file = filename,
@@ -100,9 +101,14 @@ read_stats <- function(filename){
 
 assembly_stats <- do.call(
   rbind,
-  lapply(X = assembly_stats_files, FUN = read_stats)) %>%
+  lapply(X = assembly_stats_files, FUN = read_stats, name_position = 2)) %>%
   select(sample, '#seq_name', length, 'cov.', 'circ.')
 colnames(assembly_stats) <- c("sample", "contig", "contig_length", "contig_depth", "circular")
+write_delim(
+  x = assembly_stats,
+  file = here("data", "processed", "assembly_stats-concatenated.tsv"),
+  delim = "\t"
+)
 
 assembly_stats_summary <- assembly_stats %>%
   group_by(sample) %>%
@@ -127,7 +133,7 @@ rm(arg_stats, assembly_stats, assembly_stats_summary)
 
 read_classification_files <- function(filename) {
   # Cut the sample name from the file path
-  sample_name <- str_split_1(string = filename, pattern = "/")[9]
+  sample_name <- str_split_1(string = filename, pattern = "/") %>% tail(2) %>% head(1)
 
   df <- read_delim(
     file = filename,
@@ -147,6 +153,11 @@ classifications <- do.call(
   rbind,
   lapply(X = classification_files, FUN = read_classification_files)
 )
+write_delim(
+  x = classifications,
+  file = here("data", "processed", "classifications-concatenated.tsv"),
+  delim = "\t"
+)
 
 db_with_classifications <- left_join(
   x = arg_and_assembly,
@@ -161,25 +172,35 @@ rm(classifications, arg_and_assembly)
 
 genomad_scores <- do.call(
   rbind,
-  lapply(X = genomad_scores_files, FUN = read_stats)
+  lapply(X = genomad_scores_files, FUN = read_stats, name_position = 3)
 )
 
 plasmid_classifications <- do.call(
   rbind,
-  lapply(X = genomad_plasmid_files, FUN = read_stats)
+  lapply(X = genomad_plasmid_files, FUN = read_stats, name_position = 3)
 ) %>%
   rename("contig" = "seq_name",
          "plasmid_topology" = "topology",
          "plasmid_genes" = "n_genes")
+write_delim(
+  x = plasmid_classifications,
+  file = here("data", "processed", "plasmid_predictions-concatenated.tsv"),
+  delim = "\t"
+)
 
 virus_classifications <- do.call(
   rbind,
-  lapply(X = genomad_virus_files, FUN = read_stats)
+  lapply(X = genomad_virus_files, FUN = read_stats, name_position = 3)
 ) %>%
   rename("contig" = "seq_name",
          "virus_topology" = "topology",
          "virus_genes" = "n_genes",
          "virus_taxonomy" = "taxonomy")
+write_delim(
+  x = virus_classifications,
+  file = here("data", "processed", "virus_predictions.tsv"),
+  delim = "\t"
+)
 
 db_with_mge <- left_join(
   x = db_with_classifications,
