@@ -13,6 +13,8 @@ genomad_scores_files <- Sys.glob(paths = here("data", "tmp", "genomad", "*", "as
 genomad_plasmid_files <- Sys.glob(paths = here("data", "tmp", "genomad", "*", "assembly_summary", "assembly_plasmid_summary.tsv"))
 genomad_virus_files <- Sys.glob(paths = here("data", "tmp", "genomad", "*", "assembly_summary", "assembly_virus_summary.tsv"))
 
+duplicates <- read_delim(here("data", "samples_with_multiple_runs.tsv"))
+
 
 ## 1. Resistance gene information (gene name, contig position, hit length?)
 
@@ -34,12 +36,15 @@ read_arg_stats <- function(filename){
   return(df)
 }
 
+# Read antibiotic resistance gene information from KMA output files
 arg_stats <- do.call(
   rbind,
   lapply(X = arg_hits_files, FUN = read_arg_stats)
 ) %>%
   select(sample, X7, X6, X8, X9, X4, X5)
 
+# Make the dataframe nicer by adding column names, and add columns 'hit_length'
+#  and 'arg_short'
 colnames(arg_stats) <- c("sample", "contig", "arg", "start_position", "end_position", "hit_start", "hit_end")
 arg_stats <- arg_stats %>%
   mutate(hit_length = hit_end - hit_start + 1,
@@ -48,40 +53,28 @@ arg_stats <- arg_stats %>%
                           x = arg)) %>%
   select(-c("hit_start", "hit_end"))
 
-## Look up antibiotic classes from ResFinder's `notes.txt` file
+# Deduplicate samples by removing runs that derive from the same biosample
+deduplicated_args <- arg_stats %>%
+  filter(! sample %in% duplicates$run)
+# (Remember that the the dataframe contained both entries for runs and the
+#  samples: by removing runs we keep only the samples, which are the two
+#  corresponding runs concatenated.)
+
+## Look up antibiotic classes from ResFinder's `phenotypes.txt` file
 arg_annotation <- read_delim(
-  file = "https://bitbucket.org/genomicepidemiology/resfinder_db/raw/cf9bbc7b13f04de987f7dd4a3a1440c7af0b1ce0/notes.txt",
-  skip = 1,
-  col_names = FALSE,
+  file = "https://bitbucket.org/genomicepidemiology/resfinder_db/raw/cf9bbc7b13f04de987f7dd4a3a1440c7af0b1ce0/phenotypes.txt",
   show_col_types = FALSE,
-  delim = ":"
-)
-colnames(arg_annotation) <- c("arg", "antibiotic_class", "alternative_name")
+  delim = "\t"
+) %>%
+  rename("Resistance_mechanism" = "Mechanism of resistance")
 
-arg_stats <- left_join(
-  x = arg_stats,
+deduplicated_args <- left_join(
+  x = deduplicated_args,
   y = arg_annotation %>%
-    select(arg, antibiotic_class),
-  by = c("arg_short" = "arg")
+    select(`Gene_accession no.`, Class, Phenotype, Resistance_mechanism),
+  by = c("arg" = "Gene_accession no.")
 )
 
-## Look up special cases where alternative gene names were used
-alt_genes <- arg_stats %>%
-  filter(is.na(antibiotic_class)) %>%
-  select(arg_short) %>%
-  distinct()
-
-find_alt_gene <- function(x) {
-  return(
-    arg_annotation %>%
-      filter(
-        grepl(pattern = x,
-              x = alternative_name,
-              fixed = TRUE)
-      )
-  )
-}
-## Nevermind... most of these cannot be found in this table
 
 ## 2. Assembly stats (length, depth and circularity)
 
@@ -99,6 +92,7 @@ read_stats <- function(filename, name_position){
   return(df)
 }
 
+# Read Flye assembly info output files and concatenate in one dataframe
 assembly_stats <- do.call(
   rbind,
   lapply(X = assembly_stats_files, FUN = read_stats, name_position = 2)) %>%
@@ -117,7 +111,7 @@ assembly_stats_summary <- assembly_stats %>%
 
 
 arg_and_assembly <- left_join(
-  x = arg_stats,
+  x = deduplicated_args,
   y = assembly_stats_summary,
   by = "sample"
 ) %>%
@@ -127,7 +121,8 @@ arg_and_assembly <- left_join(
     by = c("sample", "contig")
   )
 
-rm(arg_stats, assembly_stats, assembly_stats_summary)
+# Remove dataframes that are no longer necessary to save memory
+rm(arg_stats, deduplicated_args, assembly_stats, assembly_stats_summary)
 
 ## 3. Taxonomic classifications
 
@@ -230,13 +225,4 @@ db_with_mge <- left_join(
 write_csv(
   x = db_with_mge,
   file = here("data", "processed", "assembly_database.csv")
-)
-
-duplicates <- read_delim(here("data", "samples_with_multiple_runs.tsv"))
-deduplicated_db <- db_with_mge %>%
-  filter(! sample %in% duplicates$run)
-
-write_csv(
-  x = deduplicated_db,
-  file = here("data", "processed", "assembly_database-deduplicated.csv")
 )
