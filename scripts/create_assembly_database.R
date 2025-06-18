@@ -18,21 +18,21 @@ duplicates <- read_delim(here("data", "samples_with_multiple_runs.tsv"))
 
 ## 1. Resistance gene information (gene name, contig position, hit length?)
 
-read_arg_stats <- function(filename){
+read_arg_stats <- function(filename) {
   # Cut the sample name from the file path
   sample_name <- basename(filename) %>% gsub(
     pattern = ".hmm.frag.gz",
     replacement = "",
     x = .
   )
-  
+
   df <- read_delim(
     file = filename,
     col_names = FALSE,
     show_col_types = FALSE
   ) %>%
     mutate(sample = sample_name)
-  
+
   return(df)
 }
 
@@ -47,15 +47,19 @@ arg_stats <- do.call(
 #  and 'arg_short'
 colnames(arg_stats) <- c("sample", "contig", "arg", "start_position", "end_position", "hit_start", "hit_end")
 arg_stats <- arg_stats %>%
-  mutate(hit_length = hit_end - hit_start + 1,
-         arg_short = gsub(pattern = "_.*",
-                          replacement = "",
-                          x = arg)) %>%
+  mutate(
+    hit_length = hit_end - hit_start + 1,
+    arg_short = gsub(
+      pattern = "_.*",
+      replacement = "",
+      x = arg
+    )
+  ) %>%
   select(-c("hit_start", "hit_end"))
 
 # Deduplicate samples by removing runs that derive from the same biosample
 deduplicated_args <- arg_stats %>%
-  filter(! sample %in% duplicates$run)
+  filter(!sample %in% duplicates$run)
 # (Remember that the the dataframe contained both entries for runs and the
 #  samples: by removing runs we keep only the samples, which are the two
 #  corresponding runs concatenated.)
@@ -75,18 +79,87 @@ deduplicated_args <- left_join(
   by = c("arg" = "Gene_accession no.")
 )
 
+# Further annotate antibiotics resistances using medically important classes
+# assigned by the WHO:
+# https://cdn.who.int/media/docs/default-source/gcp/who-mia-list-2024-lv.pdf
+# (In particular tables 1-3)
+hpcia_antibiotics <- c("cefcapene", "cefdinir", "cefditoren", "cefepime", "cefetamet", "cefixime", "cefmenoxime", "cefodizime", "cefoperazone", "cefoselis", "cefotaxime", "cefovecin", "cefozopran", "cefpiramide", "cefpirome", "cefpodoxime", "cefquinome", "cefsulodin", "ceftazidime", "cefteram pivoxil", "ceftibuten", "ceftiofur", "ceftizoxime", "ceftolozane", "ceftriaxone", "latamoxef", "besifloxacin", "cinoxacin", "ciprofloxacin", "danofloxacin", "delafloxacin", "difloxacin", "enoxacin", "enrofloxacin", "fleroxacin", "flumequine", "garenoxacin", "gatifloxacin", "gemifloxacin", "grepafloxacin", "ibafloxacin", "lascufloxacin", "levofloxacin", "levonadifloxacin", "lomefloxacin", "marbofloxacin", "moxifloxacin", "nadifloxacin", "nalidixic acid", "nemonoxacin", "norfloxacin", "ofloxacin", "orbifloxacin", "oxolinic acid", "ozenoxacin pazufloxacin", "pefloxacin", "pipemidic acid", "piromidic acid", "pradofloxacin", "prulifloxacin", "rosoxacin", "rufloxacin", "sitafloxacin", "sparfloxacin", "temafloxacin", "trovafloxacin", "colistin", "polymyxin B", "fosfomycin")
+
+cia_antibiotics <- c("amikacin", "apramycin", "arbekacin", "astromicin", "bekanamycin", "dibekacin", "dihydrostreptomycin", "framycetin", "gentamicin", "isepamicin", "kanamycin", "micronomicin neomycin", "netilmicin", "paromomycin", "ribostamycin", "sisomicin", "streptoduocin", "streptomycin", "tobramycin", "rifabutin", "rifampicin", "rifamycin", "rifapentine", "rifaximin", "azithromycin", "cethromycin", "clarithromycin", "dirithromycin", "erythromycin", "flurithromycin", "gamithromycin", "josamycin", "kitasamycin", "midecamycin", "miocamycin", "oleandomycin", "rokitamycin", "roxithromycin", "spiramycin", "tildipirosin", "tilmicosin", "troleandomycin", "tulathromycin", "tylosin", "tylvalosin")
+
+hia_antibiotics <- c("chloramphenicol", "florfenicol", "thiamphenicol", "cefacetrile", "cefaclor", "cefadroxil", "cefalexin", "cefalonium", "cefaloridine", "cefalotin", "cefamandole", "cefapirin", "cefatrizine", "cefazedone", "cefazolin", "cefbuperazone", "cefmetazole", "cefminox", "cefonicid", "ceforanide", "cefotetan", "cefotiam", "cefoxitin", "cefprozil", "cefradine", "cefroxadine", "ceftezole", "cefuroxime", "flomoxef", "loracarbef", "clindamycin", "lincomycin", "pirlimycin", "metronidazole", "ornidazole", "ronidazole", "secnidazole", "tinidazole", "mecillinam", "pivmecillinam", "amoxicillin", "ampicillin", "azidocillin", "bacampicillin", "epicillin", "hetacillin", "metampicillin", "pivampicillin", "sultamicillin", "talampicillin", "temocillin", "amoxicillin-clavulanic acid", "ampicillin-sulbactam", "cloxacillin", "flucloxacillin", "meticillin", "methicillin", "nafcillin", "oxacillin", "benethamine-benzylpenicillin", "benzathine-benzylpenicillin", "penicillin G", "clometocillin", "penamecillin", "penethamate", "hydriodide", "pheneticillin", "phenoxymethylpenicillin", "penicillin V", "procaine benzylpenicillin", "propicillin", "pristinamycin", "quinupristin-", "dalfopristin", "virginiamycin", "brodimoprim", "formosulfathiazole", "iclaprim", "ormetoprim", "phthalylsulfathiazole", "pyrimethamine", "sulfachlorpyridazine", "sulfadiazine", "sulfadimethoxine", "sulfadimidine", "sulfafurazole (=", "sulfisoxazole)", "sulfaguanidin", "sulfaisodimidine", "sulfalene", "sulfamazone", "sulfamerazine", "sulfamethazine", "sulfamethizole", "sulfamethoxazole", "sulfamethoxypyridazine", "sulfametomidine", "sulfametoxydiazine", "sulfametrole", "sulfamoxole", "sulfanilamide", "sulfaperin", "sulfaphenazole", "sulfapyridine", "sulfaquinoxaline", "sulfathiazole", "sulfathiourea", "tetroxoprim", "trimethoprim", "fusidic acid", "chlortetracycline", "clomocycline", "demeclocycline", "doxycycline", "lymecycline", "metacycline", "minocycline", "oxytetracycline", "penimepicycline", "rolitetracycline", "sarecycline", "tetracycline")
+
+ia_antibiotics <- c("spectinomycin", "bacitracin", "enramycin", "enduramycin", "methenamine hippurate", "methenamine", "mandelate", "furaltadone", "furazidine", "furazolidone", "nifuroxazide", "nifurtoinol", "nitrofural", "nitrofurantoin", "lefamulin retapamulin", "tiamulin", "valnemulin")
+
+not_important <- c("novobiocin", "nitarsone", "roxarsone", "bicozamycin", "halquinol", "laidlomycin", "lasalocid", "maduramicin", "monensin", "narasin", "salinomycin", "semduramicin", "avilamycin", "bambermycin", "flavomycin", "flavophospholipol", "moenomycin", "carbadox", "olaquindox")
+
+find_any_match <- function(phenotype, class) {
+  return(
+    any(
+      str_split(tolower(phenotype), pattern = ", ") %>%
+        unlist() %in% class
+    )
+  )
+}
+
+# Add WHO classifications one by one
+deduplicated_args <- deduplicated_args %>%
+  mutate(
+    hpcia = sapply(
+      X = deduplicated_args$Phenotype,
+      FUN = find_any_match,
+      class = hpcia_antibiotics
+    ),
+    cia = sapply(
+      X = Phenotype,
+      FUN = find_any_match,
+      class = cia_antibiotics
+    ),
+    hia = sapply(
+      X = Phenotype,
+      FUN = find_any_match,
+      class = hia_antibiotics
+    ),
+    ia = sapply(
+      X = Phenotype,
+      FUN = find_any_match,
+      class = ia_antibiotics
+    ),
+    not_important = sapply(
+      X = Phenotype,
+      FUN = find_any_match,
+      class = not_important
+    ),
+
+    # And finally combine them into one column:
+    medical_importance = case_when(
+      hpcia ~ "HPCIA",
+      cia ~ "CIA",
+      hia ~ "HIA",
+      ia ~ "IA",
+      not_important ~ "not_important",
+      TRUE ~ "unknown"
+    )
+  ) %>%
+  # And remove intermediate columns
+  select(
+    -c(hpcia, cia, hia, ia, not_important)
+  )
+
 
 ## 2. Assembly stats (length, depth and circularity)
 
-read_stats <- function(filename, name_position){
+read_stats <- function(filename, name_position) {
   # Cut the sample name from the file path using the name's position in the
   # absolute file path (counting from the end: 1 = last, 2 = second last, etc.)
-  sample_name <- str_split_1(string = filename, pattern = "/") %>% tail(name_position) %>% head(1)
-  
+  sample_name <- str_split_1(string = filename, pattern = "/") %>%
+    tail(name_position) %>%
+    head(1)
+
   df <- read_delim(
     file = filename,
     show_col_types = FALSE
-    ) %>%
+  ) %>%
     mutate(sample = sample_name)
 
   return(df)
@@ -95,8 +168,9 @@ read_stats <- function(filename, name_position){
 # Read Flye assembly info output files and concatenate in one dataframe
 assembly_stats <- do.call(
   rbind,
-  lapply(X = assembly_stats_files, FUN = read_stats, name_position = 2)) %>%
-  select(sample, '#seq_name', length, 'cov.', 'circ.')
+  lapply(X = assembly_stats_files, FUN = read_stats, name_position = 2)
+) %>%
+  select(sample, "#seq_name", length, "cov.", "circ.")
 colnames(assembly_stats) <- c("sample", "contig", "contig_length", "contig_depth", "circular")
 write_delim(
   x = assembly_stats,
@@ -106,8 +180,10 @@ write_delim(
 
 assembly_stats_summary <- assembly_stats %>%
   group_by(sample) %>%
-  summarise(mean_contig_depth = mean(contig_depth),
-            total_assembly_length = sum(contig_length))
+  summarise(
+    mean_contig_depth = mean(contig_depth),
+    total_assembly_length = sum(contig_length)
+  )
 
 
 arg_and_assembly <- left_join(
@@ -128,7 +204,9 @@ rm(arg_stats, deduplicated_args, assembly_stats, assembly_stats_summary)
 
 read_classification_files <- function(filename) {
   # Cut the sample name from the file path
-  sample_name <- str_split_1(string = filename, pattern = "/") %>% tail(2) %>% head(1)
+  sample_name <- str_split_1(string = filename, pattern = "/") %>%
+    tail(2) %>%
+    head(1)
 
   df <- read_delim(
     file = filename,
@@ -138,9 +216,10 @@ read_classification_files <- function(filename) {
     separate_wider_delim(
       cols = taxonomy,
       delim = "\t",
-      names = c("Species", "Taxonomy")) %>%
+      names = c("Species", "Taxonomy")
+    ) %>%
     mutate(sample = sample_name)
-  
+
   return(df)
 }
 
@@ -174,9 +253,11 @@ plasmid_classifications <- do.call(
   rbind,
   lapply(X = genomad_plasmid_files, FUN = read_stats, name_position = 3)
 ) %>%
-  rename("contig" = "seq_name",
-         "plasmid_topology" = "topology",
-         "plasmid_genes" = "n_genes")
+  rename(
+    "contig" = "seq_name",
+    "plasmid_topology" = "topology",
+    "plasmid_genes" = "n_genes"
+  )
 write_delim(
   x = plasmid_classifications,
   file = here("data", "processed", "plasmid_predictions-concatenated.tsv"),
@@ -187,10 +268,12 @@ virus_classifications <- do.call(
   rbind,
   lapply(X = genomad_virus_files, FUN = read_stats, name_position = 3)
 ) %>%
-  rename("contig" = "seq_name",
-         "virus_topology" = "topology",
-         "virus_genes" = "n_genes",
-         "virus_taxonomy" = "taxonomy")
+  rename(
+    "contig" = "seq_name",
+    "virus_topology" = "topology",
+    "virus_genes" = "n_genes",
+    "virus_taxonomy" = "taxonomy"
+  )
 write_delim(
   x = virus_classifications,
   file = here("data", "processed", "virus_predictions.tsv"),
@@ -205,20 +288,24 @@ db_with_mge <- left_join(
   left_join(
     x = .,
     y = plasmid_classifications %>%
-      select(sample, contig, plasmid_topology,
-             plasmid_genes, conjugation_genes,
-             amr_genes),
+      select(
+        sample, contig, plasmid_topology,
+        plasmid_genes, conjugation_genes,
+        amr_genes
+      ),
     by = c("sample", "contig")
   ) %>%
   left_join(
     x = .,
     y = virus_classifications %>%
-      select(sample, contig, virus_topology,
-             virus_genes, virus_taxonomy)
+      select(
+        sample, contig, virus_topology,
+        virus_genes, virus_taxonomy
+      )
   ) %>%
   mutate(genomad_prediction = case_when(
-    ! is.na(plasmid_topology) ~ "plasmid",
-    ! is.na(virus_topology) ~ "virus",
+    !is.na(plasmid_topology) ~ "plasmid",
+    !is.na(virus_topology) ~ "virus",
     TRUE ~ "chromosome"
   ))
 
