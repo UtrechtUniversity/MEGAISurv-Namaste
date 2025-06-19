@@ -309,7 +309,9 @@ db_with_mge <- left_join(
     TRUE ~ "chromosome"
   ))
 
+# Somehow, duplicated rows appear in the dataframe,
+# so save the 'distinct' version:
 write_csv(
-  x = db_with_mge,
+  x = db_with_mge %>% distinct(),
   file = here("data", "processed", "assembly_database.csv")
 )
