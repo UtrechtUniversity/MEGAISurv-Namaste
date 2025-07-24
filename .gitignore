@@ -1,0 +1,8 @@
+# Workflow (temporary) files
+.snakemake/
+data/tmp/
+log/
+
+# pixi environments
+.pixi
+*.egg-info

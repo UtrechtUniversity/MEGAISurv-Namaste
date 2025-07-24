@@ -1,4 +1,4 @@
-jobs: 12
+jobs: 72
 use-conda: true
 jobname: Smk-{name}.{jobid}
 printshellcmds: true

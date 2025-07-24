@@ -4,8 +4,12 @@
 
 input_directory: "data/raw/"
 output_directory: "data/tmp/"
+taxon_database: "/mnt/DGK_KLIF/data/klif/databases/taxdump/"
 
 ### 2. Tool-specific parameters ###
+
+fastplong:
+  threads: 3
 
 flye:
   threads: 12
