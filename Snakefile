@@ -242,6 +242,8 @@ rule lookup_taxids:
         OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked.tsv",
     output:
         OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked+taxa.tsv",
+    params:
+        taxondb = config["taxon_database"]
     threads: 1
     conda:
         "envs/taxonkit.yaml"
@@ -251,7 +253,7 @@ rule lookup_taxids:
         "log/benchmark/lookup_taxids/{sample}.txt"
     shell:
         """
-taxonkit reformat {input} -I 3\
+taxonkit reformat {input} -I 3 --data-dir {params.taxondb}\
  -f '{{s}}\t{{k}};{{p}};{{c}};{{o}};{{f}};{{g}};{{s}}' -F\
  > {output} 2> {log}
         """
