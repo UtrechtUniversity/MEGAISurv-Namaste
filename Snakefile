@@ -94,6 +94,7 @@ rule read_quality_control:
     shell:
         """
 fastplong --in {input} --out {output.filtered}\
+ --trim_poly_x --trimming_extension 10\
  --json {output.json} --html {output.html}\
  --thread {threads} > {log} 2>&1
         """
