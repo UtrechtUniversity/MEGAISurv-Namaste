@@ -1,0 +1,33 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: MEGAISurv-Namaste
+message: >-
+  Workflow for Nanopore Metagenome antibiotic Resistance and
+  Taxonomy Screening
+type: software
+authors:
+  - given-names: Sam
+    family-names: Nooij
+    email: s.nooij@uu.nl
+    affiliation: Utrecht University
+    orcid: 'https://orcid.org/0000-0001-5892-5637'
+  - given-names: Aldert
+    family-names: Zomer
+    affiliation: Utrecht University
+    orcid: 'https://orcid.org/0000-0002-0758-5190'
+  - given-names: Agata
+    family-names: Dziegiel
+    affiliation: 'Quardram Institute '
+    orcid: 'https://orcid.org/0000-0002-6148-1771'
+identifiers:
+  - type: url
+    value: 'https://github.com/UtrechtUniversity/MEGAISurv-Namaste'
+    description: GitHub repository
+repository-code: 'https://github.com/UtrechtUniversity/MEGAISurv-Namaste'
+keywords:
+  - nanopore-sequencing
+  - metagenomics
+  - antibiotic-resistance
+license: BSD-3-Clause
