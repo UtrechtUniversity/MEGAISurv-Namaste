@@ -127,9 +127,8 @@ Actually, after some more testing and looking at the results, I think the whole 
 
 # Licence
 
-_to do_
+This project is licensed under the terms of the [New BSD licence](LICENSE).
 
 # Citation
 
-_to do_
-
+Please cite this project as described in the [citation file](CITATION.cff).
