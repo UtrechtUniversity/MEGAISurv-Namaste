@@ -1,6 +1,6 @@
 # MEGAISurv analysis workflow
 
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 **ME**ta**G**enome-informed **A**ntimicrobial res**i**stance **Surv**eillance:
 Harnessing long-read sequencing for an analytical, indicator and risk assessment
