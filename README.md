@@ -104,6 +104,10 @@ and visualisation
 
 - **Write/extend documentation of the whole workflow and interesting findings**
 
+- Calculate per-sample and overall fraction of contigs with ARGs: what is the estimated prevalence of ARGs?
+
+- Document ARG identification process (currently includes R script to parse KMA and include only hits that cover >=60% of the reference ARG)
+
 ## Project organisation
 
 ```bash
