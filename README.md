@@ -28,9 +28,12 @@ Simple description:
 
 3. Antibiotic resistance genes are identified using [KMA](https://github.com/genomicepidemiology/kma) (version 1.4.2)
 
-4. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
+    - This uses the [ResFinder Database](https://bitbucket.org/genomicepidemiology/resfinder_db/src/master/);
+      a script is included to download the latest version: [scripts/prepare_resfinder.sh](scripts/prepare_resfinder.sh)
 
-5. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
+5. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
+
+6. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
 
 ### Microbiota profiling
 
