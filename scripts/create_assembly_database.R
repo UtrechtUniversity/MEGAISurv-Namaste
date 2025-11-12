@@ -8,6 +8,7 @@ library(here)
 
 assembly_stats_files <- Sys.glob(paths = here("data", "tmp", "assembly", "*", "assembly_info.txt"))
 arg_hits_files <- Sys.glob(paths = here("data", "tmp", "kma", "*.hmm.frag.gz"))
+arg_results_files <- Sys.glob(paths = here("data", "tmp", "kma", "*.hmm.res"))
 classification_files <- Sys.glob(paths = here("data", "tmp", "centrifuger", "*", "centrifuger_masked+taxa.tsv"))
 genomad_scores_files <- Sys.glob(paths = here("data", "tmp", "genomad", "*", "assembly_aggregated_classification", "assembly_aggregated_classification.tsv"))
 genomad_plasmid_files <- Sys.glob(paths = here("data", "tmp", "genomad", "*", "assembly_summary", "assembly_plasmid_summary.tsv"))
@@ -16,7 +17,46 @@ genomad_virus_files <- Sys.glob(paths = here("data", "tmp", "genomad", "*", "ass
 duplicates <- read_delim(here("data", "samples_with_multiple_runs.tsv"))
 
 
-## 1. Resistance gene information (gene name, contig position, hit length?)
+## 1. Resistance gene information (gene name, contig, position, gene coverage, identity, depth)
+read_arg_results <- function(filename) {
+  sample_name <- basename(filename) %>% gsub(
+    pattern = ".hmm.res",
+    replacement = "",
+    x = .
+  )
+
+  df <- read_delim(
+    file = filename,
+    show_col_types = FALSE,
+    trim_ws = TRUE
+  ) %>%
+    mutate(sample = sample_name)
+
+  return(df)
+}
+
+arg_results <- do.call(
+  rbind,
+  lapply(X = arg_results_files, FUN = read_arg_results)
+) %>%
+  rename(arg = `#Template`,
+         arg_identity = Template_Identity,
+         arg_coverage = Template_Coverage,
+         arg_length = Template_length,
+         arg_depth = Depth) %>%
+  select(sample, arg, arg_identity, arg_coverage, arg_length, arg_depth)
+
+## A 'strict' matching option would be to take the ARG length (in results),
+## compare it to the hit_length (in stats), and keep only those meeting a
+## certain threshold (e.g. 90%). Then keep the contig start/stop positions
+## as-is, calculate actual coverage and assign identity scores from results?
+
+# Deduplicate samples by removing runs that derive from the same biosample
+deduplicated_results <- arg_results %>%
+  filter(!sample %in% duplicates$run)
+# (Remember that the the dataframe contained both entries for runs and the
+#  samples: by removing runs we keep only the samples, which are the two
+#  corresponding runs concatenated.)
 
 read_arg_stats <- function(filename) {
   # Cut the sample name from the file path
@@ -64,6 +104,22 @@ deduplicated_args <- arg_stats %>%
 #  samples: by removing runs we keep only the samples, which are the two
 #  corresponding runs concatenated.)
 
+match_results_with_stats <- left_join(
+  x = deduplicated_results,
+  y = deduplicated_args,
+  by = c("sample", "arg")
+)
+
+## Calculate actual coverage per hit
+match_results_with_stats <- match_results_with_stats %>%
+  mutate(coverage = hit_length / arg_length * 100)
+
+## Apply coverage threshold
+match_results_with_stats <- match_results_with_stats %>%
+  filter(coverage >= 60) %>%
+  select(-arg_coverage) %>%
+  rename(arg_coverage = coverage)
+
 ## Look up antibiotic classes from ResFinder's `phenotypes.txt` file
 arg_annotation <- read_delim(
   file = "https://bitbucket.org/genomicepidemiology/resfinder_db/raw/cf9bbc7b13f04de987f7dd4a3a1440c7af0b1ce0/phenotypes.txt",
@@ -72,8 +128,8 @@ arg_annotation <- read_delim(
 ) %>%
   rename("Resistance_mechanism" = "Mechanism of resistance")
 
-deduplicated_args <- left_join(
-  x = deduplicated_args,
+annotated_args <- left_join(
+  x = match_results_with_stats,
   y = arg_annotation %>%
     select(`Gene_accession no.`, Class, Phenotype, Resistance_mechanism),
   by = c("arg" = "Gene_accession no.")
@@ -103,10 +159,10 @@ find_any_match <- function(phenotype, class) {
 }
 
 # Add WHO classifications one by one
-deduplicated_args <- deduplicated_args %>%
+classified_args <- annotated_args %>%
   mutate(
     hpcia = sapply(
-      X = deduplicated_args$Phenotype,
+      X = annotated_args$Phenotype,
       FUN = find_any_match,
       class = hpcia_antibiotics
     ),
@@ -187,7 +243,7 @@ assembly_stats_summary <- assembly_stats %>%
 
 
 arg_and_assembly <- left_join(
-  x = deduplicated_args,
+  x = classified_args,
   y = assembly_stats_summary,
   by = "sample"
 ) %>%
@@ -198,7 +254,10 @@ arg_and_assembly <- left_join(
   )
 
 # Remove dataframes that are no longer necessary to save memory
-rm(arg_stats, deduplicated_args, assembly_stats, assembly_stats_summary)
+rm(arg_stats, arg_results, deduplicated_args, deduplicated_results,
+   match_results_with_stats, annotated_args, arg_annotation,
+   classified_args,
+   assembly_stats, assembly_stats_summary)
 
 ## 3. Taxonomic classifications
 
