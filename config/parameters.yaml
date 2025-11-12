@@ -22,7 +22,7 @@ simple_stats:
 
 kma:
   threads: 12
-  database: "/mnt/data/db/KMA/ResFinder/ResFinder"
+  database: "data/resfinder_db/all"
 
 centrifuger:
   threads: 12
