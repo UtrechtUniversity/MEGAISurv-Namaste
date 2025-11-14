@@ -163,9 +163,38 @@ seqkit stats -Ta -j {threads} > {output} 2> {log}
         """
 
 
+rule create_resfinder_database:
+    output:
+        multiext(
+            config["kma"]["database"],
+            out1=".comp.b",
+            out2=".fsa",
+            out3=".length.b",
+            out4=".seq.b",
+        ),
+    conda:
+        "envs/kma.yaml"
+    threads: 1
+    log:
+        "log/create_resfinder_database.txt",
+    benchmark:
+        "log/benchmark/create_resfinder_database.txt"
+    shell:
+        """
+rm -rf $(dirname {output.out1})
+bash scripts/prepare_resfinder.sh > {log} 2>&1
+
+(cd $(dirname {output.out1}) && python3 INSTALL.py) >> {log} 2>&1
+        """
+
+
 rule screen_antibiotic_resistance_genes:
     input:
-        OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
+        db=expand(
+            config["kma"]["database"] + ".{extension}",
+            extension=["comp.b", "fsa", "length.b", "seq.b"],
+        ),
+        assembly=OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
     output:
         aln=OUTPUT_DIR + "kma/{sample}.hmm.aln",
         frag=OUTPUT_DIR + "kma/{sample}.hmm.frag.gz",
@@ -183,7 +212,7 @@ rule screen_antibiotic_resistance_genes:
         "log/benchmark/kma/{sample}.txt"
     shell:
         """
-kma -t {threads} -bcNano -t_db {params.db} -i {input} -o {params.prefix}\
+kma -t {threads} -bcNano -t_db {params.db} -i {input.assembly} -o {params.prefix}\
  -ont -hmm > {log} 2>&1
         """
 
@@ -243,7 +272,7 @@ rule lookup_taxids:
     output:
         OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked+taxa.tsv",
     params:
-        taxondb = config["taxon_database"]
+        taxondb=config["taxon_database"],
     threads: 1
     conda:
         "envs/taxonkit.yaml"
