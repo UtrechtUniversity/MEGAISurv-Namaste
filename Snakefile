@@ -100,6 +100,44 @@ fastplong --in {input} --out {output.filtered}\
         """
 
 
+rule extract_read_qc_summaries:
+    input:
+        expand(OUTPUT_DIR + "read_qc/{sample}.json",
+               sample = SAMPLES)
+    output:
+        expand(OUTPUT_DIR + "read_qc/summary/{sample}.json",
+               sample = SAMPLES)
+    threads: 1
+    log:
+        "log/extract_read_qc_summaries.txt"
+    benchmark:
+        "log/benchmark/extract_read_qc_summaries.txt"
+    shell:
+        """
+for inputfile in {input}
+do
+    bash scripts/extract_fastplong_json_summary.sh ${{inputfile}}
+done > {log} 2>&1
+        """
+
+
+rule summarise_read_qc_data:
+    input:
+        expand(OUTPUT_DIR + "read_qc/summary/{sample}.json",
+               sample = SAMPLES)
+    output:
+        "data/processed/read_qc_summary.csv"
+    conda:
+        "envs/R_tidyverse.yaml"
+    threads: 1
+    log:
+        "log/summarise_read_qc_data.txt"
+    benchmark:
+        "log/benchmark/summarise_read_qc_data.txt"
+    script:
+        "scripts/collect_read_qc_data.R"
+
+
 rule metagenomic_assembly:
     input:
         OUTPUT_DIR + "filtered/{sample}.fastq.gz",
