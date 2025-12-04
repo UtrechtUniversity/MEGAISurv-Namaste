@@ -14,6 +14,9 @@ fastplong:
 flye:
   threads: 12
 
+minimap2:
+  threads: 8
+
 metaquast:
   threads: 3
 

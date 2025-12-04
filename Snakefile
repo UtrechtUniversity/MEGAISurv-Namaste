@@ -48,6 +48,8 @@ rule all:
         expand(OUTPUT_DIR + "quast/{sample}/metaquast.log", sample=SAMPLES),
         # Simple assembly statistics (by seqkit)
         OUTPUT_DIR + "assembly/assembly_statistics-seqkit.tsv",
+        # Per-contig coverage stats
+        "data/processed/contig_coverage.csv",
         # Antibiotic resistance gene screening (by KMA)
         expand(
             OUTPUT_DIR + "kma/{sample}.hmm.{suffix}",
@@ -102,14 +104,12 @@ fastplong --in {input} --out {output.filtered}\
 
 rule extract_read_qc_summaries:
     input:
-        expand(OUTPUT_DIR + "read_qc/{sample}.json",
-               sample = SAMPLES)
+        expand(OUTPUT_DIR + "read_qc/{sample}.json", sample=SAMPLES),
     output:
-        expand(OUTPUT_DIR + "read_qc/summary/{sample}.json",
-               sample = SAMPLES)
+        expand(OUTPUT_DIR + "read_qc/summary/{sample}.json", sample=SAMPLES),
     threads: 1
     log:
-        "log/extract_read_qc_summaries.txt"
+        "log/extract_read_qc_summaries.txt",
     benchmark:
         "log/benchmark/extract_read_qc_summaries.txt"
     shell:
@@ -123,15 +123,14 @@ done > {log} 2>&1
 
 rule summarise_read_qc_data:
     input:
-        expand(OUTPUT_DIR + "read_qc/summary/{sample}.json",
-               sample = SAMPLES)
+        expand(OUTPUT_DIR + "read_qc/summary/{sample}.json", sample=SAMPLES),
     output:
-        "data/processed/read_qc_summary.csv"
+        "data/processed/read_qc_summary.csv",
     conda:
         "envs/R_tidyverse.yaml"
     threads: 1
     log:
-        "log/summarise_read_qc_data.txt"
+        "log/summarise_read_qc_data.txt",
     benchmark:
         "log/benchmark/summarise_read_qc_data.txt"
     script:
@@ -199,6 +198,47 @@ rule simple_assembly_statistics:
         """
 seqkit stats -Ta -j {threads} > {output} 2> {log}
         """
+
+
+rule map_reads_to_assembly:
+    input:
+        reads=OUTPUT_DIR + "filtered/{sample}.fastq.gz",
+        assembly=OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
+    output:
+        bam=OUTPUT_DIR + "assembly/{sample}/mapped_back/{sample}.bam",
+        cov=OUTPUT_DIR + "assembly/{sample}/mapped_back/{sample}-coverage.tsv",
+    conda:
+        "envs/minimap2.yaml"
+    threads: config["minimap2"]["threads"]
+    log:
+        "log/map_reads_to_assembly/{sample}.txt",
+    benchmark:
+        "log/benchmark/map_reads_to_assembly/{sample}.txt"
+    shell:
+        """
+minimap2 -x map-ont -t {threads} -a {input.assembly} {input.reads} 2> {log} |\
+ samtools sort -o {output.bam} --write-index - > {log} 2>&1
+samtools coverage -o {output.cov} {output.bam} >> {log} 2>&1
+        """
+
+
+rule summarise_read_mapping:
+    input:
+        cov_files=expand(
+            OUTPUT_DIR + "assembly/{sample}/mapped_back/{sample}-coverage.tsv",
+            sample=SAMPLES,
+        ),
+    output:
+        "data/processed/contig_coverage.csv",
+    conda:
+        "envs/R_tidyverse.yaml"
+    threads: 1
+    log:
+        "log/summarise_read_mapping.txt",
+    benchmark:
+        "log/benchmark/summarise_read_mapping.txt"
+    script:
+        "scripts/collect_read_mapping_data.R"
 
 
 rule create_resfinder_database:
