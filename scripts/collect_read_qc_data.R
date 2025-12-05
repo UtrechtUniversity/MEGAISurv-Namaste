@@ -6,7 +6,7 @@ suppressPackageStartupMessages({
   library(here)
 })
 
-read_qc_files <- Sys.glob(paths = here("data", "tmp", "read_qc", "summary", "*.json"))
+read_qc_files <- snakemake@input[["cov_files"]]
 
 json_to_df <- function(json_file) {
   # Get the sample name from the file name (remove '.json' extension)
