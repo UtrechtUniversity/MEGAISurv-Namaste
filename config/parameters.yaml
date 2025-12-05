@@ -30,6 +30,12 @@ kma:
 centrifuger:
   threads: 12
 
+semibin:
+  threads: 12
+
+gtdbtk:
+  threads: 12
+
 genomad:
   threads: 12
   database: "data/genomad_db/"

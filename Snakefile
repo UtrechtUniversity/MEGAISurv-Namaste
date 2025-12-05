@@ -74,6 +74,11 @@ rule all:
             + "genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
             sample=SAMPLES,
         ),
+        # Classification of binned contigs (SemiBin2 + GTDB-Tk)
+        expand(
+            OUTPUT_DIR + "assembly/{sample}/semibin2/gtdbtk/gtdbtk.bac120.summary.tsv",
+            sample=SAMPLES,
+        ),
 
 
 ### Step 3: Define processing steps that generate the output ###
@@ -410,4 +415,46 @@ rule genomad:
         """
 genomad end-to-end -t {threads} --cleanup --enable-score-calibration\
  {input.fasta} {params.output_dir} {input.db} > {log} 2>&1
+        """
+
+
+rule bin_assemblies:
+    input:
+        masked_assembly=OUTPUT_DIR + "assembly/{sample}/assembly_ARG_masked.fasta",
+        bam=OUTPUT_DIR + "assembly/{sample}/mapped_back/{sample}.bam",
+    output:
+        info=OUTPUT_DIR + "assembly/{sample}/semibin2/bins_info.tsv",
+        contig_bins=OUTPUT_DIR + "assembly/{sample}/semibin2/contig_bins.tsv",
+        bin_dir=directory(OUTPUT_DIR + "assembly/{sample}/semibin2/output_bins"),
+    conda:
+        "envs/semibin.yaml"
+    threads: config["semibin"]["threads"]
+    log:
+        "log/bin_assemblies/{sample}.txt",
+    benchmark:
+        "log/benchmark/bin_assemblies/{sample}.txt"
+    shell:
+        """
+SemiBin2 single_easy_bin -t {threads}\
+ -i {input.masked_assembly} -b {input.bam} -o $(dirname {output.info})\
+  --sequencing-type=long_read --environment=global > {log} 2>&1
+        """
+
+
+rule classify_bins:
+    input:
+        bin_dir=OUTPUT_DIR + "assembly/{sample}/semibin2/output_bins",
+    output:
+        OUTPUT_DIR + "assembly/{sample}/semibin2/gtdbtk/gtdbtk.bac120.summary.tsv",
+    conda:
+        "envs/gtdbtk.yaml"
+    threads: config["gtdbtk"]["threads"]
+    log:
+        "log/classify_bins/{sample}.txt",
+    benchmark:
+        "log/benchmark/classify_bins/{sample}.txt"
+    shell:
+        """
+gtdbtk classify_wf --cpus {threads} --genome_dir {input.bin_dir}\
+ --extension .fa.gz --out_dir $(dirname {output}) > {log} 2>&1
         """
