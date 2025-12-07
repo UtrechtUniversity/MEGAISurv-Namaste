@@ -29,6 +29,7 @@ kma:
 
 centrifuger:
   threads: 12
+  database: "/mnt/data2/db/centrifuger/cfr_hpv+gbsarscov2"
 
 semibin:
   threads: 12

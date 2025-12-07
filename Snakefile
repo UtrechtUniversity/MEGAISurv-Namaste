@@ -327,12 +327,12 @@ maskFastaFromBed -fi {input.assembly} -bed {output.gene_locations}\
 rule taxonomic_classification:
     input:
         fasta=OUTPUT_DIR + "assembly/{sample}/assembly_ARG_masked.fasta",
-        db="/mnt/data/db/centrifuger/cfr_hpv+gbsarscov2.1.cfr",
+        db=config["centrifuger"]["database"] + ".2.cfr",
     output:
         tsv=OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked.tsv",
         quant=OUTPUT_DIR + "centrifuger/{sample}/centrifuger_masked-quant.tsv",
     params:
-        db="/mnt/data/db/centrifuger/cfr_hpv+gbsarscov2",
+        db=config["centrifuger"]["database"],
     conda:
         "envs/centrifuger.yaml"
     threads: config["centrifuger"]["threads"]
