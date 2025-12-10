@@ -31,9 +31,9 @@ Simple description:
     - This uses the [ResFinder Database](https://bitbucket.org/genomicepidemiology/resfinder_db/src/master/);
       a script is included to download the latest version: [scripts/prepare_resfinder.sh](scripts/prepare_resfinder.sh)
 
-5. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
+4. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
 
-6. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
+5. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
 
 ### Microbiota profiling
 
@@ -93,6 +93,26 @@ generated when you install taxdump) to be able to use `taxonkit`. E.g.:
 ```bash
 mv *.dmp ~/.taxonkit/
 ```
+
+#### GTDB-Tk user note
+
+GTDB-Tk requires its database to be downloaded and referenced to work.
+You can run the Snakemake workflow without setting this up first,
+but then the rule `classify_bins` will fail and present an error.
+If you already have a working GTDB-Tk installation in conda/mamba,
+you can use:
+
+```bash
+grep "gtdbtk" .snakemake/conda/*yaml # find the environment with gtdbtk in it
+mamba activate .snakemake/conda/[env_name]
+# Below is an example command, fill in the correct path to your environment!
+conda env config vars set GTDBTK_DATA_PATH="~/miniforge3/env/gtdbtk/share/gtdbtk-2.5.2/db"
+
+# If you have not downloaded the database before, change the last command to this :
+download-db.sh # to download the database.
+```
+
+(See the [GTDB-Tk user manual](https://ecogenomics.github.io/GTDBTk/installing/bioconda.html#installing-bioconda).)
 
 ## Future ideas
 
