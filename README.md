@@ -114,6 +114,26 @@ download-db.sh # to download the database.
 
 (See the [GTDB-Tk user manual](https://ecogenomics.github.io/GTDBTk/installing/bioconda.html#installing-bioconda).)
 
+## Manual intervention
+
+### Failing assemblies
+
+Although the workflow is automated, it is possible that it gets stuck at certain points.
+One is the assembly: a sample may not have enough reads to successfully assemble.
+In such a case, Snakemake will return an error for that particular sample
+and will not be able to complete the whole workflow. To exclude samples from
+further analysis if no assembly can be produced, a helper script has been provided.
+If Snakemake was installed using mamda, you can run:
+
+```bash
+python3 scripts/exclude_failed_assemblies.py
+```
+
+To automatically identify samples for which no assembly could be produced
+and move their respective reads to the subdirectory `cannot_assemble`.
+By doing this, Snakemake will no longer see them as input samples and
+can then successfully complete the workflow.
+
 ## Future ideas
 
 - Summarise the final output in one neat table
