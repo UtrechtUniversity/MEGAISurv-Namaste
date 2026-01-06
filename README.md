@@ -20,6 +20,15 @@ framework.
 
 ## Workflow description
 
+```mermaid
+flowchart LR
+    A[Raw reads] -->|Preprocess:  fastplong| B(High-quality reads)
+    B -->|Assembly: metaFlye| C(Contigs)
+    C -->|Screen ARGs: KMA/ResFinder| D(ARG-containing contigs)
+    D -->|Mask: BEDtools| E(Masked contigs)
+    E -->|Classify: Centrifuger| F(Taxonomy-assigned contigs)
+```
+
 Simple description:
 
 1. Metagenomic reads are preprocessed using [fastplong](https://github.com/OpenGene/fastplong) (version 0.2.2)
