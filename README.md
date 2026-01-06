@@ -136,20 +136,32 @@ can then successfully complete the workflow.
 
 ## Future ideas
 
-- Summarise the final output in one neat table
+### Improve existing workflow
+
+- Summarise the final output in one neat table, that is, include `scripts/generate_assembly_database.R` in the workflow (or equivalent scripts)
+
+- **Write/extend documentation of the whole workflow and interesting findings**
+
+    - Create a documentation page like <https://utrechtuniversity.github.io/campylobacter-crisprscape/>
+
+    - Document ARG identification process (currently includes R script to parse KMA and include only hits that cover >=60% of the reference ARG)
+
+    - Document quality control steps and inclusion and exclusion criteria
 
 - Include downstream processing scripts (RMarkdown) for statistical analyses
-and visualisation
+and visualisationu
+
+- Calculate per-sample and overall fraction of contigs with ARGs: what is the estimated prevalence of ARGs?
+
+- adopt Snakemake's recommended structure, formatting, linting
+
+    - (update [project organisation](#project-organisation))
+
+### Test new features
 
 - Test alternative contig classification databases and tools
 
 - Filter contigs to minimum length of 2-3x average read length?
-
-- **Write/extend documentation of the whole workflow and interesting findings**
-
-- Calculate per-sample and overall fraction of contigs with ARGs: what is the estimated prevalence of ARGs?
-
-- Document ARG identification process (currently includes R script to parse KMA and include only hits that cover >=60% of the reference ARG)
 
 ## Project organisation
 
