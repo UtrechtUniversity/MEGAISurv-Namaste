@@ -74,9 +74,16 @@ rule all:
             + "genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
             sample=SAMPLES,
         ),
-        # Classification of binned contigs (SemiBin2 + GTDB-Tk)
+        # Bins from SemiBin2
+        expand(OUTPUT_DIR + "assembly/{sample}/semibin2/bins_info.tsv", sample=SAMPLES),
+        # Bins from MetaBAT2
         expand(
-            OUTPUT_DIR + "assembly/{sample}/semibin2/gtdbtk/gtdbtk.bac120.summary.tsv",
+            OUTPUT_DIR + "assembly/{sample}/metabat/{sample}-metabat.BinInfo.txt",
+            sample=SAMPLES,
+        ),
+        # Bins from VAMB
+        expand(
+            OUTPUT_DIR + "assembly/{sample}/vamb/bins",
             sample=SAMPLES,
         ),
 
@@ -418,7 +425,7 @@ genomad end-to-end -t {threads} --cleanup --enable-score-calibration\
         """
 
 
-rule bin_assemblies:
+rule bin_assemblies_semibin:
     input:
         masked_assembly=OUTPUT_DIR + "assembly/{sample}/assembly_ARG_masked.fasta",
         bam=OUTPUT_DIR + "assembly/{sample}/mapped_back/{sample}.bam",
@@ -430,14 +437,63 @@ rule bin_assemblies:
         "envs/semibin.yaml"
     threads: config["semibin"]["threads"]
     log:
-        "log/bin_assemblies/{sample}.txt",
+        "log/bin_assemblies_semibin/{sample}.txt",
     benchmark:
-        "log/benchmark/bin_assemblies/{sample}.txt"
+        "log/benchmark/bin_assemblies_semibin/{sample}.txt"
     shell:
         """
 SemiBin2 single_easy_bin -t {threads}\
  -i {input.masked_assembly} -b {input.bam} -o $(dirname {output.info})\
   --sequencing-type=long_read --environment=global > {log} 2>&1
+        """
+
+
+rule bin_assemblies_metabat:
+    input:
+        masked_assembly=OUTPUT_DIR + "assembly/{sample}/assembly_ARG_masked.fasta",
+        bam=OUTPUT_DIR + "assembly/{sample}/mapped_back/{sample}.bam",
+    output:
+        depth=temp(OUTPUT_DIR + "assembly/{sample}/metabat/{sample}-metabat_depth.txt"),
+        info=OUTPUT_DIR + "assembly/{sample}/metabat/{sample}-metabat.BinInfo.txt",
+    params:
+        prefix=OUTPUT_DIR + "assembly/{sample}/metabat/{sample}-metabat",
+    conda:
+        "envs/metabat2.yaml"
+    threads: config["metabat2"]["threads"]
+    log:
+        "log/bin_assemblies_metabat/{sample}.txt",
+    benchmark:
+        "log/benchmark/bin_assemblies_metabat/{sample}.txt"
+    shell:
+        """
+jgi_summarize_bam_contig_depths --outputDepth {output.depth} {input.bam} > {log} 2>&1
+
+metabat2 -i {input.masked_assembly} -a {output.depth} -o {params.prefix} >> {log} 2>&1
+        """
+
+
+rule bin_assemblies_vamb:
+    input:
+        raw_assembly=OUTPUT_DIR + "assembly/{sample}/assembly.fasta",
+        bam=OUTPUT_DIR + "assembly/{sample}/mapped_back/{sample}.bam",
+    output:
+        bins=directory(OUTPUT_DIR + "assembly/{sample}/vamb/bins"),
+    params:
+        prefix=OUTPUT_DIR + "assembly/{sample}/vamb",
+    conda:
+        "envs/vamb.yaml"
+    threads: config["vamb"]["threads"]
+    log:
+        "log/bin_assemblies_vamb/{sample}.txt",
+    benchmark:
+        "log/benchmark/bin_assemblies_vamb/{sample}.txt"
+    shell:
+        """
+rm -r {params.prefix}
+
+vamb bin default --fasta {input.raw_assembly}\
+ --bamdir $(dirname {input.bam}) --outdir {params.prefix}\
+ -p {threads} --minfasta 200000 --seed 42 > {log} 2>&1
         """
 
 

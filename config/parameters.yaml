@@ -34,6 +34,12 @@ centrifuger:
 semibin:
   threads: 12
 
+metabat2:
+  threads: 12
+
+vamb:
+  threads: 12
+
 gtdbtk:
   threads: 12
 
