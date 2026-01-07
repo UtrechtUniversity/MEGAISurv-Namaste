@@ -33,7 +33,7 @@ rule bin_assemblies_metabat:
         depth=temp("data/tmp/assembly/{sample}/metabat/{sample}-metabat_depth.txt"),
         info="data/tmp/assembly/{sample}/metabat/{sample}-metabat.BinInfo.txt",
     params:
-        prefix="data/tmp/assembly/{sample}/metabat/{sample}-metabat",
+        prefix=subpath(output.info, strip_suffix=".BinInfo.txt"),
     conda:
         "../envs/metabat2.yaml"
     threads: config["metabat2"]["threads"]
@@ -56,7 +56,7 @@ rule bin_assemblies_vamb:
     output:
         bins=directory("data/tmp/assembly/{sample}/vamb/bins"),
     params:
-        prefix="data/tmp/assembly/{sample}/vamb",
+        prefix=subpath(output.bins, parent=True),
     conda:
         "../envs/vamb.yaml"
     threads: config["vamb"]["threads"]

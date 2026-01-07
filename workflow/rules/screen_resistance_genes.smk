@@ -40,7 +40,7 @@ rule screen_antibiotic_resistance_genes:
         res="data/tmp/kma/{sample}.hmm.res",
     params:
         db=config["kma"]["database"],
-        prefix="data/tmp/kma/{sample}.hmm",
+        prefix=subpath(output.aln, strip_suffix=".aln"),
     conda:
         "../envs/kma.yaml"
     threads: config["kma"]["threads"]

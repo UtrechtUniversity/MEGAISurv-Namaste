@@ -10,7 +10,7 @@ rule taxonomic_classification:
         tsv="data/tmp/centrifuger/{sample}/centrifuger_masked.tsv",
         quant="data/tmp/centrifuger/{sample}/centrifuger_masked-quant.tsv",
     params:
-        db=config["centrifuger"]["database"],
+        db=subpath(input.db, strip_suffix=".2.cfr"),
     conda:
         "../envs/centrifuger.yaml"
     threads: config["centrifuger"]["threads"]
