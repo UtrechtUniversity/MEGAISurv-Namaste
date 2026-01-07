@@ -4,7 +4,7 @@
 rule create_resfinder_database:
     output:
         multiext(
-            config["kma"]["database"],
+            "resources/resfinder_db/all",
             out1=".comp.b",
             out2=".fsa",
             out3=".length.b",
@@ -20,7 +20,7 @@ rule create_resfinder_database:
     shell:
         """
 rm -rf $(dirname {output.out1})
-bash scripts/prepare_resfinder.sh > {log} 2>&1
+bash workflow/scripts/prepare_resfinder.sh > {log} 2>&1
 
 (cd $(dirname {output.out1}) && python3 INSTALL.py) >> {log} 2>&1
         """
@@ -29,7 +29,7 @@ bash scripts/prepare_resfinder.sh > {log} 2>&1
 rule screen_antibiotic_resistance_genes:
     input:
         db=expand(
-            config["kma"]["database"] + ".{extension}",
+            "resources/resfinder_db/all" + ".{extension}",
             extension=["comp.b", "fsa", "length.b", "seq.b"],
         ),
         assembly="data/tmp/assembly/{sample}/assembly.fasta",
@@ -39,7 +39,7 @@ rule screen_antibiotic_resistance_genes:
         fsa="data/tmp/kma/{sample}.hmm.fsa",
         res="data/tmp/kma/{sample}.hmm.res",
     params:
-        db=config["kma"]["database"],
+        db="resources/resfinder_db/all",
         prefix=subpath(output.aln, strip_suffix=".aln"),
     conda:
         "../envs/kma.yaml"

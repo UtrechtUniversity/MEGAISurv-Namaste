@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd data
+mkdir -p resources && cd resources
 git clone https://git@bitbucket.org/genomicepidemiology/resfinder_db.git
 echo "Downloaded ResFinder Database on:"
 date

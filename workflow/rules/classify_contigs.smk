@@ -75,7 +75,7 @@ rule generate_microbiota_profiles:
 rule genomad:
     input:
         fasta="data/tmp/assembly/{sample}/assembly.fasta",
-        db=config["genomad"]["database"],
+        db="resources/genomad_db",
     output:
         aggregated_classification="data/tmp/genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
         plasmid_summary="data/tmp/genomad/{sample}/assembly_summary/assembly_plasmid_summary.tsv",

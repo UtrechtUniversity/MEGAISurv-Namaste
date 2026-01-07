@@ -24,7 +24,6 @@ simple_stats:
 
 kma:
   threads: 12
-  database: "data/resfinder_db/all"
 
 centrifuger:
   threads: 12
@@ -44,4 +43,3 @@ gtdbtk:
 
 genomad:
   threads: 12
-  database: "data/genomad_db/"
