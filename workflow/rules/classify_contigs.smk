@@ -81,7 +81,7 @@ rule genomad:
         plasmid_summary="data/tmp/genomad/{sample}/assembly_summary/assembly_plasmid_summary.tsv",
         virus_summary="data/tmp/genomad/{sample}/assembly_summary/assembly_virus_summary.tsv",
     params:
-        output_dir="data/tmp/genomad/{sample}/",
+        output_dir=subpath(output.plasmid_summary, ancestor=2),
     conda:
         "../envs/genomad.yaml"
     threads: config["genomad"]["threads"]

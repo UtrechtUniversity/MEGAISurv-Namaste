@@ -8,7 +8,7 @@ rule metagenomic_assembly:
         assembly="data/tmp/assembly/{sample}/assembly.fasta",
         info="data/tmp/assembly/{sample}/assembly_info.txt",
     params:
-        output_dir="data/tmp/assembly/{sample}",
+        output_dir=subpath(output.assembly, parent=True),
         settings="--meta",
     conda:
         "../envs/flye.yaml"
@@ -32,7 +32,7 @@ rule assess_assembly:
         icarus="data/tmp/quast/{sample}/icarus.html",
         log="data/tmp/quast/{sample}/metaquast.log",
     params:
-        output_dir="data/tmp/quast/{sample}",
+        output_dir=subpath(output.report, parent=True),
     conda:
         "../envs/quast.yaml"
     threads: config["metaquast"]["threads"]
