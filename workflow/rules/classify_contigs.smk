@@ -2,15 +2,39 @@
 ## 1: taxonomic classification (Centrifuger + TaxonKit)
 
 
+rule download_centrifuger_database:
+    output:
+        multiext(
+            "resources/centrifuger_db/cfr_hpv+gbsarscov2.",
+            out1="1.cfr",
+            out2="2.cfr",
+            out3="3.cfr",
+        ),
+    conda:
+        "../envs/bash.yaml"
+    threads: 1
+    log:
+        "log/download_centrifuger_database.txt",
+    benchmark:
+        "log/benchmark/download_centrifuger_database.txt"
+    shell:
+        """
+bash workflow/scripts/download_centrifuger_db.sh > {log} 2>&1
+        """
+
+
 rule taxonomic_classification:
     input:
         fasta="data/tmp/assembly/{sample}/assembly_ARG_masked.fasta",
-        db=config["centrifuger"]["database"] + ".2.cfr",
+        db=collect(
+            "resources/centrifuger_db/cfr_hpv+gbsarscov2.{suffix}",
+            suffix=["1.cfr", "2.cfr", "3.cfr"],
+        ),
     output:
         tsv="data/tmp/centrifuger/{sample}/centrifuger_masked.tsv",
         quant="data/tmp/centrifuger/{sample}/centrifuger_masked-quant.tsv",
     params:
-        db=subpath(input.db, strip_suffix=".2.cfr"),
+        db="resources/centrifuger_db/cfr_hpv+gbsarscov2"
     conda:
         "../envs/centrifuger.yaml"
     threads: config["centrifuger"]["threads"]
@@ -20,20 +44,44 @@ rule taxonomic_classification:
         "log/benchmark/centrifuger/{sample}.txt"
     shell:
         """
-centrifuger -u {input.fasta} -t {threads} -x {params.db} > {output.tsv}\
- 2> {log}
+centrifuger -u {input.fasta} -t {threads}\
+ -x {params.db} > {output.tsv} 2> {log}
 
 centrifuger-quant -x {params.db} -c {output.tsv} > {output.quant} 2> {log}
         """
 
 
+rule download_taxdump:
+    output:
+        multiext(
+            "resources/taxdump/",
+            names="names.dmp",
+            nodes="nodes.dmp",
+            delnodes="delnodes.dmp",
+            merged="merged.dmp",
+        ),
+    threads: 1
+    conda:
+        "../envs/bash.yaml"
+    log:
+        "log/download_taxdump.txt",
+    benchmark:
+        "log/benchmark/download_taxdump.txt"
+    shell:
+        """
+bash workflow/scripts/download_taxdump.sh > {log} 2>&1
+        """
+
+
 rule lookup_taxids:
     input:
-        "data/tmp/centrifuger/{sample}/centrifuger_masked.tsv",
+        assembly="data/tmp/centrifuger/{sample}/centrifuger_masked.tsv",
+        db=collect(
+            "resources/taxdump/{dmp}",
+            dmp=["names.dmp", "nodes.dmp", "delnodes.dmp", "merged.dmp"],
+        ),
     output:
         "data/tmp/centrifuger/{sample}/centrifuger_masked+taxa.tsv",
-    params:
-        taxondb=config["taxon_database"],
     threads: 1
     conda:
         "../envs/taxonkit.yaml"
@@ -43,7 +91,7 @@ rule lookup_taxids:
         "log/benchmark/lookup_taxids/{sample}.txt"
     shell:
         """
-taxonkit reformat {input} -I 3 --data-dir {params.taxondb}\
+taxonkit reformat {input.assembly} -I 3 --data-dir resources/taxdump\
  -f '{{s}}\t{{k}};{{p}};{{c}};{{o}};{{f}};{{g}};{{s}}' -F\
  > {output} 2> {log}
         """
@@ -70,6 +118,22 @@ rule generate_microbiota_profiles:
 
 
 ## 2: chromosome/plasmid/virus (geNomad)
+
+
+rule download_genomad_database:
+    output:
+        db=directory("resources/genomad_db"),
+    conda:
+        "../envs/genomad.yaml"
+    threads: 1
+    log:
+        "log/download_genomad_database.txt",
+    benchmark:
+        "log/benchmark/download_genomad_database.txt"
+    shell:
+        """
+genomad download-database $(dirname {output.db}) > {log} 2>&1
+        """
 
 
 rule genomad:
