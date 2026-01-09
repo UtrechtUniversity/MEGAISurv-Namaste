@@ -14,5 +14,5 @@ md5sum -c taxdump.tar.gz.md5 &&\
  tar -zxf taxdump.tar.gz ||\
  echo "Wrong checksum, download again!"
 
-# Remove the tarball
-rm taxdump.tar.gz
+# Remove the tarball and checksum
+rm taxdump.tar.gz*
