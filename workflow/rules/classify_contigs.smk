@@ -132,6 +132,7 @@ rule download_genomad_database:
         "log/benchmark/download_genomad_database.txt"
     shell:
         """
+mkdir -p $(dirname {output.db})
 genomad download-database $(dirname {output.db}) > {log} 2>&1
         """
 
