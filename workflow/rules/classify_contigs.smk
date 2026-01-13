@@ -25,16 +25,16 @@ bash workflow/scripts/download_centrifuger_db.sh > {log} 2>&1
 
 rule taxonomic_classification:
     input:
-        fasta="data/tmp/assembly/{sample}/assembly_ARG_masked.fasta",
+        fasta="results/assembly/{sample}/assembly_ARG_masked.fasta",
         db=collect(
             "resources/centrifuger_db/cfr_hpv+gbsarscov2.{suffix}",
             suffix=["1.cfr", "2.cfr", "3.cfr"],
         ),
     output:
-        tsv="data/tmp/centrifuger/{sample}/centrifuger_masked.tsv",
-        quant="data/tmp/centrifuger/{sample}/centrifuger_masked-quant.tsv",
+        tsv="results/taxonomic_classification/{sample}/centrifuger_masked.tsv",
+        quant="results/taxonomic_classification/{sample}/centrifuger_masked-quant.tsv",
     params:
-        db="resources/centrifuger_db/cfr_hpv+gbsarscov2"
+        db="resources/centrifuger_db/cfr_hpv+gbsarscov2",
     conda:
         "../envs/centrifuger.yaml"
     threads: config["centrifuger"]["threads"]
@@ -75,13 +75,13 @@ bash workflow/scripts/download_taxdump.sh > {log} 2>&1
 
 rule lookup_taxids:
     input:
-        assembly="data/tmp/centrifuger/{sample}/centrifuger_masked.tsv",
+        assembly="results/taxonomic_classification/{sample}/centrifuger_masked.tsv",
         db=collect(
             "resources/taxdump/{dmp}",
             dmp=["names.dmp", "nodes.dmp", "delnodes.dmp", "merged.dmp"],
         ),
     output:
-        "data/tmp/centrifuger/{sample}/centrifuger_masked+taxa.tsv",
+        "results/taxonomic_classification/{sample}/centrifuger_masked+taxa.tsv",
     threads: 1
     conda:
         "../envs/taxonkit.yaml"
@@ -99,11 +99,11 @@ taxonkit reformat {input.assembly} -I 3 --data-dir resources/taxdump\
 
 rule generate_microbiota_profiles:
     input:
-        assembly_info="data/tmp/assembly/{sample}/assembly_info.txt",
-        classifications="data/tmp/centrifuger/{sample}/centrifuger_masked+taxa.tsv",
+        assembly_info="results/assembly/{sample}/assembly_info.txt",
+        classifications="results/taxonomic_classification/{sample}/centrifuger_masked+taxa.tsv",
     output:
-        per_contig="data/tmp/microbiota_profiles/{sample}-per_contig.tsv",
-        per_species="data/tmp/microbiota_profiles/{sample}-per_species.tsv",
+        per_contig="results/microbiota_profile/{sample}-per_contig.tsv",
+        per_species="results/microbiota_profile/{sample}-per_species.tsv",
     params:
         sample="{sample}",
     conda:
@@ -139,12 +139,12 @@ genomad download-database $(dirname {output.db}) > {log} 2>&1
 
 rule genomad:
     input:
-        fasta="data/tmp/assembly/{sample}/assembly.fasta",
+        fasta="results/assembly/{sample}/assembly.fasta",
         db="resources/genomad_db",
     output:
-        aggregated_classification="data/tmp/genomad/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
-        plasmid_summary="data/tmp/genomad/{sample}/assembly_summary/assembly_plasmid_summary.tsv",
-        virus_summary="data/tmp/genomad/{sample}/assembly_summary/assembly_virus_summary.tsv",
+        aggregated_classification="results/plasmid_prediction/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
+        plasmid_summary="results/plasmid_prediction/{sample}/assembly_summary/assembly_plasmid_summary.tsv",
+        virus_summary="results/plasmid_prediction/{sample}/assembly_summary/assembly_virus_summary.tsv",
     params:
         output_dir=subpath(output.plasmid_summary, ancestor=2),
     conda:

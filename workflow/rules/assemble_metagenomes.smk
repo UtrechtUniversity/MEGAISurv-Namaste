@@ -3,10 +3,10 @@
 
 rule metagenomic_assembly:
     input:
-        "data/tmp/filtered/{sample}.fastq.gz",
+        "results/filtered_reads/{sample}.fastq.gz",
     output:
-        assembly="data/tmp/assembly/{sample}/assembly.fasta",
-        info="data/tmp/assembly/{sample}/assembly_info.txt",
+        assembly="results/assembly/{sample}/assembly.fasta",
+        info="results/assembly/{sample}/assembly_info.txt",
     params:
         output_dir=subpath(output.assembly, parent=True),
         settings="--meta",
@@ -26,11 +26,11 @@ flye {params.settings} --threads {threads} --nano-hq {input}\
 
 rule assess_assembly:
     input:
-        "data/tmp/assembly/{sample}/assembly.fasta",
+        "results/assembly/{sample}/assembly.fasta",
     output:
-        report="data/tmp/quast/{sample}/report.html",
-        icarus="data/tmp/quast/{sample}/icarus.html",
-        log="data/tmp/quast/{sample}/metaquast.log",
+        report="results/contig_qc/{sample}/report.html",
+        icarus="results/contig_qc/{sample}/icarus.html",
+        log="results/contig_qc/{sample}/metaquast.log",
     params:
         output_dir=subpath(output.report, parent=True),
     conda:
@@ -48,9 +48,9 @@ metaquast.py -o {params.output_dir} -t {threads} {input} > {log} 2>&1
 
 rule simple_assembly_statistics:
     input:
-        expand("data/tmp/assembly/{sample}/assembly.fasta", sample=SAMPLES),
+        expand("results/assembly/{sample}/assembly.fasta", sample=SAMPLES),
     output:
-        "data/tmp/assembly/assembly_statistics-seqkit.tsv",
+        "results/assembly/assembly_statistics-seqkit.tsv",
     conda:
         "../envs/seqkit.yaml"
     threads: config["simple_stats"]["threads"]
@@ -66,11 +66,11 @@ seqkit stats -Ta -j {threads} > {output} 2> {log}
 
 rule map_reads_to_assembly:
     input:
-        reads="data/tmp/filtered/{sample}.fastq.gz",
-        assembly="data/tmp/assembly/{sample}/assembly.fasta",
+        reads="results/filtered_reads/{sample}.fastq.gz",
+        assembly="results/assembly/{sample}/assembly.fasta",
     output:
-        bam="data/tmp/assembly/{sample}/mapped_back/{sample}.bam",
-        cov="data/tmp/assembly/{sample}/mapped_back/{sample}-coverage.tsv",
+        bam="results/assembly/{sample}/mapped_back/{sample}.bam",
+        cov="results/assembly/{sample}/mapped_back/{sample}-coverage.tsv",
     conda:
         "../envs/minimap2.yaml"
     threads: config["minimap2"]["threads"]
@@ -89,11 +89,11 @@ samtools coverage -o {output.cov} {output.bam} >> {log} 2>&1
 rule summarise_read_mapping:
     input:
         cov_files=expand(
-            "data/tmp/assembly/{sample}/mapped_back/{sample}-coverage.tsv",
+            "results/assembly/{sample}/mapped_back/{sample}-coverage.tsv",
             sample=SAMPLES,
         ),
     output:
-        "data/processed/contig_coverage.csv",
+        "results/contig_coverage.csv",
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1

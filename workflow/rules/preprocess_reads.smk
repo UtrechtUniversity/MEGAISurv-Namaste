@@ -5,9 +5,9 @@ rule read_quality_control:
     input:
         INPUT_DIR / "{sample}.fastq.gz",
     output:
-        filtered="data/tmp/filtered/{sample}.fastq.gz",
-        json="data/tmp/read_qc/{sample}.json",
-        html="data/tmp/read_qc/{sample}.html",
+        filtered="results/filtered_reads/{sample}.fastq.gz",
+        json="results/read_qc/{sample}.json",
+        html="results/read_qc/{sample}.html",
     conda:
         "../envs/fastplong.yaml"
     threads: config["fastplong"]["threads"]
@@ -26,9 +26,9 @@ fastplong --in {input} --out {output.filtered}\
 
 rule extract_read_qc_summaries:
     input:
-        expand("data/tmp/read_qc/{sample}.json", sample=SAMPLES),
+        expand("results/read_qc/{sample}.json", sample=SAMPLES),
     output:
-        expand("data/tmp/read_qc/summary/{sample}.json", sample=SAMPLES),
+        expand("results/read_qc/summary/{sample}.json", sample=SAMPLES),
     conda:
         "../envs/bash.yaml"
     threads: 1
@@ -47,9 +47,9 @@ done > {log} 2>&1
 
 rule summarise_read_qc_data:
     input:
-        expand("data/tmp/read_qc/summary/{sample}.json", sample=SAMPLES),
+        expand("results/read_qc/summary/{sample}.json", sample=SAMPLES),
     output:
-        "data/processed/read_qc_summary.csv",
+        "results/read_qc_summary.csv",
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1

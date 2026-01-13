@@ -32,12 +32,12 @@ rule screen_antibiotic_resistance_genes:
             "resources/resfinder_db/all" + ".{extension}",
             extension=["comp.b", "fsa", "length.b", "seq.b"],
         ),
-        assembly="data/tmp/assembly/{sample}/assembly.fasta",
+        assembly="results/assembly/{sample}/assembly.fasta",
     output:
-        aln="data/tmp/kma/{sample}.hmm.aln",
-        frag="data/tmp/kma/{sample}.hmm.frag.gz",
-        fsa="data/tmp/kma/{sample}.hmm.fsa",
-        res="data/tmp/kma/{sample}.hmm.res",
+        aln="results/resistance_genes/{sample}.hmm.aln",
+        frag="results/resistance_genes/{sample}.hmm.frag.gz",
+        fsa="results/resistance_genes/{sample}.hmm.fsa",
+        res="results/resistance_genes/{sample}.hmm.res",
     params:
         db="resources/resfinder_db/all",
         prefix=subpath(output.aln, strip_suffix=".aln"),
@@ -57,11 +57,11 @@ kma -t {threads} -bcNano -t_db {params.db} -i {input.assembly} -o {params.prefix
 
 rule mask_resistance_gene_positions:
     input:
-        frag="data/tmp/kma/{sample}.hmm.frag.gz",
-        assembly="data/tmp/assembly/{sample}/assembly.fasta",
+        frag="results/resistance_genes/{sample}.hmm.frag.gz",
+        assembly="results/assembly/{sample}/assembly.fasta",
     output:
-        gene_locations="data/tmp/kma/{sample}.locations.txt",
-        masked_assembly="data/tmp/assembly/{sample}/assembly_ARG_masked.fasta",
+        gene_locations="results/resistance_genes/{sample}.locations.txt",
+        masked_assembly="results/assembly/{sample}/assembly_ARG_masked.fasta",
     conda:
         "../envs/bedtools.yaml"
     threads: 1

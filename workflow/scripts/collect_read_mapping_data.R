@@ -30,4 +30,4 @@ complete_coverage_df <- do.call(
   lapply(X = coverage_files, FUN = read_coverage_file)
 )
 
-write_csv(x = complete_coverage_df, file = here("data", "processed", "contig_coverage.csv"))
+write_csv(x = complete_coverage_df, file = snakemake@output[[1]])

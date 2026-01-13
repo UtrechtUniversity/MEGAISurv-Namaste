@@ -4,12 +4,12 @@
 
 rule bin_assemblies_semibin:
     input:
-        masked_assembly="data/tmp/assembly/{sample}/assembly_ARG_masked.fasta",
-        bam="data/tmp/assembly/{sample}/mapped_back/{sample}.bam",
+        masked_assembly="results/assembly/{sample}/assembly_ARG_masked.fasta",
+        bam="results/assembly/{sample}/mapped_back/{sample}.bam",
     output:
-        info="data/tmp/assembly/{sample}/semibin2/bins_info.tsv",
-        contig_bins="data/tmp/assembly/{sample}/semibin2/contig_bins.tsv",
-        bin_dir=directory("data/tmp/assembly/{sample}/semibin2/output_bins"),
+        info="results/assembly/{sample}/semibin2/bins_info.tsv",
+        contig_bins="results/assembly/{sample}/semibin2/contig_bins.tsv",
+        bin_dir=directory("results/assembly/{sample}/semibin2/output_bins"),
     conda:
         "../envs/semibin.yaml"
     threads: config["semibin"]["threads"]
@@ -27,11 +27,11 @@ SemiBin2 single_easy_bin -t {threads}\
 
 rule bin_assemblies_metabat:
     input:
-        masked_assembly="data/tmp/assembly/{sample}/assembly_ARG_masked.fasta",
-        bam="data/tmp/assembly/{sample}/mapped_back/{sample}.bam",
+        masked_assembly="results/assembly/{sample}/assembly_ARG_masked.fasta",
+        bam="results/assembly/{sample}/mapped_back/{sample}.bam",
     output:
-        depth=temp("data/tmp/assembly/{sample}/metabat/{sample}-metabat_depth.txt"),
-        info="data/tmp/assembly/{sample}/metabat/{sample}-metabat.BinInfo.txt",
+        depth=temp("results/assembly/{sample}/metabat/{sample}-metabat_depth.txt"),
+        info="results/assembly/{sample}/metabat/{sample}-metabat.BinInfo.txt",
     params:
         prefix=subpath(output.info, strip_suffix=".BinInfo.txt"),
     conda:
@@ -51,10 +51,10 @@ metabat2 -i {input.masked_assembly} -a {output.depth} -o {params.prefix} >> {log
 
 rule bin_assemblies_vamb:
     input:
-        raw_assembly="data/tmp/assembly/{sample}/assembly.fasta",
-        bam="data/tmp/assembly/{sample}/mapped_back/{sample}.bam",
+        raw_assembly="results/assembly/{sample}/assembly.fasta",
+        bam="results/assembly/{sample}/mapped_back/{sample}.bam",
     output:
-        bins=directory("data/tmp/assembly/{sample}/vamb/bins"),
+        bins=directory("results/assembly/{sample}/vamb/bins"),
     params:
         prefix=subpath(output.bins, parent=True),
     conda:
@@ -79,9 +79,9 @@ vamb bin default --fasta {input.raw_assembly}\
 
 rule classify_bins:
     input:
-        bin_dir="data/tmp/assembly/{sample}/semibin2/output_bins",
+        bin_dir="results/assembly/{sample}/semibin2/output_bins",
     output:
-        "data/tmp/assembly/{sample}/semibin2/gtdbtk/gtdbtk.bac120.summary.tsv",
+        "results/assembly/{sample}/semibin2/gtdbtk/gtdbtk.bac120.summary.tsv",
     conda:
         "../envs/gtdbtk.yaml"
     threads: config["gtdbtk"]["threads"]
