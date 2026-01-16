@@ -1,0 +1,101 @@
+"""
+Author: Sam Nooij
+Organisation: Utrecht University
+Department: Clinical Infectiology (KLIF), Infectious Diseases & Immunology,
+  Biomolecular Health Sciences, Faculty of Veterinary Medicine
+Date: 2025-01-17
+
+Workflow for assembling MinION long-read metagenomes, taxonomic classification
+and identification of antibiotic resistance genes, based on previous work by
+Aldert Zomer (from the same department). Now extended with raw read quality-
+control and filtering.
+
+Input: (Gzipped) Fastq files of relevant metagenomic samples
+Output: (various)
+
+Example use:
+    $ snakemake --profile config
+
+N.B. Variables are set in the configuration files under `config`.
+"""
+
+# Step 1: Load configuration
+# ---------------------------------------------------------
+
+
+configfile: Path("config/parameters.yaml")
+
+
+# Log messages
+onstart:
+    print("\n--- Starting analysis! ---\n")
+
+
+onsuccess:
+    print("\n --- Workflow finished! ---\n")
+
+
+onerror:
+    print("\n --- An error occurred! ---\n")
+
+
+# Step 2: Load rules that do the work
+# ---------------------------------------------------------
+include: "rules/helper_functions.smk"
+include: "rules/preprocess_reads.smk"
+include: "rules/assemble_metagenomes.smk"
+include: "rules/screen_resistance_genes.smk"
+include: "rules/classify_contigs.smk"
+include: "rules/generate_mags.smk"
+
+
+# Step 3: specify target outputs
+# ---------------------------------------------------------
+
+
+rule all:
+    input:
+        # Metagenomic assemblies (by Flye)
+        expand("results/assembly/{sample}/assembly.fasta", sample=SAMPLES),
+        # Assembly assessment reports (by metaQUAST)
+        expand("results/contig_qc/{sample}/metaquast.log", sample=SAMPLES),
+        # Simple assembly statistics (by seqkit)
+        "results/assembly/assembly_statistics-seqkit.tsv",
+        # Per-contig coverage stats
+        "results/contig_coverage.csv",
+        # Antibiotic resistance gene screening (by KMA)
+        expand(
+            "results/resistance_genes/{sample}.hmm.{suffix}",
+            sample=SAMPLES,
+            suffix=["aln", "frag.gz", "fsa", "res"],
+        ),
+        # Taxonomic classifications (by Centrifuger)
+        expand(
+            "results/taxonomic_classification/{sample}/centrifuger_masked{extension}",
+            sample=SAMPLES,
+            extension=[".tsv", "-quant.tsv"],
+        ),
+        # Microbiota profiles (TaxonKit + custom R script)
+        expand(
+            "results/microbiota_profile/{sample}-per_{unit}.tsv",
+            sample=SAMPLES,
+            unit=["contig", "species"],
+        ),
+        # Chromosome/plasmid/virus predictions (geNomad)
+        expand(
+            "results/plasmid_prediction/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
+            sample=SAMPLES,
+        ),
+        # Bins from SemiBin2
+        expand("results/assembly/{sample}/semibin2/bins_info.tsv", sample=SAMPLES),
+        # Bins from MetaBAT2
+        expand(
+            "results/assembly/{sample}/metabat/{sample}-metabat.BinInfo.txt",
+            sample=SAMPLES,
+        ),
+        # Bins from VAMB
+        expand(
+            "results/assembly/{sample}/vamb/bins",
+            sample=SAMPLES,
+        ),
+    default_target: True

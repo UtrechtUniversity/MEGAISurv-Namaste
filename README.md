@@ -20,6 +20,15 @@ framework.
 
 ## Workflow description
 
+```mermaid
+flowchart LR
+    A[Raw reads] -->|Preprocess:  fastplong| B(High-quality reads)
+    B -->|Assembly: metaFlye| C(Contigs)
+    C -->|Screen ARGs: KMA/ResFinder| D(ARG-containing contigs)
+    D -->|Mask: BEDtools| E(Masked contigs)
+    E -->|Classify: Centrifuger| F(Taxonomy-assigned contigs)
+```
+
 Simple description:
 
 1. Metagenomic reads are preprocessed using [fastplong](https://github.com/OpenGene/fastplong) (version 0.2.2)
@@ -31,9 +40,9 @@ Simple description:
     - This uses the [ResFinder Database](https://bitbucket.org/genomicepidemiology/resfinder_db/src/master/);
       a script is included to download the latest version: [scripts/prepare_resfinder.sh](scripts/prepare_resfinder.sh)
 
-5. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
+4. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
 
-6. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
+5. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
 
 ### Microbiota profiling
 
@@ -94,22 +103,76 @@ generated when you install taxdump) to be able to use `taxonkit`. E.g.:
 mv *.dmp ~/.taxonkit/
 ```
 
+#### GTDB-Tk user note
+
+GTDB-Tk requires its database to be downloaded and referenced to work.
+You can run the Snakemake workflow without setting this up first,
+but then the rule `classify_bins` will fail and present an error.
+If you already have a working GTDB-Tk installation in conda/mamba,
+you can use:
+
+```bash
+grep "gtdbtk" .snakemake/conda/*yaml # find the environment with gtdbtk in it
+mamba activate .snakemake/conda/[env_name]
+# Below is an example command, fill in the correct path to your environment!
+conda env config vars set GTDBTK_DATA_PATH="~/miniforge3/env/gtdbtk/share/gtdbtk-2.5.2/db"
+
+# If you have not downloaded the database before, change the last command to this :
+download-db.sh # to download the database.
+```
+
+(See the [GTDB-Tk user manual](https://ecogenomics.github.io/GTDBTk/installing/bioconda.html#installing-bioconda).)
+
+## Manual intervention
+
+### Failing assemblies
+
+Although the workflow is automated, it is possible that it gets stuck at certain points.
+One is the assembly: a sample may not have enough reads to successfully assemble.
+In such a case, Snakemake will return an error for that particular sample
+and will not be able to complete the whole workflow. To exclude samples from
+further analysis if no assembly can be produced, a helper script has been provided.
+If Snakemake was installed using mamda, you can run:
+
+```bash
+python3 scripts/exclude_failed_assemblies.py
+```
+
+To automatically identify samples for which no assembly could be produced
+and move their respective reads to the subdirectory `cannot_assemble`.
+By doing this, Snakemake will no longer see them as input samples and
+can then successfully complete the workflow.
+
 ## Future ideas
 
-- Summarise the final output in one neat table
+### Improve existing workflow
+
+- Summarise the final output in one neat table, that is, include `scripts/generate_assembly_database.R` in the workflow (or equivalent scripts)
+
+- **Write/extend documentation of the whole workflow and interesting findings**
+
+    - Create a documentation page like <https://utrechtuniversity.github.io/campylobacter-crisprscape/>
+
+    - Document ARG identification process (currently includes R script to parse KMA and include only hits that cover >=60% of the reference ARG)
+
+    - Document quality control steps and inclusion and exclusion criteria
+
+    - Definitely include a user manual!
 
 - Include downstream processing scripts (RMarkdown) for statistical analyses
-and visualisation
+and visualisationu
+
+- Calculate per-sample and overall fraction of contigs with ARGs: what is the estimated prevalence of ARGs?
+
+- adopt Snakemake's recommended structure, formatting, linting
+
+    - include scripts for downloading TaxonKit taxdump and Centrifuger DB --> to `resources/` (that makes the workflow more portable and simpler to setup)
+
+### Test new features
 
 - Test alternative contig classification databases and tools
 
 - Filter contigs to minimum length of 2-3x average read length?
-
-- **Write/extend documentation of the whole workflow and interesting findings**
-
-- Calculate per-sample and overall fraction of contigs with ARGs: what is the estimated prevalence of ARGs?
-
-- Document ARG identification process (currently includes R script to parse KMA and include only hits that cover >=60% of the reference ARG)
 
 ## Project organisation
 
@@ -118,17 +181,21 @@ and visualisation
 ├── CITATION.cff
 ├── LICENSE
 ├── README.md
-├── Snakefile          <- Python-based workflow description
-├── bin                <- Code and programs used in this project/experiment
 ├── config             <- Configuration of Snakemake workflow
 ├── data               <- All project data, divided in subfolders
 │   ├── processed      <- Final data, used for visualisation (e.g. tables)
 │   ├── raw            <- Raw data, original, should not be modified (e.g. fastq files)
 │   └── tmp            <- Intermediate data, derived from the raw data, but not yet ready for visualisation
 ├── doc                <- Project documentation, notes and experiment records
-├── envs               <- Conda environments necessary to run the project/experiment
 ├── log                <- Log files from programs
-└── results            <- Figures or reports generated from processed data
+├── resources          <- Databases downloaded/generated by the workflow
+├── results            <- Figures or reports generated from processed data
+└── workflow           <- Snakemake workflow files
+    ├── envs           <- Conda environments (software dependencies)
+    ├── notebooks      <- RMarkdown/Jupyter notebooks with statistical analyses and figures
+    ├── rules          <- Modules of the workflow
+    ├── scripts        <- Scripts used by the workflow
+    └── Snakefile      <- The main workflow file
 ```
 
 ## Licence

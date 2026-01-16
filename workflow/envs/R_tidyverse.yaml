@@ -6,3 +6,5 @@ channels:
 dependencies:
  - r-base=4.4.2
  - r-tidyverse=2.0.0
+ - r-here=1.0.1
+ - r-jsonlite=2.0.0

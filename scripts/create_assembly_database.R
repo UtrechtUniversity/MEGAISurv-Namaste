@@ -39,11 +39,13 @@ arg_results <- do.call(
   rbind,
   lapply(X = arg_results_files, FUN = read_arg_results)
 ) %>%
-  rename(arg = `#Template`,
-         arg_identity = Template_Identity,
-         arg_coverage = Template_Coverage,
-         arg_length = Template_length,
-         arg_depth = Depth) %>%
+  rename(
+    arg = `#Template`,
+    arg_identity = Template_Identity,
+    arg_coverage = Template_Coverage,
+    arg_length = Template_length,
+    arg_depth = Depth
+  ) %>%
   select(sample, arg, arg_identity, arg_coverage, arg_length, arg_depth)
 
 ## A 'strict' matching option would be to take the ARG length (in results),
@@ -254,10 +256,12 @@ arg_and_assembly <- left_join(
   )
 
 # Remove dataframes that are no longer necessary to save memory
-rm(arg_stats, arg_results, deduplicated_args, deduplicated_results,
-   match_results_with_stats, annotated_args, arg_annotation,
-   classified_args,
-   assembly_stats, assembly_stats_summary)
+rm(
+  arg_stats, arg_results, deduplicated_args, deduplicated_results,
+  match_results_with_stats, annotated_args, arg_annotation,
+  classified_args,
+  assembly_stats, assembly_stats_summary
+)
 
 ## 3. Taxonomic classifications
 

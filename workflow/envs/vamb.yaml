@@ -1,0 +1,9 @@
+name: vamb
+
+dependencies:
+ - python >=3.10.0,<3.14
+ - pip:
+   - vamb==5.0.4
+
+channels:
+ - conda-forge
