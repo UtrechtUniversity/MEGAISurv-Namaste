@@ -29,20 +29,47 @@ flowchart LR
     E -->|Classify: Centrifuger| F(Taxonomy-assigned contigs)
 ```
 
-Simple description:
+### Simple description
+
+Input: long-read metagenomes generated on a Nanopore platform
 
 1. Metagenomic reads are preprocessed using [fastplong](https://github.com/OpenGene/fastplong) (version 0.2.2)
 
 2. High-quality reads are assembled using [metaFlye](https://github.com/mikolmogorov/Flye) (version 2.9.2)
 
-3. Antibiotic resistance genes are identified using [KMA](https://github.com/genomicepidemiology/kma) (version 1.4.2)
+    - Assembly stats are calculated using [metaQUAST](https://quast.sourceforge.net/quast) (version 5.3.0) and [seqkit](https://bioinf.shenwei.me/seqkit/) (version 2.9.0)
+    - High-quality reads are mapped back to contigs to calculate coverage using [minimap2](https://github.com/lh3/minimap2) (version 2.30) and [samtools](https://www.htslib.org/) (version 1.22.1)
+
+4. Antibiotic resistance genes are identified using [KMA](https://github.com/genomicepidemiology/kma) (version 1.4.2)
 
     - This uses the [ResFinder Database](https://bitbucket.org/genomicepidemiology/resfinder_db/src/master/);
       a script is included to download the latest version: [scripts/prepare_resfinder.sh](scripts/prepare_resfinder.sh)
 
-4. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
+5. Resistance genes are masked using [BEDtools](https://bedtools.readthedocs.io/en/latest/index.html) (function `maskFastaFromBed`; version 2.31.1)
 
-5. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
+6. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
+
+    - Taxon IDs are converted to their respective names using [TaxonKit](https://bioinf.shenwei.me/taxonkit/) (version 0.18.0)
+
+7. Contigs are also classified as chromosome/plasmid/virus based on the predictions by [geNomad](https://portal.nersc.gov/genomad/) (version 1.8.0)
+
+The results from KMA+ResFinder, Centrifuger+TaxonKit and geNomad are combined in a tab-separated text file (dataframe)
+for downstream processing (for example in R).
+
+**(Under construction: 🚧)**
+
+As additional taxonomic classification and verification of results produced by Centrifuger, assembled contigs are binned using:
+
+- [SemiBin2](https://semibin.readthedocs.io/en/latest/) (version 2.2.0)
+- [MetaBAT2](https://bitbucket.org/berkeleylab/metabat) (version 2.18)
+- [VAMB](https://vamb.readthedocs.io/en/latest/index.html) (version 5.0.4)
+
+The plan is to assess each of these with [CheckM2](https://github.com/chklovski/CheckM2),
+select the most complete/least contaminated bins for each sample using
+[dRep](https://drep.readthedocs.io/en/latest/), and then classify these 'curated bins' with
+[GTDB-Tk](https://ecogenomics.github.io/GTDBTk/).
+These classifications are then added to the combined dataframe to facilitate comparison to
+Centrifuger's classifications.
 
 ### Microbiota profiling
 
@@ -65,7 +92,7 @@ NCBI taxdump (ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)
 downloaded on 26 February 2025.
 
 The practical implementation of this workflow is described in the
-[`Snakefile`](Snakefile) and is as follows:
+[`Snakefile`](workflow/Snakefile) and is as follows:
 
 1. Classify contigs using Centrifuger with default parameters and the 'cfr_hpv+sarscov2' database
 (Which is available on [Zenodo](https://zenodo.org/records/10023239))
