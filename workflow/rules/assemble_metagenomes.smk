@@ -60,7 +60,7 @@ rule simple_assembly_statistics:
         "log/benchmark/simple_assembly_statistics.txt"
     shell:
         """
-seqkit stats -Ta -j {threads} > {output} 2> {log}
+seqkit stats -Ta -j {threads} {input} > {output} 2> {log}
         """
 
 

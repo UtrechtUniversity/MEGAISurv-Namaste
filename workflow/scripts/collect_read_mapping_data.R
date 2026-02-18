@@ -15,11 +15,11 @@ read_coverage_file <- function(coverage_file) {
   coverage_df <- read_delim(file = coverage_file, show_col_types = FALSE)
 
   # Insert sample names
-  if ( nrow(coverage_df) == 0) {
+  if (nrow(coverage_df) == 0) {
     return(data.frame())
   } else {
     coverage_df <- cbind(Sample = sample, coverage_df %>%
-                           rename("Contig" = "#rname"))
+      rename("Contig" = "#rname"))
   }
 
   return(coverage_df)
