@@ -31,25 +31,24 @@ def parse_yaml(config_file=str):
     """
     parameters_dict = load(open(config_file, "r"), Loader=Loader)
     input_directory = Path(parameters_dict["input_directory"])
-    output_directory = Path(parameters_dict["output_directory"])
     input_files = list(input_directory.glob("*.fastq.gz"))
     samples = [file.stem.replace(".fastq", "") for file in input_files]
 
     samples_and_reads = {"Samples": samples, "Input_reads": input_files}
 
-    return samples_and_reads, output_directory
+    return samples_and_reads
 
 
-def find_assembly_files(samples=list, output_directory=str):
+def find_assembly_files(samples=list):
     """
     Given a list of sample names, look for their corresponding assembly output
-    files in the directory that Snakemake uses (default=data/tmp/assembly)
+    files in the directory that Snakemake uses (default=results/assembly)
     """
     file_list = []
     assembly_qc = []
 
     for sample in samples:
-        assembly_file = output_directory / f"assembly/{sample}/assembly.fasta"
+        assembly_file = Path(f"results/assembly/{sample}/assembly.fasta")
 
         # If the assembly file exists
         if assembly_file.is_file():
@@ -73,8 +72,6 @@ def move_samples_without_assembly(qc_dict=dict):
     from samples that did not assemble (= exclude) to a new
     subdirectory 'cannot_assemble'.
     """
-    # Path.mkdir(input_path / "cannot_assemble", parents=True)
-
     for index in range(len(qc_dict["Samples"])):
         sample = qc_dict["Samples"][index]
         reads_file = qc_dict["Input_reads"][index]
@@ -104,21 +101,21 @@ def write_assembly_qc_table(qc_dict=dict, outputfile=str):
 
 
 def main():
-    samples_and_reads_dict, output_directory = parse_yaml(
-        config_file="config/parameters.yaml"
-    )
+    print("Looking for input reads by reading Snakemake parameters (YAML) file")
+    samples_and_reads_dict = parse_yaml(config_file="config/parameters.yaml")
+    print("Found:\n", pd.DataFrame.from_dict(samples_and_reads_dict), "\n")
 
-    assembly_dict = find_assembly_files(
-        samples=samples_and_reads_dict["Samples"], output_directory=output_directory
-    )
+    print("Looking up assemblies")
+    assembly_dict = find_assembly_files(samples=samples_and_reads_dict["Samples"])
+    print("Found:\n", pd.DataFrame.from_dict(assembly_dict), "\n")
 
     combined_dict = {**samples_and_reads_dict, **assembly_dict}
 
+    print("Moving reads that could not assemble")
     move_samples_without_assembly(qc_dict=combined_dict)
 
-    write_assembly_qc_table(
-        qc_dict=combined_dict, outputfile="data/tmp/assembly_qc.tsv"
-    )
+    print("\nWriting summary report")
+    write_assembly_qc_table(qc_dict=combined_dict, outputfile="results/assembly_qc.tsv")
 
     exit(0)
 
