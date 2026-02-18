@@ -86,6 +86,15 @@ rule all:
             "results/plasmid_prediction/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
             sample=SAMPLES,
         ),
+        # Concatenated stats from Flye,
+        "results/assembly_stats-concatenated.tsv.gz",
+        # Centrifuger,
+        "results/classifications-concatenated.tsv.gz",
+        # and geNomad
+        "results/plasmid_predictions-concatenated.tsv.gz",
+        "results/virus_predections-concatenated.tsv.gz",
+        # And a complete summary of assembly, ARG screening, and classification
+        "results/assembly_database.csv.gz",
         # Bins from SemiBin2
         expand("results/assembly/{sample}/semibin2/bins_info.tsv", sample=SAMPLES),
         # Bins from MetaBAT2
