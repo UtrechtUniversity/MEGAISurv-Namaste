@@ -13,6 +13,7 @@ rule make_assembly_database:
         assembly_info=expand(
             "results/assembly/{sample}/assembly_info.txt", sample=SAMPLES
         ),
+        mapped_coverage="results/contig_coverage.csv",
         arg_hits=expand("results/resistance_genes/{sample}.hmm.frag.gz", sample=SAMPLES),
         arg_results=expand("results/resistance_genes/{sample}.hmm.res", sample=SAMPLES),
         classification=expand(
