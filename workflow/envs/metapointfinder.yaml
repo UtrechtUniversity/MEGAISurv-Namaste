@@ -1,0 +1,8 @@
+name: metapointfinder
+
+dependencies:
+ - metapointfinder=1.01
+
+channels:
+ - conda-forge
+ - bioconda

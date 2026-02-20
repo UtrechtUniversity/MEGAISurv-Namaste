@@ -45,6 +45,7 @@ include: "rules/helper_functions.smk"
 include: "rules/preprocess_reads.smk"
 include: "rules/assemble_metagenomes.smk"
 include: "rules/screen_resistance_genes.smk"
+include: "rules/screen_resistance_mutations.smk"
 include: "rules/classify_contigs.smk"
 include: "rules/generate_mags.smk"
 
@@ -69,6 +70,17 @@ rule all:
             sample=SAMPLES,
             suffix=["aln", "frag.gz", "fsa", "res"],
         ),
+        # Antibiotic resistance mutations (by MetaPointFinder)
+        expand(
+            "results/resistance_mutations/{sample}/{sample}.{mol}.updated_table_with_scores_and_mutations.tsv",
+            sample=SAMPLES,
+            mol=["dna", "prot"],
+        ),
+        expand(
+            "results/resistance_mutations/{sample}/{sample}.{infix}.summary.txt",
+            sample=SAMPLES,
+            infix=["class.dna", "class.prot", "gene.dna", "gene.prot"],
+        ),
         # Taxonomic classifications (by Centrifuger)
         expand(
             "results/taxonomic_classification/{sample}/centrifuger_masked{extension}",
@@ -92,7 +104,7 @@ rule all:
         "results/classifications-concatenated.tsv.gz",
         # and geNomad
         "results/plasmid_predictions-concatenated.tsv.gz",
-        "results/virus_predections-concatenated.tsv.gz",
+        "results/virus_predictions-concatenated.tsv.gz",
         # And a complete summary of assembly, ARG screening, and classification
         "results/assembly_database.csv.gz",
         # Bins from SemiBin2

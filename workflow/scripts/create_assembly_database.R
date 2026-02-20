@@ -3,10 +3,9 @@
 # Look up information from KMA, Flye, Resfinder, geNomad, and Centrifuger
 # to create a comprehensive overview table of all the ARG-containing contigs.
 
-suppressPackageStartupMessages({
+suppressPackageStartupMessages(
   library(tidyverse)
-  library(here)
-})
+)
 
 
 assembly_stats_files <- snakemake@input[["assembly_info"]] # Flye's assembly_info.txt files
@@ -316,6 +315,12 @@ rm(classifications, arg_and_assembly)
 genomad_scores <- do.call(
   rbind,
   lapply(X = genomad_scores_files, FUN = read_stats, name_position = 3)
+)
+
+write_delim(
+  x = genomad_scores,
+  file = snakemake@output[["genomad_scores"]],
+  delim = "\t"
 )
 
 plasmid_classifications <- do.call(

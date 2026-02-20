@@ -25,6 +25,9 @@ simple_stats:
 kma:
   threads: 12
 
+metapointfinder:
+  threads: 8
+
 centrifuger:
   threads: 12
   database: "/mnt/data2/db/centrifuger/cfr_hpv+gbsarscov2"

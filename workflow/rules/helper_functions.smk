@@ -35,8 +35,9 @@ rule make_assembly_database:
     output:
         assembly_stats="results/assembly_stats-concatenated.tsv.gz",
         taxonomic_classification="results/classifications-concatenated.tsv.gz",
+        genomad_scores="results/plasmid_prediction/aggregated_classification_scores-concatenated.tsv.gz",
         plasmid_prediction="results/plasmid_predictions-concatenated.tsv.gz",
-        virus_prediction="results/virus_predections-concatenated.tsv.gz",
+        virus_prediction="results/virus_predictions-concatenated.tsv.gz",
         assembly_database="results/assembly_database.csv.gz",
     conda:
         "../envs/R_tidyverse.yaml"
@@ -47,3 +48,31 @@ rule make_assembly_database:
         "log/benchmark/make_assembly_database.txt"
     script:
         "../scripts/create_assembly_database.R"
+
+
+rule make_mutation_database:
+    input:
+        arm_results=expand(
+            "results/resistance_mutations/{sample}/{sample}.dna.updated_table_with_scores_and_mutations.tsv",
+            sample=SAMPLES,
+        ),
+        arm_contigs=expand(
+            "results/resistance_mutations/{sample}/matched_to_contigs.tsv",
+            sample=SAMPLES,
+        ),
+        assembly_stats="results/assembly_stats-concatenated.tsv.gz",
+        classification="results/classifications-concatenated.tsv.gz",
+        genomad_scores="results/plasmid_prediction/aggregated_classification_scores-concatenated.tsv.gz",
+        plasmid="results/plasmid_predictions-concatenated.tsv.gz",
+        virus="results/virus_predictions-concatenated.tsv.gz",
+    output:
+        mutation_database="results/mutation_database.csv.gz",
+    conda:
+        "../envs/R_tidyverse.yaml"
+    threads: 1
+    log:
+        "log/make_mutation_database.txt",
+    benchmark:
+        "log/benchmark/make_mutation_database.txt"
+    script:
+        "../scripts/create_mutation_database.R"
