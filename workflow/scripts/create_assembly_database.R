@@ -193,7 +193,7 @@ classified_args <- annotated_args %>%
 
 
 ## 2. Assembly stats (length, depth and circularity) -
-#     both from Flye (kmer-based) and minimap2 (mapping-based)
+#     both from Flye (graph-based mapping) and minimap2+samtools (mapping-based)
 
 read_stats <- function(filename, name_position) {
   # Cut the sample name from the file path using the name's position in the
@@ -217,15 +217,15 @@ flye_stats <- do.call(
   lapply(X = assembly_stats_files, FUN = read_stats, name_position = 2)
 ) %>%
   select(sample, "#seq_name", length, "cov.", "circ.")
-colnames(flye_stats) <- c("sample", "contig", "contig_length", "contig_kmer_depth", "circular")
+colnames(flye_stats) <- c("sample", "contig", "contig_length", "contig_depth_flye", "circular")
 
 mapped_stats <- read_csv(coverage_file, show_col_types = FALSE) %>%
   rename(
     "contig_mapped_reads" = "numreads",
     "contig_mapped_percent" = "coverage",
-    "contig_mapped_depth" = "meandepth"
+    "contig_depth_samtools" = "meandepth"
   ) %>%
-  select(Sample, Contig, contig_mapped_percent, contig_mapped_depth, contig_mapped_reads)
+  select(Sample, Contig, contig_mapped_percent, contig_depth_samtools, contig_mapped_reads)
 
 assembly_stats <- left_join(
   x = flye_stats,
@@ -245,8 +245,8 @@ write_delim(
 assembly_stats_summary <- assembly_stats %>%
   group_by(sample) %>%
   summarise(
-    mean_assembly_kmer_depth = mean(contig_kmer_depth),
-    mean_assembly_mapped_depth = mean(contig_mapped_depth),
+    mean_assembly_depth_flye = mean(contig_depth_flye),
+    mean_assembly_depth_samtools = mean(contig_depth_samtools),
     total_assembly_length = sum(contig_length)
   )
 
