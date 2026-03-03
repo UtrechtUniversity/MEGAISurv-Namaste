@@ -13,6 +13,7 @@ coverage_file <- snakemake@input[["mapped_coverage"]] # minimap2 + samtools cove
 arg_hits_files <- snakemake@input[["arg_hits"]] # KMA's *.frag.gz files
 arg_results_files <- snakemake@input[["arg_results"]] # KMA's .res files
 classification_files <- snakemake@input[["classification"]] # Centrifuger's output with annotated taxa Sys.glob(paths = here("data", "tmp", "centrifuger", "*", "centrifuger_masked+taxa.tsv"))
+strict_class_files <- snakemake@input[["strict_classification"]] # Centrifuger's output with '--min-hitlen 100'
 genomad_scores_files <- snakemake@input[["genomad_scores"]] # geNomad's aggregated classification scores
 genomad_plasmid_files <- snakemake@input[["genomad_plasmid"]] # geNomad's plasmid summary
 genomad_virus_files <- snakemake@input[["genomad_virus"]] # geNomad's virus summary
@@ -293,7 +294,8 @@ read_classification_files <- function(filename) {
 classifications <- do.call(
   rbind,
   lapply(X = classification_files, FUN = read_classification_files)
-)
+) %>%
+  select(sample, everything())
 
 write_delim(
   x = classifications,
@@ -301,10 +303,28 @@ write_delim(
   delim = "\t"
 )
 
+strict_classifications <- do.call(
+  rbind,
+  lapply(X = strict_class_files, FUN = read_classification_files)
+) %>%
+  select(sample, everything())
+
+write_delim(
+  x = strict_classifications,
+  file = snakemake@output[["strict_classification"]],
+  delim = "\t"
+)
+
 db_with_classifications <- left_join(
   x = arg_and_assembly,
-  y = classifications %>%
-    select(sample, readID, Species, Taxonomy),
+  y = full_join(
+    x = classifications %>%
+      select(sample, readID, Species, Taxonomy),
+    y = strict_classifications %>%
+      select(sample, readID, Species, Taxonomy),
+    by = c("sample", "readID"),
+    suffix = c("", "_strict")
+  ),
   by = c("sample", "contig" = "readID")
 )
 

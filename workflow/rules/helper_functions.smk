@@ -20,6 +20,10 @@ rule make_assembly_database:
             "results/taxonomic_classification/{sample}/centrifuger_masked+taxa.tsv",
             sample=SAMPLES,
         ),
+        strict_classification=expand(
+            "results/taxonomic_classification/{sample}/centrifuger_masked-strict+taxa.tsv",
+            sample=SAMPLES,
+        ),
         genomad_scores=expand(
             "results/plasmid_prediction/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
             sample=SAMPLES,
@@ -35,6 +39,7 @@ rule make_assembly_database:
     output:
         assembly_stats="results/assembly_stats-concatenated.tsv.gz",
         taxonomic_classification="results/classifications-concatenated.tsv.gz",
+        strict_classification="results/strict_classifications-concatenated.tsv.gz",
         genomad_scores="results/plasmid_prediction/aggregated_classification_scores-concatenated.tsv.gz",
         plasmid_prediction="results/plasmid_predictions-concatenated.tsv.gz",
         virus_prediction="results/virus_predictions-concatenated.tsv.gz",
@@ -62,6 +67,7 @@ rule make_mutation_database:
         ),
         assembly_stats="results/assembly_stats-concatenated.tsv.gz",
         classification="results/classifications-concatenated.tsv.gz",
+        strict_classification="results/strict_classifications-concatenated.tsv.gz",
         genomad_scores="results/plasmid_prediction/aggregated_classification_scores-concatenated.tsv.gz",
         plasmid="results/plasmid_predictions-concatenated.tsv.gz",
         virus="results/virus_predictions-concatenated.tsv.gz",

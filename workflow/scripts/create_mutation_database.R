@@ -116,11 +116,22 @@ classifications <- read_delim(
   delim = "\t", show_col_types = FALSE
 )
 
+strict_classifications <- read_delim(
+  file = snakemake@input[["strict_classification"]],
+  delim = "\t", show_col_types = FALSE
+)
+
 
 db_with_classifications <- left_join(
   x = arm_and_assembly,
-  y = classifications %>%
-    select(sample, readID, Species, Taxonomy),
+  y = full_join(
+    x = classifications %>%
+      select(sample, readID, Species, Taxonomy),
+    y = strict_classifications %>%
+      select(sample, readID, Species, Taxonomy),
+    by = c("sample", "readID"),
+    suffix = c("", "_strict")
+  ),
   by = c("sample", "contig" = "readID")
 )
 

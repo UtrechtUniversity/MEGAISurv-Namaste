@@ -47,6 +47,7 @@ include: "rules/assemble_metagenomes.smk"
 include: "rules/screen_resistance_genes.smk"
 include: "rules/screen_resistance_mutations.smk"
 include: "rules/classify_contigs.smk"
+include: "rules/strict-classify_contigs.smk"
 include: "rules/generate_mags.smk"
 
 
@@ -83,15 +84,17 @@ rule all:
         ),
         # Taxonomic classifications (by Centrifuger)
         expand(
-            "results/taxonomic_classification/{sample}/centrifuger_masked{extension}",
+            "results/taxonomic_classification/{sample}/centrifuger_masked{strictness}{extension}",
             sample=SAMPLES,
+            strictness=["", "-strict"],
             extension=[".tsv", "-quant.tsv"],
         ),
         # Microbiota profiles (TaxonKit + custom R script)
         expand(
-            "results/microbiota_profile/{sample}-per_{unit}.tsv",
+            "results/microbiota_profile/{sample}{strictness}-per_{unit}.tsv",
             sample=SAMPLES,
             unit=["contig", "species"],
+            strictness=["", "-strict"],
         ),
         # Chromosome/plasmid/virus predictions (geNomad)
         expand(
@@ -102,6 +105,7 @@ rule all:
         "results/assembly_stats-concatenated.tsv.gz",
         # Centrifuger,
         "results/classifications-concatenated.tsv.gz",
+        "results/strict_classifications-concatenated.tsv.gz",
         # and geNomad
         "results/plasmid_predictions-concatenated.tsv.gz",
         "results/virus_predictions-concatenated.tsv.gz",
