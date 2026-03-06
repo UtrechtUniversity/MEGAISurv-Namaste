@@ -25,10 +25,15 @@ if (!dir.exists(output_dir)) {
 # Read the 'sample' variable from Snakemake
 sample <- snakemake@params[["sample"]]
 
-# Read the Flye assembly statistics file
-info_df <- read_delim(snakemake@input[["assembly_info"]],
+# Read the coverage file by minimap2 + samtools coverage
+coverage_df <- read_delim(snakemake@input[["coverage_info"]],
   delim = "\t", show_col_types = FALSE
-)
+) %>%
+  rename(
+    "readID" = "#rname",
+    "length" = "endpos",
+    "depth" = "meandepth"
+  )
 # And the taxonomic classifications from Centrifuger,
 # interpreted by TaxonKit:
 classification_df <- read_delim(snakemake@input[["classifications"]],
@@ -37,15 +42,14 @@ classification_df <- read_delim(snakemake@input[["classifications"]],
 )
 
 # Manually adjust the column names (to simplify further scripting)
-colnames(info_df) <- c("seq_name", "length", "depth", "circular", "repeat", "multiples", "alt_group", "graph_path")
 colnames(classification_df) <- c("readID", "seqID", "taxID", "score", "2ndBestScore", "hitLength", "queryLength", "numMatches", "Species", "Lineage")
 
 # Join (merge) the two together
 quantified_df <- left_join(
   x = classification_df,
-  y = info_df %>%
-    select(seq_name, length, depth),
-  by = c("readID" = "seq_name")
+  y = coverage_df %>%
+    select(readID, length, depth),
+  by = "readID"
 )
 
 # Calculate the total bases per contig (length * depth)

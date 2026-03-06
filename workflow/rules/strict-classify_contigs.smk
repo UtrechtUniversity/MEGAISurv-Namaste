@@ -56,7 +56,7 @@ taxonkit reformat {input.assembly} -I 3 --data-dir resources/taxdump\
 
 rule strict_generate_microbiota_profiles:
     input:
-        assembly_info="results/assembly/{sample}/assembly_info.txt",
+        coverage_info="results/assembly/{sample}/mapped_back/{sample}-coverage.tsv",
         classifications="results/taxonomic_classification/{sample}/centrifuger_masked-strict+taxa.tsv",
     output:
         per_contig="results/microbiota_profile/{sample}-strict-per_contig.tsv",
