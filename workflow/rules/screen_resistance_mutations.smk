@@ -65,7 +65,6 @@ rule match_mutations_to_contigs:
     shell:
         """
 printf "read\tflag\tcontig\tms_score\tAS_score\n" > {output} 2> {log}
-samtools view -F 4 -F 256 -F 512 -F 2048\
- -N <(cut -f 3 {input.table}) {input.bam} | cut -f 1-3,13,14\
- >> {output} 2>> {log}
+samtools view -N <(cut -f 3 {input.table}) {input.bam} |\
+ cut -f 1-3,13,14 >> {output} 2>> {log}
         """

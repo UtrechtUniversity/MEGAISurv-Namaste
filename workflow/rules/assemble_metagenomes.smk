@@ -80,7 +80,7 @@ rule map_reads_to_assembly:
         "log/benchmark/map_reads_to_assembly/{sample}.txt"
     shell:
         """
-minimap2 -x map-ont -t {threads} -a {input.assembly} {input.reads} 2> {log} |\
+minimap2 -x map-ont -N 0 -t {threads} -a {input.assembly} {input.reads} 2> {log} |\
  samtools sort -o {output.bam} --write-index - > {log} 2>&1
 samtools coverage -o {output.cov} {output.bam} >> {log} 2>&1
         """
