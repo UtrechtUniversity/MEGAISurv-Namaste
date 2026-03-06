@@ -5,9 +5,14 @@
 # (TaxonKit-)assigned taxonomy names to create tables that list for each
 # sample the normalised/quantified taxa.
 
-suppressPackageStartupMessages({
+suppressPackageStartupMessages(
   library(tidyverse)
-})
+)
+
+sink(
+  file = file(snakemake@log[[1]], open = "wt"),
+  type = "message"
+)
 
 # Prepare the output directory if it does not exist yet:
 output_dir <- snakemake@output["per_contig"] %>%

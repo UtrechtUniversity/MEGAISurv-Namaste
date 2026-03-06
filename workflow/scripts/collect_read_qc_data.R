@@ -6,6 +6,11 @@ suppressPackageStartupMessages({
   library(here)
 })
 
+sink(
+  file = file(snakemake@log[[1]], open = "wt"),
+  type = "message"
+)
+
 read_qc_files <- snakemake@input[["cov_files"]]
 
 json_to_df <- function(json_file) {

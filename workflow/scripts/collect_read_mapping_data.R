@@ -5,6 +5,11 @@ suppressPackageStartupMessages({
   library(here)
 })
 
+sink(
+  file = file(snakemake@log[[1]], open = "wt"),
+  type = "message"
+)
+
 coverage_files <- snakemake@input[["cov_files"]]
 
 read_coverage_file <- function(coverage_file) {

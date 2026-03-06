@@ -7,6 +7,10 @@ suppressPackageStartupMessages(
   library(tidyverse)
 )
 
+sink(
+  file = file(snakemake@log[[1]], open = "wt"),
+  type = "message"
+)
 
 assembly_stats_files <- snakemake@input[["assembly_info"]] # Flye's assembly_info.txt files
 coverage_file <- snakemake@input[["mapped_coverage"]] # minimap2 + samtools coverage-based CSV file
