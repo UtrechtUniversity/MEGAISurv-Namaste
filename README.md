@@ -24,6 +24,7 @@ framework.
 flowchart LR
     A[Raw reads] -->|Preprocess:  fastplong| B(High-quality reads)
     B -->|Assembly: metaFlye| C(Contigs)
+    B -->|Screen ARMs: MetaPointFinder| M(Reads with resistance mutations)
     C -->|Screen ARGs: KMA/ResFinder| D(ARG-containing contigs)
     D -->|Mask: BEDtools| E(Masked contigs)
     E -->|Classify: Centrifuger| F(Taxonomy-assigned contigs)
@@ -35,10 +36,13 @@ Input: long-read metagenomes generated on a Nanopore platform
 
 1. Metagenomic reads are preprocessed using [fastplong](https://github.com/OpenGene/fastplong) (version 0.2.2)
 
+2. High-quality reads are screened for antibiotic resistance mutations using [MetaPointFinder](https://github.com/aldertzomer/metapointfinder) (version 1.01)
+
 2. High-quality reads are assembled using [metaFlye](https://github.com/mikolmogorov/Flye) (version 2.9.2)
 
     - Assembly stats are calculated using [metaQUAST](https://quast.sourceforge.net/quast) (version 5.3.0) and [seqkit](https://bioinf.shenwei.me/seqkit/) (version 2.9.0)
     - High-quality reads are mapped back to contigs to calculate coverage using [minimap2](https://github.com/lh3/minimap2) (version 2.30) and [samtools](https://www.htslib.org/) (version 1.22.1)
+        - This is also used to match the resistance mutations in reads to contigs
 
 4. Antibiotic resistance genes are identified using [KMA](https://github.com/genomicepidemiology/kma) (version 1.4.2)
 
@@ -49,16 +53,19 @@ Input: long-read metagenomes generated on a Nanopore platform
 
 6. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
 
+    - For this we use the default settings, as well as extra strict settings `--min-hitlen 100` to reduce false-positives based on short matches      
+
     - Taxon IDs are converted to their respective names using [TaxonKit](https://bioinf.shenwei.me/taxonkit/) (version 0.18.0)
 
-7. Contigs are also classified as chromosome/plasmid/virus based on the predictions by [geNomad](https://portal.nersc.gov/genomad/) (version 1.8.0)
+8. Contigs are also classified as chromosome/plasmid/virus based on the predictions by [geNomad](https://portal.nersc.gov/genomad/) (version 1.8.0)
 
 The results from KMA+ResFinder, Centrifuger+TaxonKit and geNomad are combined in a tab-separated text file (dataframe)
-for downstream processing (for example in R).
+for downstream processing (for example in R). Results for MetaPointFinder are similarly combined with their respective
+contig annotations (assembly statistics, taxonomy, plasmid predictions) and saved as tab-separated text file.
 
 **(Under construction: 🚧)**
 
-As additional taxonomic classification and verification of results produced by Centrifuger, assembled contigs are binned using:
+As additional taxonomic classification, and verification of results produced by Centrifuger, assembled contigs are binned using:
 
 - [SemiBin2](https://semibin.readthedocs.io/en/latest/) (version 2.2.0)
 - [MetaBAT2](https://bitbucket.org/berkeleylab/metabat) (version 2.18)
@@ -70,6 +77,8 @@ select the most complete/least contaminated bins for each sample using
 [GTDB-Tk](https://ecogenomics.github.io/GTDBTk/).
 These classifications are then added to the combined dataframe to facilitate comparison to
 Centrifuger's classifications.
+
+These steps are not automatically run with the workflow and may be enabled later as an extra feature.
 
 ### Microbiota profiling
 
@@ -89,46 +98,20 @@ Instead, it provides the tax IDs as reported in the NCBI taxonomy database.
 To translate these to species names and complete taxonomic lineages, we use
 [TaxonKit](https://bioinf.shenwei.me/taxonkit) (version 0.18.0) with the
 NCBI taxdump (ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz)
-downloaded on 26 February 2025.
+downloaded automatically within the workflow.
 
 The practical implementation of this workflow is described in the
 [`Snakefile`](workflow/Snakefile) and is as follows:
 
-1. Classify contigs using Centrifuger with default parameters and the 'cfr_hpv+sarscov2' database
+1. Classify contigs using Centrifuger with the 'cfr_hpv+sarscov2' database
 (Which is available on [Zenodo](https://zenodo.org/records/10023239))
 
 2. Attach species and taxon lineage names using TaxonKit
 
-3. Quantify by combining Centrifuger's output and Flye's assembly statistics
-in a custom R script. (I.e., for each contig, multiply its length with its depth
-to represent 'total_bases', then calculate percentages per contig and per taxon
-based on these total_bases.)
-
-#### TaxonKit user note
-
-Extra note on using TaxonKit: after downloading the taxdump tarball itself, e.g.:
-
-`wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz`
-
-it can be useful to check if it is complete by comparing the md5 checksum:
-
-```bash
-# Download MD5 checksum
-wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz.md5
-# Check file integrity
-md5sum -c taxdump.tax.gz.md5
-
-# Then extract the tarball
-tar -xzf taxdump.tar.gz
-```
-
-TaxonKit relies on the files: `names.dmp`, `nodes.dmp`, `delnodes.dmp` and `merged.dmp`.
-Copy or move them to the `.taxonkit` directory in your home folder (which should be automatically
-generated when you install taxdump) to be able to use `taxonkit`. E.g.:
-
-```bash
-mv *.dmp ~/.taxonkit/
-```
+3. Quantify by combining Centrifuger's output and coverage statistics by minimap2 +
+samtools coverageFlye in a custom R script. (I.e., for each contig, multiply its
+length with its depth to represent 'total_bases', then calculate percentages per
+contig and per taxon based on these total_bases.)
 
 #### GTDB-Tk user note
 
@@ -174,8 +157,6 @@ can then successfully complete the workflow.
 
 ### Improve existing workflow
 
-- Summarise the final output in one neat table, that is, include `scripts/generate_assembly_database.R` in the workflow (or equivalent scripts)
-
 - **Write/extend documentation of the whole workflow and interesting findings**
 
     - Create a documentation page like <https://utrechtuniversity.github.io/campylobacter-crisprscape/>
@@ -191,15 +172,9 @@ and visualisationu
 
 - Calculate per-sample and overall fraction of contigs with ARGs: what is the estimated prevalence of ARGs?
 
-- adopt Snakemake's recommended structure, formatting, linting
-
-    - include scripts for downloading TaxonKit taxdump and Centrifuger DB --> to `resources/` (that makes the workflow more portable and simpler to setup)
-
 ### Test new features
 
-- Test alternative contig classification databases and tools
-
-- Filter contigs to minimum length of 2-3x average read length?
+- Test alternative contig classification databases and tools (CAT with GTDB?)
 
 ## Project organisation
 
