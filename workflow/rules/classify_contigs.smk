@@ -34,7 +34,7 @@ rule taxonomic_classification:
         tsv="results/taxonomic_classification/{sample}/centrifuger_masked.tsv",
         quant="results/taxonomic_classification/{sample}/centrifuger_masked-quant.tsv",
     params:
-        db="resources/centrifuger_db/cfr_hpv+gbsarscov2",
+        db=subpath(input[1], strip_suffix=".1.cfr"),
     conda:
         "../envs/centrifuger.yaml"
     threads: config["centrifuger"]["threads"]

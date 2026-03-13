@@ -39,7 +39,7 @@ rule screen_antibiotic_resistance_genes:
         fsa="results/resistance_genes/{sample}.hmm.fsa",
         res="results/resistance_genes/{sample}.hmm.res",
     params:
-        db="resources/resfinder_db/all",
+        db=subpath(input[0], strip_suffix=".comp.b"),
         prefix=subpath(output.aln, strip_suffix=".aln"),
     conda:
         "../envs/kma.yaml"
