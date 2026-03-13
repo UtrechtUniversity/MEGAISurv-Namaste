@@ -24,28 +24,6 @@ flye {params.settings} --threads {threads} --nano-hq {input}\
         """
 
 
-rule assess_assembly:
-    input:
-        "results/assembly/{sample}/assembly.fasta",
-    output:
-        report="results/contig_qc/{sample}/report.html",
-        icarus="results/contig_qc/{sample}/icarus.html",
-        log="results/contig_qc/{sample}/metaquast.log",
-    params:
-        output_dir=subpath(output.report, parent=True),
-    conda:
-        "../envs/quast.yaml"
-    threads: config["metaquast"]["threads"]
-    log:
-        "log/assess_assembly/{sample}.txt",
-    benchmark:
-        "log/benchmark/assess_assembly/{sample}.txt"
-    shell:
-        """
-metaquast.py -o {params.output_dir} -t {threads} {input} > {log} 2>&1
-        """
-
-
 rule simple_assembly_statistics:
     input:
         expand("results/assembly/{sample}/assembly.fasta", sample=SAMPLES),
