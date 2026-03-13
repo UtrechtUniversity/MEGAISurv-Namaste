@@ -1,0 +1,56 @@
+site_name: Namaste
+site_url: https://localhost:8000/namaste
+nav:
+  - Overview: index.md
+  - User manual: manual.md
+  - Workflow details:
+    - Assemble metagenomes: assembly.md
+    - Screen resistance genes: arg_screening.md
+    - Screen resistance mutations: arm_screening.md
+    - Taxonomic classification: taxonomy.md
+    - Plasmid prediction: genomad.md
+    - Extra functions: extra_functions.md
+  - Output files: output_files.md
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.code.select
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+docs_dir: "doc"
+plugins:
+  - offline
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format 
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      check_paths: 
+      url_download: false
+      url_max_size: 33554432
+      url_timeout: 10
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
