@@ -7,6 +7,12 @@ INPUT_DIR = Path(config["input_directory"])
 INPUT_FILES = list(INPUT_DIR.glob("*.fastq.gz"))
 SAMPLES = [file.stem.replace(".fastq", "") for file in INPUT_FILES]
 
+assert len(SAMPLES) > 0, (
+    f"-----\nNo input samples found in {INPUT_DIR}.\n"
+    "Please make sure that there are gzipped FASTQ files in this directory!\n"
+    "(Note: they must have '.fastq.gz' as extension.)\n-----\n"
+)
+
 
 rule make_assembly_database:
     input:
