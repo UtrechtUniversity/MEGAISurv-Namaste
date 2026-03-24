@@ -77,3 +77,50 @@ zcat {input.frag} | cut -f 7-9 | sort | uniq > {output.gene_locations}
 maskFastaFromBed -fi {input.assembly} -bed {output.gene_locations}\
  -fo {output.masked_assembly} > {log} 2>&1
         """
+
+
+rule screen_antibiotic_resistance_genes_reads:
+    input:
+        db=expand(
+            "resources/resfinder_db/all" + ".{extension}",
+            extension=["comp.b", "fsa", "length.b", "seq.b"],
+        ),
+        reads="results/filtered_reads/{sample}.fastq.gz",
+    output:
+        aln="results/resistance_genes-reads/{sample}.hmm.aln",
+        frag="results/resistance_genes-reads/{sample}.hmm.frag.gz",
+        fsa="results/resistance_genes-reads/{sample}.hmm.fsa",
+        res="results/resistance_genes-reads/{sample}.hmm.res",
+    params:
+        db=subpath(input[0], strip_suffix=".comp.b"),
+        prefix=subpath(output.aln, strip_suffix=".aln"),
+    conda:
+        "../envs/kma.yaml"
+    threads: config["kma"]["threads"]
+    log:
+        "log/kma-reads/{sample}.txt",
+    benchmark:
+        "log/benchmark/kma-reads/{sample}.txt"
+    shell:
+        """
+kma -t {threads} -bcNano -t_db {params.db} -i {input.reads} -o {params.prefix}\
+ -ont -hmm > {log} 2>&1
+        """
+
+
+rule summarise_read_args:
+    input:
+        results=expand(
+            "results/resistance_genes-reads/{sample}.hmm.res", sample=SAMPLES
+        ),
+    output:
+        "results/resistance_genes-reads/summary.tsv",
+    conda:
+        "../envs/R_tidyverse.yaml"
+    threads: 1
+    log:
+        "log/summarise_read_args.txt",
+    benchmark:
+        "log/benchmark/summarise_read_args.txt"
+    script:
+        "../scripts/summarise_read_args.R"
