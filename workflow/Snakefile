@@ -57,6 +57,8 @@ include: "rules/generate_mags.smk"
 
 rule all:
     input:
+        # Summary of the input read quality control (by Fastplong)
+        "results/read_qc_summary.csv",
         # Metagenomic assemblies (by Flye)
         expand("results/assembly/{sample}/assembly.fasta", sample=SAMPLES),
         # Simple assembly statistics (by seqkit)
@@ -64,6 +66,7 @@ rule all:
         # Per-contig coverage stats
         "results/contig_coverage.csv",
         # Antibiotic resistance gene screening (by KMA)
+        "results/resistance_genes-reads/summary.tsv",
         expand(
             "results/resistance_genes/{sample}.hmm.{suffix}",
             sample=SAMPLES,
