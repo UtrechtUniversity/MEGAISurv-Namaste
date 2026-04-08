@@ -26,28 +26,23 @@ fastplong --in {input} --out {output.filtered}\
 
 rule extract_read_qc_summaries:
     input:
-        expand("results/read_qc/{sample}.json", sample=SAMPLES),
+        "results/read_qc/{sample}.json",
     output:
-        expand("results/read_qc/summary/{sample}.json", sample=SAMPLES),
+        "results/read_qc/summary/{sample}.json",
     conda:
         "../envs/bash.yaml"
     threads: 1
     log:
-        "log/extract_read_qc_summaries.txt",
+        "log/extract_read_qc_summaries/{sample}.txt",
     benchmark:
-        "log/benchmark/extract_read_qc_summaries.txt"
-    shell:
-        """
-for inputfile in {input}
-do
-    bash scripts/extract_fastplong_json_summary.sh ${{inputfile}}
-done > {log} 2>&1
-        """
+        "log/benchmark/extract_read_qc_summaries/{sample}.txt"
+    script:
+        "../scripts/extract_fastplong_json_summary.sh"
 
 
 rule summarise_read_qc_data:
     input:
-        expand("results/read_qc/summary/{sample}.json", sample=SAMPLES),
+        json=expand("results/read_qc/summary/{sample}.json", sample=SAMPLES),
     output:
         "results/read_qc_summary.csv",
     conda:

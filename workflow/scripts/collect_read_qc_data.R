@@ -3,7 +3,6 @@
 suppressPackageStartupMessages({
   library(tidyverse)
   library(jsonlite)
-  library(here)
 })
 
 sink(
@@ -11,7 +10,7 @@ sink(
   type = "message"
 )
 
-read_qc_files <- snakemake@input[["cov_files"]]
+read_qc_files <- snakemake@input[["json"]]
 
 json_to_df <- function(json_file) {
   # Get the sample name from the file name (remove '.json' extension)
@@ -43,4 +42,4 @@ complete_qc_df <- do.call(
   lapply(X = read_qc_files, FUN = json_to_df)
 )
 
-write_csv(x = complete_qc_df, file = here("data", "processed", "read_qc_summary.csv"))
+write_csv(x = complete_qc_df, file = snakemake@output[[1]])
