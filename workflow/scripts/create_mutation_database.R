@@ -76,7 +76,26 @@ mutations <- mapped_arm_df %>%
   count(Status) %>%
   pivot_wider(names_from = Status, values_from = n) %>%
   add_column(., !!!columns[setdiff(names(columns), colnames(.))]) %>%
-  mutate(fraction_resistant = Resistant / Wildtype) %>%
+  mutate(
+    fraction_resistant = case_when(
+      # If there are zero resistant mutants, the fraction is always zero
+      Resistant == 0 ~ 0,
+
+      # If there are both wildtype reads and mutant reads,
+      #  (neither are NA), calculate fraction normally
+      ! is.na(Wildtype) & ! is.na(Resistant) ~ Resistant / (Resistant + Wildtype),
+
+      # If there are *no wildtypes* and there are resistant mutants,
+      #  the fraction is 1
+      is.na(Wildtype) & Resistant > 0 ~ 1,
+
+      # If both are missing (NA), the fraction is 0
+      is.na(Wildtype) & is.na(Resistant) ~ 0,
+
+      # If a possible outcome is missed, fill in NA
+      TRUE ~ NA
+    )
+  ) %>%
   mutate(fraction_resistant = if_else(!is.na(fraction_resistant),
     fraction_resistant,
     0
