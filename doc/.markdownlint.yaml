@@ -1,0 +1,2 @@
+MD007: false # allow 4 spaces list indentation, required for sublevels in MkDocs (and GitHub?)
+MD026: false # allow colons at end of title line (for emojis)

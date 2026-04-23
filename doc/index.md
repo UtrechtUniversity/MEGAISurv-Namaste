@@ -13,15 +13,17 @@ To learn more about how to use the workflow, see the
 
 The workflow works as follows:
 
-1. [Assemble metagenomes](assembly.md)
+1. [Preprocess reads](preprocess.md)
 
-2. [Screen for presence of antibiotic resistance genes](arg_screening.md)
+2. [Assemble metagenomes](assembly.md)
 
-3. [Also screen for antibiotic resistance mutations](arm_screening.md)
+3. [Screen for presence of antibiotic resistance genes](arg_screening.md)
 
-4. [Classify contigs taxonomically](taxonomy.md)
+4. [Also screen for antibiotic resistance mutations](arm_screening.md)
 
-5. [Predict whether contigs derive from chromosomes, plasmids or viruses](genomad.md)
+5. [Classify contigs taxonomically](taxonomy.md)
+
+6. [Predict whether contigs derive from chromosomes, plasmids or viruses](genomad.md)
 
 And comes with several [additional functions](extra_functions.md)
 
