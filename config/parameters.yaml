@@ -2,8 +2,7 @@
 
 ### 1. Input/output parameters ###
 
-input_directory: "data/raw/"
-taxon_database: "/mnt/DGK_KLIF/data/klif/databases/taxdump/"
+input_directory: "data/"
 
 ### 2. Tool-specific parameters ###
 
@@ -30,7 +29,6 @@ metapointfinder:
 
 centrifuger:
   threads: 12
-  database: "/mnt/data2/db/centrifuger/cfr_hpv+gbsarscov2"
 
 semibin:
   threads: 12
