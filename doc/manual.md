@@ -1,6 +1,6 @@
 # Namaste user manual
 
-## Quick start :material-run-fast
+## Quick start :material-run-fast:
 
 Install dependencies:
 [git](https://git-scm.com/downloads/),
@@ -151,7 +151,7 @@ To run the actual workflow:
 snakemake --profile config
 ```
 
-### Exceptions: failed assembly
+### Exceptions: failed assembly :warning:
 
 Sometimes, a metagenome may not contain sufficient reads to generate a
 de novo assembly. For example, when negative controls (blanks) are included.

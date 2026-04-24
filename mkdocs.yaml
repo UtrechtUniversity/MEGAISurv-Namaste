@@ -4,6 +4,7 @@ nav:
   - Overview: index.md
   - User manual: manual.md
   - Workflow details:
+    - Preprocess raw reads: preprocess.md
     - Assemble metagenomes: assembly.md
     - Screen resistance genes: arg_screening.md
     - Screen resistance mutations: arm_screening.md

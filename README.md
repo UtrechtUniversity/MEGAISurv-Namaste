@@ -1,6 +1,6 @@
 # MEGAISurv Namaste :pray:
 
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)  [![pages-build-deployment](https://github.com/UtrechtUniversity/MEGAISurv-Namaste/actions/workflows/pages/pages-build-deployment/badge.svg)](https://utrechtuniversity.github.io/MEGAISurv-Namaste/)  [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/UtrechtUniversity/MEGAISurv-Namaste)
 
 **Namaste**: Nanopore Metagenomics antibiotic Resistance and Taxonomy Screening
 for the project MEGAISurv:
@@ -8,6 +8,14 @@ for the project MEGAISurv:
 **ME**ta**G**enome-informed **A**ntimicrobial res**i**stance **Surv**eillance:
 Harnessing long-read sequencing for an analytical, indicator and risk assessment
 framework.
+
+For more detailed documentation, please look at the
+[project website](https://utrechtuniversity.github.io/MEGAISurv-Namaste/index.html).
+Here you also find the
+[user manual](https://utrechtuniversity.github.io/MEGAISurv-Namaste/manual.html),
+which includes a quick start guide as well as a detailed step-by-step description.
+Or look at the computer-generated Wiki with integrated chatbot assistant at
+[DeepWiki](https://deepwiki.com/UtrechtUniversity/MEGAISurv-Namaste)!
 
 ## Index
 
@@ -28,17 +36,19 @@ flowchart LR
     C -->|Screen ARGs: KMA/ResFinder| D(ARG-containing contigs)
     D -->|Mask: BEDtools| E(Masked contigs)
     E -->|Classify: Centrifuger| F(Taxonomy-assigned contigs)
+    C -->|Predict plasmids: geNomad| G(Plasmid/virus/chromosome contigs)
 ```
 
 ### Simple description
 
-Input: long-read metagenomes generated on a Nanopore platform
+Input: long-read metagenomes generated on a Nanopore platform.
+Also works with PacBio SMRT metagenomes.
 
 1. Metagenomic reads are preprocessed using [fastplong](https://github.com/OpenGene/fastplong) (version 0.2.2)
 
 2. High-quality reads are screened for antibiotic resistance mutations using [MetaPointFinder](https://github.com/aldertzomer/metapointfinder) (version 1.01)
 
-2. High-quality reads are assembled using [metaFlye](https://github.com/mikolmogorov/Flye) (version 2.9.2)
+3. High-quality reads are assembled using [metaFlye](https://github.com/mikolmogorov/Flye) (version 2.9.2)
 
     - Assembly stats are calculated using [metaQUAST](https://quast.sourceforge.net/quast) (version 5.3.0) and [seqkit](https://bioinf.shenwei.me/seqkit/) (version 2.9.0)
     - High-quality reads are mapped back to contigs to calculate coverage using [minimap2](https://github.com/lh3/minimap2) (version 2.30) and [samtools](https://www.htslib.org/) (version 1.22.1)
@@ -53,15 +63,17 @@ Input: long-read metagenomes generated on a Nanopore platform
 
 6. Assembled and masked contigs are taxonomically classified using [Centrifuger](https://github.com/mourisl/centrifuger) (version 1.0.6)
 
-    - For this we use the default settings, as well as extra strict settings `--min-hitlen 100` to reduce false-positives based on short matches      
+    - For this we use the default settings, as well as extra strict settings `--min-hitlen 100` to reduce false-positives based on short matches
 
     - Taxon IDs are converted to their respective names using [TaxonKit](https://bioinf.shenwei.me/taxonkit/) (version 0.18.0)
 
-8. Contigs are also classified as chromosome/plasmid/virus based on the predictions by [geNomad](https://portal.nersc.gov/genomad/) (version 1.8.0)
+7. Contigs are also classified as chromosome/plasmid/virus based on the predictions by [geNomad](https://portal.nersc.gov/genomad/) (version 1.8.0)
 
 The results from KMA+ResFinder, Centrifuger+TaxonKit and geNomad are combined in a tab-separated text file (dataframe)
 for downstream processing (for example in R). Results for MetaPointFinder are similarly combined with their respective
 contig annotations (assembly statistics, taxonomy, plasmid predictions) and saved as tab-separated text file.
+
+Also see the [documentation on output files](https://utrechtuniversity.github.io/MEGAISurv-Namaste/output_files.html).
 
 **(Under construction: 🚧)**
 
@@ -109,7 +121,7 @@ The practical implementation of this workflow is described in the
 2. Attach species and taxon lineage names using TaxonKit
 
 3. Quantify by combining Centrifuger's output and coverage statistics by minimap2 +
-samtools coverageFlye in a custom R script. (I.e., for each contig, multiply its
+samtools coverage in a custom R script. (I.e., for each contig, multiply its
 length with its depth to represent 'total_bases', then calculate percentages per
 contig and per taxon based on these total_bases.)
 
@@ -117,8 +129,8 @@ contig and per taxon based on these total_bases.)
 
 GTDB-Tk requires its database to be downloaded and referenced to work.
 You can run the Snakemake workflow without setting this up first,
-but then the rule `classify_bins` will fail and present an error.
-If you already have a working GTDB-Tk installation in conda/mamba,
+but then the rule `classify_bins` will likely fail and present an error.
+If you already have a working GTDB-Tk installation outside of Namaste,
 you can use:
 
 ```bash
@@ -129,6 +141,8 @@ conda env config vars set GTDBTK_DATA_PATH="~/miniforge3/env/gtdbtk/share/gtdbtk
 
 # If you have not downloaded the database before, change the last command to this :
 download-db.sh # to download the database.
+
+mamba deactivate
 ```
 
 (See the [GTDB-Tk user manual](https://ecogenomics.github.io/GTDBTk/installing/bioconda.html#installing-bioconda).)
@@ -159,22 +173,12 @@ can then successfully complete the workflow.
 
 - **Write/extend documentation of the whole workflow and interesting findings**
 
-    - Create a documentation page like <https://utrechtuniversity.github.io/campylobacter-crisprscape/>
-
-    - Document ARG identification process (currently includes R script to parse KMA and include only hits that cover >=60% of the reference ARG)
-
-    - Document quality control steps and inclusion and exclusion criteria
-
-    - Definitely include a user manual!
+  - Document ARG identification process (currently includes R script to parse KMA and include only hits that cover >=60% of the reference ARG)
 
 - Include downstream processing scripts (RMarkdown) for statistical analyses
 and visualisationu
 
 - Calculate per-sample and overall fraction of contigs with ARGs: what is the estimated prevalence of ARGs?
-
-### Test new features
-
-- Test alternative contig classification databases and tools (CAT with GTDB?)
 
 ## Project organisation
 
@@ -184,14 +188,11 @@ and visualisationu
 ├── LICENSE
 ├── README.md
 ├── config             <- Configuration of Snakemake workflow
-├── data               <- All project data, divided in subfolders
-│   ├── processed      <- Final data, used for visualisation (e.g. tables)
-│   ├── raw            <- Raw data, original, should not be modified (e.g. fastq files)
-│   └── tmp            <- Intermediate data, derived from the raw data, but not yet ready for visualisation
+├── data               <- Suggested input directory for metagenomic reads
 ├── doc                <- Project documentation, notes and experiment records
 ├── log                <- Log files from programs
 ├── resources          <- Databases downloaded/generated by the workflow
-├── results            <- Figures or reports generated from processed data
+├── results            <- Workflow output
 └── workflow           <- Snakemake workflow files
     ├── envs           <- Conda environments (software dependencies)
     ├── notebooks      <- RMarkdown/Jupyter notebooks with statistical analyses and figures
