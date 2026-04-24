@@ -1,0 +1,1055 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://localhost:8000/namaste/output_files.html">
+      
+      
+        <link rel="prev" href="extra_functions.html">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Output files - Namaste</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#output-files" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Namaste" class="md-header__button md-logo" aria-label="Namaste" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Namaste
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Output files
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Namaste" class="md-nav__button md-logo" aria-label="Namaste" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Namaste
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="manual.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User manual
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow details
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workflow details
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="preprocess.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Preprocess raw reads
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="assembly.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assemble metagenomes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="arg_screening.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen resistance genes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="arm_screening.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen resistance mutations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="taxonomy.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Taxonomic classification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="genomad.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plasmid prediction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="extra_functions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extra functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Output files
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="output_files.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Output files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-preprocessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Preprocessing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Assembly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-antibiotic-resistance-genes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Antibiotic resistance genes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-antibiotic-resistance-mutations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Antibiotic resistance mutations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-taxonomic-classifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Taxonomic classifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-plasmid-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Plasmid predictions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-preprocessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Preprocessing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Assembly
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-antibiotic-resistance-genes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Antibiotic resistance genes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-antibiotic-resistance-mutations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Antibiotic resistance mutations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-taxonomic-classifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Taxonomic classifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-plasmid-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Plasmid predictions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="output-files">Output files</h1>
+<p>Namaste includes a handful of processing steps, each using a few
+bioinformatics tools to get the job done. All of these tools generate
+output files, yielding a plethora of files in your <code>results/</code> directory!</p>
+<p>Below is a description of the most relevant files.</p>
+<h2 id="1-preprocessing">1. Preprocessing</h2>
+<p>As described in <a href="preprocess.md">preprocess</a>, raw reads are quality filtered,
+producing a file with high-quality reads and a report.</p>
+<p>The quality-filtered reads are written to the directory <code>results/filtered_reads/</code>,
+for example:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>ls<span class="w"> </span>results/filtered_reads/
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ERR10188468.fastq.gz<span class="w">  </span>SRR16329143_1.fastq.gz<span class="w">  </span>SRR17232957_1.fastq.gz
+</span></code></pre></div>
+<p>Each of these files will be slightly smaller than the original, raw read file.</p>
+<p>For each sample, there will be a JSON and an HTML report of the filtering
+process, of which the 'summary' part is parsed for later use. These
+files are saved under <code>results/read_qc/</code> and <code>results/read_qc/summary/</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$<span class="w"> </span>ls<span class="w"> </span>results/read_qc/summary/
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>ERR10188468.json<span class="w">  </span>SRR16329143_1.json<span class="w">  </span>SRR17232957_1.json
+</span></code></pre></div>
+<p>As an example, these files look like:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$<span class="w"> </span>cat<span class="w"> </span>results/read_qc/summary/ERR10188468.json
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="o">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">        </span><span class="s2">&quot;summary&quot;</span>:<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">                </span><span class="s2">&quot;fastplong_version&quot;</span>:<span class="w"> </span><span class="s2">&quot;0.2.2&quot;</span>,
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">                </span><span class="s2">&quot;before_filtering&quot;</span>:<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">                        </span><span class="s2">&quot;total_reads&quot;</span>:1295276,
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">                        </span><span class="s2">&quot;total_bases&quot;</span>:4898452401,
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">                        </span><span class="s2">&quot;q20_bases&quot;</span>:1985830150,
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">                        </span><span class="s2">&quot;q30_bases&quot;</span>:644728976,
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">                        </span><span class="s2">&quot;q20_rate&quot;</span>:0.405399,
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">                        </span><span class="s2">&quot;q30_rate&quot;</span>:0.131619,
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">                        </span><span class="s2">&quot;read_mean_length&quot;</span>:3781,
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">                        </span><span class="s2">&quot;gc_content&quot;</span>:0.411915
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">                </span><span class="o">}</span>,
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">                </span><span class="s2">&quot;after_filtering&quot;</span>:<span class="w"> </span><span class="o">{</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">                        </span><span class="s2">&quot;total_reads&quot;</span>:490786,
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">                        </span><span class="s2">&quot;total_bases&quot;</span>:1801486902,
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">                        </span><span class="s2">&quot;q20_bases&quot;</span>:899296433,
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">                        </span><span class="s2">&quot;q30_bases&quot;</span>:331205707,
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">                        </span><span class="s2">&quot;q20_rate&quot;</span>:0.499197,
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">                        </span><span class="s2">&quot;q30_rate&quot;</span>:0.183851,
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">                        </span><span class="s2">&quot;read_mean_length&quot;</span>:3670,
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">                        </span><span class="s2">&quot;gc_content&quot;</span>:0.388144
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">                </span><span class="o">}</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="o">}</span>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="o">}</span>
+</span></code></pre></div>
+<p>Finally, read quality control (QC) statistics are collected for all samples and
+stored in a CSV format table: <code>results/read_qc_summary.csv</code>. It summarises
+the number of reads and basepairs before and after quality filtering, as well
+as some other quality indicators:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span>results/read_qc_summary.csv
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sample,before_total_reads,before_total_bases,before_q20_bases,before_q30_bases,before_q20_rate,before_q30_rate,before_read_mean_length,before_gc_content,after_total_reads,after_total_bases,after_q20_bases,after_q30_bases,after_q20_rate,after_q30_rate,after_read_mean_length,after_gc_content
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>SRR17232957_1,315586,1285925859,769615133,342928711,0.598491,0.266678,4074,0.507556,263485,1083609370,696137892,320329347,0.642425,0.295613,4112,0.50747
+</span></code></pre></div>
+<h2 id="2-assembly">2. Assembly</h2>
+<p>The assembly itself generates sequences in fasta format along with a
+tab-separated table with basic statistics per contig. These are stored under
+<code>results/assembly/{sample}/</code> where {sample} indicates the base file name of
+the raw reads file that was used to generate it. As described in
+<a href="assembly.html">assembly</a>, Namaste uses Flye to assemble reads, which generates
+many different output files. For convenience, we only show the relevant ones.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>ls<span class="w"> </span>-F<span class="w"> </span>results/assembly/SRR17232957_1/
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>assembly.fasta<span class="w">  </span>assembly_info.txt<span class="w">    </span>mapped_back/
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span>results/assembly/SRR17232957_1/assembly_info.txt
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">#seq_name       length  cov.    circ.   repeat  mult.   alt_group       graph_path</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>contig_1702<span class="w">     </span><span class="m">65004</span><span class="w">   </span><span class="m">6</span><span class="w">       </span>N<span class="w">       </span>N<span class="w">       </span><span class="m">1</span><span class="w">       </span>*<span class="w">       </span>*,1702,*
+</span></code></pre></div>
+<p>The <code>assembly_info.txt</code> file contains useful information such as contig length,
+depth of coverage (cov.) and whether the contig is circular (circ.).
+Output files from Flye are also described
+<a href="https://github.com/mikolmogorov/Flye/blob/flye/docs/USAGE.md#-flye-output">on its GitHub page</a>.</p>
+<p>Furthermore, Namaste maps reads back to contigs, which can be found in the
+subdirectory <code>mapped_back/</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$<span class="w"> </span>ls<span class="w"> </span>results/assembly/SRR17232957_1/mapped_back/
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>SRR17232957_1.bam<span class="w">  </span>SRR17232957_1-coverage.tsv
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span>results/assembly/SRR17232957_1/mapped_back/SRR17232957_1-coverage.tsv
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1">#rname  startpos        endpos  numreads        covbases        coverage        meandepth       meanbaseq       meanmapq</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>contig_1<span class="w">        </span><span class="m">1</span><span class="w">       </span><span class="m">17948</span><span class="w">   </span><span class="m">33</span><span class="w">      </span><span class="m">17948</span><span class="w">   </span><span class="m">100</span><span class="w">     </span><span class="m">4</span>.92378<span class="w"> </span><span class="m">22</span>.1<span class="w">    </span><span class="m">57</span>.5
+</span></code></pre></div>
+<p>Per sample coverage files are generated with <code>samtools coverage</code> and are
+slightly different from the <code>assembly_info.txt</code> by Flye in terms of
+values reported (depth of coverage = meandepth).</p>
+<p>Finally, these per sample coverage files are combined into one file for all
+samples: <code>results/contig_coverage.tsv</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span>results/contig_coverage.csv
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Sample,Contig,startpos,endpos,numreads,covbases,coverage,meandepth,meanbaseq,meanmapq
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>SRR17232957_1,contig_1,1,17948,33,17948,100,4.92378,22.1,57.5
+</span></code></pre></div>
+<p>And the coverage statistics of both Flye and samtools are combined in one
+overall statistics file: <code>results/assembly_stats-concatenated.tsv.gz</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$<span class="w"> </span>zless<span class="w"> </span>results/assembly_stats-concatenated.tsv.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sample<span class="w">  </span>contig<span class="w">  </span>contig_length<span class="w">   </span>contig_depth_flye<span class="w">       </span>circular<span class="w">        </span>contig_mapped_percent<span class="w">   </span>contig_depth_samtools<span class="w">   </span>contig_mapped_reads
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>SRR17232957_1<span class="w">   </span>contig_1702<span class="w">     </span><span class="m">65004</span><span class="w">   </span><span class="m">6</span><span class="w">       </span>N<span class="w">       </span><span class="m">100</span><span class="w">     </span><span class="m">6</span>.54354<span class="w"> </span><span class="m">207</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>SRR17232957_1<span class="w">   </span>contig_515<span class="w">      </span><span class="m">63366</span><span class="w">   </span><span class="m">6</span><span class="w">       </span>N<span class="w">       </span><span class="m">100</span><span class="w">     </span><span class="m">5</span>.86153<span class="w"> </span><span class="m">150</span>
+</span></code></pre></div>
+<h2 id="3-antibiotic-resistance-genes">3. Antibiotic resistance genes</h2>
+<p><a href="arg_screening.html">Screening</a> of antibiotic resistance genes (ARGs) is done
+with KMA, the output files of which are briefly described on
+<a href="https://github.com/genomicepidemiology/kma#result-explanation">its GitHub page</a>.
+Namaste uses the files with <code>.frag.gz</code> and <code>.res</code> extension, which are tabular
+files of hits per contig and per sample, respectively.</p>
+<p>Files for the contig-based screening of ARGs are stored in
+<code>results/resistance_genes/</code>. Note that the <code>.frag.gz</code> file includes complete
+sequences, which quickly becomes unwieldy when using contigs as input.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$<span class="w"> </span>zless<span class="w"> </span>results/resistance_genes/SRR17232957_1.hmm.frag.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-2
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>GTATCTGAACAACTATCTTGTGTGGAATAACCTTGTAAATTACGCCAAAGAAAGCGACATGGAGAAAAGGAACATCTTCTTAACTTTCGTTTTGGCAACATTGAAAACTGCTAAATGCAGAGATTTATCAAACAGACCAGCAGTTCCTCTGGTCGCCTAATTAGAATTTGTGGAGATGATAAGATGGTCAATATAACAGATGTAAAACAGATTCTTCAATTTGCAATAGATGCGGAGATTAAAGTCTTTCTTGATGGTGGCTGGGGTGTAGATGCTCTTCTTGGATATCAGTCAAGAGCCCATAATGATATTGACATTTTTGTAGAAAAGAACGATTATCAGAACTTTATAGAAATAATGAAAGCTAATGGCTTTTATGAGATTAAGATGGAATATACAACATTGAACCATACTGTATGGGAAGATTTGAAAAACAGAATTATTGATTTGCATTGTTTTGAATATACGGACGAAGGTGAAATTCTTTATGATGGGGATTGTTTTCCGGTAGAAACTTTTTCGGGTAAAGGAAGAATTGAGGAAATAGAGGTTTCCTGTATTGAACCATATAGTCAAGTAATGTTCCATCTGGGATACGAGTTTGATGAAAATGATGCACATGATGTGAAGTTATTGTGTGAGACACTTCATATCGAAATTCCAAATGAGTATAGATAACTGCAAATAACAAGTTTGTAGGGGAGTTCTGATACTCCCCTATAAAAATGGCTATTTATCAACTGTTTGTTGTGACATAGCCTTTCATATAATATATCTTTGCATGGATTCCACGGGCCTTACTCCGTGTGTTTTTGCGAATCCACGATAACTCTTCAGGTCGCTCGACCTTCAAAATTACCATGC<span class="w">        </span><span class="m">1</span><span class="w">       </span><span class="m">471</span><span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">495</span><span class="w">     </span>lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180<span class="w">       </span>contig_418<span class="w">      </span><span class="m">4000</span><span class="w">    </span><span class="m">4864</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>AAGATGGTCAATATAACAGATGTAAAACAGATTCTTCAATTTGCAATAGATGCGGAGATTAAAGTCTTTCTTGATGGTGGCTTCTGGGGTGTAGATACTCTTCTTGGATATCAGTCAAGAGCCCATAATGATATTACGACATTTTGTAGAAAAGAACGATTATAAAGGGCACTTTATAGAAATAATGAAGCTAATGGCTTTTATGATTAAGATGGAATATACAACATTGAACCATACTGTATGGGAAGATTTGAAAAACAGACAATGATTTGCATTGTTTTGAATATACGGACGAAGGTGAAATTCTTTATGATGGGGATTGTTTTCCGGTAGAAACTTTTTCGAGGTAAAGGGAAGAATTGAGGAAATAGGGGTTTCCTGTATTGAACCATATAGTCAAGTAATGTTCCATCTGGGATACGGAAGTTTGATGAAAATGATGCACATGATGTGAAGTTATTGTGTGAGACACTTCATATCGAAATTCCCAATGAGTATAGATAACTACCAAATAACAAGTTTGTAGGGGAGTTCTGATACTCCCCTATAAAGAAAACAACATTTATCAACTGTTTGTGTGAGCACAGCCTAAAAAAAATACCTTGCCATCGACAGGGGTATTTTTGTTGACAGTAGCAATACTTAATCTTTGTATATTTCGTGGAGCTCTACCCTCGTAGATAATCGGGGCGTAGCGC<span class="w">  </span><span class="m">1</span><span class="w">       </span><span class="m">406</span><span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">495</span><span class="w">     </span>lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180<span class="w">       </span>contig_1422<span class="w">     </span><span class="m">15104</span><span class="w">   </span><span class="m">15802</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span>results/resistance_genes/SRR17232957_1.hmm.res
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1">#Template       Score   Expected        Template_length Template_Identity       Template_Coverage       Query_Identity  Query_Coverage  Depth   q_value p_value</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180<span class="w">            </span><span class="m">901</span><span class="w">               </span><span class="m">1</span><span class="w">             </span><span class="m">495</span><span class="w">           </span><span class="m">99</span>.19<span class="w">          </span><span class="m">102</span>.42<span class="w">           </span><span class="m">96</span>.84<span class="w">           </span><span class="m">97</span>.63<span class="w">            </span><span class="m">2</span>.02<span class="w">          </span><span class="m">896</span>.92<span class="w">        </span><span class="m">1</span>.0e-26
+</span></code></pre></div>
+<p>Contigs in which the ARGs are masked are written back to the assembly folder:
+<code>results/assembly/{sample}/assembly_ARG_masked.fasta</code>.</p>
+<p>For reads, the results are written to <code>results/resistance_genes-reads/</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span>results/resistance_genes-reads/SRR17232957_1.hmm.res
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1">#Template       Score   Expected        Template_length Template_Identity       Template_Coverage       Query_Identity  Query_Coverage  Depth   q_value p_value</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180<span class="w">           </span><span class="m">7599</span><span class="w">              </span><span class="m">21</span><span class="w">             </span><span class="m">495</span><span class="w">           </span><span class="m">99</span>.19<span class="w">          </span><span class="m">100</span>.00<span class="w">           </span><span class="m">99</span>.19<span class="w">          </span><span class="m">100</span>.00<span class="w">           </span><span class="m">19</span>.28<span class="w">         </span><span class="m">7535</span>.38<span class="w">        </span><span class="m">1</span>.0e-26
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>$<span class="w"> </span>zless<span class="w"> </span>results/resistance_genes-reads/SRR17232957_1.hmm.frag.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-2
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>AAAGATGGTCAATATAACAGATGTAAAACAGATTCTTCAATTTGCAATAGATGCGGAGATTAAAGTCTTTCTTGATGGTGGCTTCTGGGGTGTAGATACTCTTCTTGGATATCAGTCAAGAGCCCATAATGATATTACGACATTTTGTAGAAAAGAACGATTATAAAGGGCACTTTATAGAAATAATGAAGCTAATGGCTTTTATGATTAAGATGGAATATACAACATTGAACCATACTGTATGGGAAGATTTGAAAAACAGACAATGATTTGCATTGTTTTGAATATACGGACGAAGGTGAAATTCTTTATGATGGGGATTGTTTTCCGGTAGAAACTTTTTCGAGGTAAAGGGAAGAATTGAGGAAATAGGGGTTTCCTGTATTGAACCATATAGTCAAGTAATGTTCCATCTGGGATACGGAAGTTTGATGAAAATGATGCACATGATGTGAAGTTATTGTGTGAGACACTTCATATCGAAATTCCCAATGAGTATAGATAACTACCAAATAACAAGTTTGTAGGGGAGTTCTGATACTCCCCTATAAAGAAAACAACATTTATCAACTGTTTGTGTGAGCACAGCCTAAAAAAAATACCTTGCCATCGACAGGGGTATTTTTGTTGACAGTAGCAATACTTAATCTTTGTATATTTCGTGGAGCTCTA<span class="w">    </span><span class="m">1</span><span class="w">       </span><span class="m">406</span><span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">495</span><span class="w">     </span>lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180<span class="w">       </span>SRR17232957.300718<span class="w"> </span><span class="m">300718</span>/1<span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">672</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>AACGGTGTTTCTACCAAGTATCTGAACAACTATCTTGTGTGGAATAACCTTGTAAATTACGCCAAAGAAAGCGACATGGAGAAAAGGAACATCTTCTTAACTTTCGTTTTGGCAACATTGAAAACTGCCAGCCGTGTAGATTGATCAAACAGACCAGCAGTTCCTCTGGTCGCTTAATTAGAATTTTGTAGATGATAAGATGGTCAATATAACAGATGTAAAACAGATTTTCAATTTGCAATAGATGCGGAGATTAAAGTCTTTCTTGCAGGCTGGGGTGGATGCTCTTCTGATATCAGTCGAGAGCCCATAATGATATTGACATTTTTGTAGAAAGAACGATTATCAGAACTTTATAGAAATAATGAAAGCTAATGGCTTTTTATGAGATTAAGATGGAATATACAATACGAACCATATCAGGCAAAGATTTTGAAAACAGAATTATTGATTTAAATGTTTTGAATATACGGACGAAGGTGAAATTCTTTATGATGGGGATTGTTTTCCGGTAGAAACTTTTCGGGTAAAGGAAGAATTGAGGAAATAGAGGTTTCCCGTATTGAACCATAGTCAATGGGCTGTTCCATCTGGGATACGAGTTTGATGAAAATGATGCCATGATGTACAGTTATTGTGAGACACTTCATATCGAAATTCCAATGAGGAGTGATAACTGCAAATAACAAGTTTGTAGGGGAGTTCTGATACCCCCTATAAAAATGGCTATTTATCAATCGTTGGTTGTGACATAGCCTTCATATAATATATCTTTGCATGGATTCCACGGCCTTACCCGTGTGTTTTTGCGAATCCACGATAACTCTTCAGGTCGCCTGACCTTCAAAAATTACCATGCAAAAA<span class="w">        </span><span class="m">1</span><span class="w">       </span><span class="m">341</span><span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">495</span><span class="w">     </span>lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180<span class="w">       </span>SRR17232957.245932<span class="w"> </span><span class="m">245932</span>/1<span class="w">     </span><span class="m">2528</span><span class="w">    </span><span class="m">3392</span>
+</span></code></pre></div>
+<p>And a summary of the read-based ARG screening approach for all samples is
+stored as TSV table: <code>results/resistance_genes-reads/summary.tsv</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span>results/resistance_genes-reads/summary.tsv
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Sample<span class="w">  </span>Gene<span class="w">    </span>Score<span class="w">   </span>Expected<span class="w">        </span>Template_length<span class="w"> </span>Template_Identity<span class="w">       </span>Template_Coverage<span class="w">       </span>Query_Identity<span class="w">  </span>Query_Coverage<span class="w">  </span>Depth<span class="w">   </span>q_value<span class="w"> </span>p_value
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>SRR17232957_1<span class="w">   </span>lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180<span class="w">       </span><span class="m">7599</span><span class="w">    </span><span class="m">21</span><span class="w">      </span><span class="m">495</span><span class="w">     </span><span class="m">99</span>.19<span class="w">   </span><span class="m">100</span><span class="w">     </span><span class="m">99</span>.19<span class="w">   </span><span class="m">100</span><span class="w">     </span><span class="m">19</span>.28<span class="w">   </span><span class="m">7535</span>.38<span class="w"> </span>1e-26
+</span></code></pre></div>
+<p>And a complete resistome dataset with ARG info, assembly statistics, taxonomy,
+and plasmid/virus predictions (CSV table with 39 columns) is saved as:
+<code>results/assembly_database.csv.gz</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>$<span class="w"> </span>zless<span class="w"> </span>results/assembly_database.csv.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>sample,arg,arg_identity,arg_length,arg_depth,contig,start_position,end_position,hit_length,arg_short,arg_coverage,Class,Phenotype,Resistance_mechanism,medical_importance,mean_assembly_depth_flye,mean_assembly_depth_samtools,total_assembly_length,contig_length,contig_depth_flye,circular,contig_mapped_percent,contig_depth_samtools,contig_mapped_reads,Species,Taxonomy,Species_strict,Taxonomy_strict,chromosome_score,plasmid_score,virus_score,plasmid_topology,plasmid_genes,conjugation_genes,amr_genes,virus_topology,virus_genes,virus_taxonomy,genomad_prediction
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>SRR17232957_1,lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180,99.19,495,2.02,contig_418,4000,4864,496,lnu<span class="o">(</span>C<span class="o">)</span>,100.20202020202021,Lincosamide,Lincomycin,Enzymatic<span class="w"> </span>inactivation,HIA,5.768397033656589,7.170406012549915,18310891,22412,5,N,100,6.5833,67,Campylobacter<span class="w"> </span>coli,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Campylobacterota<span class="p">;</span>Epsilonproteobacteria<span class="p">;</span>Campylobacterales<span class="p">;</span>Campylobacteraceae<span class="p">;</span>Campylobacter<span class="p">;</span>Campylobacter<span class="w"> </span>coli,Campylobacter<span class="w"> </span>coli,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Campylobacterota<span class="p">;</span>Epsilonproteobacteria<span class="p">;</span>Campylobacterales<span class="p">;</span>Campylobacteraceae<span class="p">;</span>Campylobacter<span class="p">;</span>Campylobacter<span class="w"> </span>coli,0.7905,0.1618,0.0477,NA,NA,NA,NA,NA,NA,NA,chromosome
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>SRR17232957_1,lnu<span class="o">(</span>C<span class="o">)</span>_1_AY928180,99.19,495,2.02,contig_1422,15104,15802,496,lnu<span class="o">(</span>C<span class="o">)</span>,100.20202020202021,Lincosamide,Lincomycin,Enzymatic<span class="w"> </span>inactivation,HIA,5.768397033656589,7.170406012549915,18310891,15802,4,N,100,4.42469,19,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>species,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>phylum<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>class<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>order<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>family<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>genus<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>species,,<span class="p">;;;;;;</span>,0.9389,0.0446,0.0166,NA,NA,NA,NA,NA,NA,NA,chromosome
+</span></code></pre></div>
+<h2 id="4-antibiotic-resistance-mutations">4. Antibiotic resistance mutations</h2>
+<p>Namaste <a href="arm_screening.html">screens</a> metagenomes for the presence of antibiotic
+resistance-conferring mutations using MetaPointFinder.
+Its output is explained
+<a href="https://github.com/aldertzomer/metapointfinder/tree/main#output-files">on GitHub</a>.</p>
+<p>Results are stored under <code>results/resistance_mutations/{sample}/</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>$<span class="w"> </span>ls<span class="w"> </span>results/resistance_mutations/SRR17232957_1/
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>accession<span class="w">               </span>SRR17232957_1.class.dna.summary.txt<span class="w">                            </span>SRR17232957_1.frag.gz<span class="w">                </span>SRR17232957_1.prot.input.tsv
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>class<span class="w">                   </span>SRR17232957_1.class.prot.summary.txt<span class="w">                           </span>SRR17232957_1.gene.dna.summary.txt<span class="w">   </span>SRR17232957_1.prot.updated_table_with_scores_and_mutations.tsv
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>dna_accession<span class="w">           </span>SRR17232957_1.dna.input.tsv<span class="w">                                    </span>SRR17232957_1.gene.prot.summary.txt<span class="w">  </span>SRR17232957_1.res
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>dna_class<span class="w">               </span>SRR17232957_1.dna.updated_table_with_scores_and_mutations.tsv<span class="w">  </span>SRR17232957_1.log
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>matched_to_contigs.tsv<span class="w">  </span>SRR17232957_1.error<span class="w">                                            </span>SRR17232957_1.prot.hits.txt
+</span></code></pre></div>
+<p>These results are combined in the end to make one big table with all mutations
+and contig annotations from the other analysis steps:
+<code>results/mutation_database.csv.gz</code>. (A table with 33 columns.)</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>$<span class="w"> </span>zless<span class="w"> </span>results/mutation_database.csv.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>sample,contig,class,gene,mutations,Unknown,Wildtype,Resistant,fraction_resistant,mean_assembly_depth_flye,mean_assembly_depth_samtools,total_assembly_length,contig_length,contig_depth_flye,circular,contig_mapped_percent,contig_depth_samtools,contig_mapped_reads,Species,Taxonomy,Species_strict,Taxonomy_strict,chromosome_score,plasmid_score,virus_score,plasmid_topology,plasmid_genes,conjugation_genes,amr_genes,virus_topology,virus_genes,virus_taxonomy,genomad_prediction
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>ERR10188468,contig_20,MACROLIDE,NZ_CP018347.1@23S_ribosomal_RNA@23S:32347-35250,None,1,NA,0,0,7.500926081831958,7.098058050597744,115259403,370730,26,N,99.9957,24.7572,2715,Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Bacillota<span class="p">;</span>Bacilli<span class="p">;</span>Lactobacillales<span class="p">;</span>Streptococcaceae<span class="p">;</span>Streptococcus<span class="p">;</span>Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Bacillota<span class="p">;</span>Bacilli<span class="p">;</span>Lactobacillales<span class="p">;</span>Streptococcaceae<span class="p">;</span>Streptococcus<span class="p">;</span>Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,0.8733,0.0833,0.0434,NA,NA,NA,NA,NA,NA,NA,chromosome
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>ERR10188468,contig_20,MACROLIDE_STREPTOGRAMIN,NZ_CP018347.1@23S_ribosomal_RNA@23S:32347-35250,None,1,NA,0,0,7.500926081831958,7.098058050597744,115259403,370730,26,N,99.9957,24.7572,2715,Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Bacillota<span class="p">;</span>Bacilli<span class="p">;</span>Lactobacillales<span class="p">;</span>Streptococcaceae<span class="p">;</span>Streptococcus<span class="p">;</span>Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Bacillota<span class="p">;</span>Bacilli<span class="p">;</span>Lactobacillales<span class="p">;</span>Streptococcaceae<span class="p">;</span>Streptococcus<span class="p">;</span>Streptococcus<span class="w"> </span>sp.<span class="w"> </span>LPB0220,0.8733,0.0833,0.0434,NA,NA,NA,NA,NA,NA,NA,chromosome
+</span></code></pre></div>
+<h2 id="5-taxonomic-classifications">5. Taxonomic classifications</h2>
+<p>Namaste <a href="taxonomy.html">classifies</a> contigs with Centrifuger and its database of
+microbiota + human. Centrifuger produces a table in TSV format and has a
+<code>quant</code> function to calculate microbiota profiles. Furthermore, Namaste uses
+both default and 'strict' settings and assigns scientific names to each using
+TaxonKit. All of these are stored as TSV files in
+<code>results/taxonomic_classification/{sample}/</code>.</p>
+<p>For details on the file format, consult
+<a href="https://github.com/mourisl/centrifuger#inputoutput">Centrifuger's documentation</a>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>$<span class="w"> </span>ls<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>centrifuger_masked-quant.tsv<span class="w">  </span>centrifuger_masked-strict-quant.tsv<span class="w">  </span>centrifuger_masked-strict+taxa.tsv<span class="w">  </span>centrifuger_masked-strict.tsv<span class="w">  </span>centrifuger_masked+taxa.tsv<span class="w">  </span>centrifuger_masked.tsv
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>$<span class="w"> </span>head<span class="w"> </span>-3<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/*
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="o">==</span>&gt;<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/centrifuger_masked-quant.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>name<span class="w">    </span>taxID<span class="w">   </span>taxRank<span class="w"> </span>genomeSize<span class="w">      </span>numReads<span class="w">        </span>numUniqueReads<span class="w">  </span>abundance
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>root<span class="w">    </span><span class="m">1</span><span class="w">       </span>no<span class="w"> </span>rank<span class="w"> </span><span class="m">2070143</span><span class="w"> </span><span class="m">1696</span><span class="w">    </span><span class="m">1018</span><span class="w">    </span><span class="m">1</span>.000000
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>Bacteria<span class="w">        </span><span class="m">2</span><span class="w">       </span>superkingdom<span class="w">    </span><span class="m">4534370</span><span class="w"> </span><span class="m">1628</span><span class="w">    </span><span class="m">989</span><span class="w">     </span><span class="m">0</span>.911828
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="o">==</span>&gt;<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/centrifuger_masked-strict-quant.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>name<span class="w">    </span>taxID<span class="w">   </span>taxRank<span class="w"> </span>genomeSize<span class="w">      </span>numReads<span class="w">        </span>numUniqueReads<span class="w">  </span>abundance
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>root<span class="w">    </span><span class="m">1</span><span class="w">       </span>no<span class="w"> </span>rank<span class="w"> </span><span class="m">2070143</span><span class="w"> </span><span class="m">39</span><span class="w">      </span><span class="m">14</span><span class="w">      </span><span class="m">1</span>.000000
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>Bacteria<span class="w">        </span><span class="m">2</span><span class="w">       </span>superkingdom<span class="w">    </span><span class="m">4534370</span><span class="w"> </span><span class="m">39</span><span class="w">      </span><span class="m">14</span><span class="w">      </span><span class="m">1</span>.000000
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="o">==</span>&gt;<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/centrifuger_masked-strict+taxa.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>readID<span class="w">  </span>seqID<span class="w">   </span>taxID<span class="w">   </span>score<span class="w">   </span>2ndBestScore<span class="w">    </span>hitLength<span class="w">       </span>queryLength<span class="w">     </span>numMatches
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>contig_1<span class="w">        </span>unclassified<span class="w">    </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">17948</span><span class="w">   </span><span class="m">1</span><span class="w">               </span><span class="p">;;;;;;</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>contig_10<span class="w">       </span>unclassified<span class="w">    </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">5781</span><span class="w">    </span><span class="m">1</span><span class="w">               </span><span class="p">;;;;;;</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="o">==</span>&gt;<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/centrifuger_masked-strict.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>readID<span class="w">  </span>seqID<span class="w">   </span>taxID<span class="w">   </span>score<span class="w">   </span>2ndBestScore<span class="w">    </span>hitLength<span class="w">       </span>queryLength<span class="w">     </span>numMatches
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a>contig_1<span class="w">        </span>unclassified<span class="w">    </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">17948</span><span class="w">   </span><span class="m">1</span>
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a>contig_10<span class="w">       </span>unclassified<span class="w">    </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">0</span><span class="w">       </span><span class="m">5781</span><span class="w">    </span><span class="nv">1</span>
+</span><span id="__span-14-24"><a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a>
+</span><span id="__span-14-25"><a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a><span class="o">==</span>&gt;<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/centrifuger_masked+taxa.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-14-26"><a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a>readID<span class="w">  </span>seqID<span class="w">   </span>taxID<span class="w">   </span>score<span class="w">   </span>2ndBestScore<span class="w">    </span>hitLength<span class="w">       </span>queryLength<span class="w">     </span>numMatches
+</span><span id="__span-14-27"><a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>contig_1<span class="w">        </span>NZ_CP035464.1<span class="w">   </span><span class="m">78344</span><span class="w">   </span><span class="m">121</span><span class="w">     </span><span class="m">64</span><span class="w">      </span><span class="m">26</span><span class="w">      </span><span class="m">17948</span><span class="w">   </span><span class="m">1</span><span class="w">       </span>Bifidobacterium<span class="w"> </span>pullorum<span class="w">        </span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Actinomycetota<span class="p">;</span>Actinomycetes<span class="p">;</span>Bifidobacteriales<span class="p">;</span>Bifidobacteriaceae<span class="p">;</span>Bifidobacterium<span class="p">;</span>Bifidobacterium<span class="w"> </span>pullorum
+</span><span id="__span-14-28"><a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a>contig_10<span class="w">       </span>NZ_CP102287.1<span class="w">   </span><span class="m">679190</span><span class="w">  </span><span class="m">100</span><span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">25</span><span class="w">      </span><span class="m">5781</span><span class="w">    </span><span class="m">1</span><span class="w">       </span>Hoylesella<span class="w"> </span>buccalis<span class="w">     </span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Bacteroidota<span class="p">;</span>Bacteroidia<span class="p">;</span>Bacteroidales<span class="p">;</span>Prevotellaceae<span class="p">;</span>Hoylesella<span class="p">;</span>Hoylesella<span class="w"> </span><span class="nv">buccalis</span>
+</span><span id="__span-14-29"><a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a>
+</span><span id="__span-14-30"><a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a><span class="o">==</span>&gt;<span class="w"> </span>results/taxonomic_classification/SRR17232957_1/centrifuger_masked.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-14-31"><a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a>readID<span class="w">  </span>seqID<span class="w">   </span>taxID<span class="w">   </span>score<span class="w">   </span>2ndBestScore<span class="w">    </span>hitLength<span class="w">       </span>queryLength<span class="w">     </span>numMatches
+</span><span id="__span-14-32"><a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a>contig_1<span class="w">        </span>NZ_CP035464.1<span class="w">   </span><span class="m">78344</span><span class="w">   </span><span class="m">121</span><span class="w">     </span><span class="m">64</span><span class="w">      </span><span class="m">26</span><span class="w">      </span><span class="m">17948</span><span class="w">   </span><span class="m">1</span>
+</span><span id="__span-14-33"><a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a>contig_10<span class="w">       </span>NZ_CP102287.1<span class="w">   </span><span class="m">679190</span><span class="w">  </span><span class="m">100</span><span class="w">     </span><span class="m">0</span><span class="w">       </span><span class="m">25</span><span class="w">      </span><span class="m">5781</span><span class="w">    </span><span class="m">1</span>
+</span></code></pre></div>
+<p>Also, for each of these Namaste produces microbiota profiles as TSV in
+<code>results/microbiota_profile/</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>$<span class="w"> </span>ls<span class="w"> </span>results/microbiota_profile/SRR17232957_1-*
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>results/microbiota_profile/SRR17232957_1-per_contig.tsv<span class="w">   </span>results/microbiota_profile/SRR17232957_1-strict-per_contig.tsv
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>results/microbiota_profile/SRR17232957_1-per_species.tsv<span class="w">  </span>results/microbiota_profile/SRR17232957_1-strict-per_species.tsv
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>$<span class="w"> </span>head<span class="w"> </span>-2<span class="w">  </span>results/microbiota_profile/SRR17232957_1-*
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="o">==</span>&gt;<span class="w"> </span>results/microbiota_profile/SRR17232957_1-per_contig.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>readID<span class="w">  </span>seqID<span class="w">   </span>taxID<span class="w">   </span>score<span class="w">   </span>2ndBestScore<span class="w">    </span>hitLength<span class="w">       </span>queryLength<span class="w">     </span>numMatches<span class="w">      </span>Species<span class="w"> </span>Lineage<span class="w"> </span>length<span class="w">  </span>depth<span class="w">   </span>total_bases<span class="w">     </span>grand_total<span class="w">     </span>Sample<span class="w">  </span>Percentage
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>contig_282<span class="w">      </span>NZ_LN879430.1<span class="w">   </span><span class="m">1679721</span><span class="w"> </span><span class="m">66113</span><span class="w">   </span><span class="m">52062</span><span class="w">   </span><span class="m">295</span><span class="w">     </span><span class="m">22345</span><span class="w">   </span><span class="m">1</span><span class="w">       </span>Herbinix<span class="w"> </span>luporum<span class="w">        </span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Bacillota<span class="p">;</span>Clostridia<span class="p">;</span>Lachnospirales<span class="p">;</span>Lachnospiraceae<span class="p">;</span>Herbinix<span class="p">;</span>Herbinix<span class="w"> </span>luporum<span class="w">  </span><span class="m">22345</span><span class="w">   </span><span class="m">61</span>.431<span class="w">  </span><span class="m">1372675</span>.6949999998<span class="w">      </span><span class="m">132539452</span>.71505<span class="w"> </span>SRR17232957_1<span class="w">   </span><span class="m">1</span>.0356732783189853
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="o">==</span>&gt;<span class="w"> </span>results/microbiota_profile/SRR17232957_1-per_species.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>Sample<span class="w">  </span>Species<span class="w"> </span>Lineage<span class="w"> </span>total_bases<span class="w">     </span>Percentage
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>SRR17232957_1<span class="w">   </span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>species<span class="w"> </span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>phylum<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>class<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>order<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>family<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>genus<span class="p">;</span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>species<span class="w">        </span><span class="m">8955780</span>.64689<span class="w">   </span><span class="m">6</span>.757067773732448
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="o">==</span>&gt;<span class="w"> </span>results/microbiota_profile/SRR17232957_1-strict-per_contig.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>readID<span class="w">  </span>seqID<span class="w">   </span>taxID<span class="w">   </span>score<span class="w">   </span>2ndBestScore<span class="w">    </span>hitLength<span class="w">       </span>queryLength<span class="w">     </span>numMatches<span class="w">      </span>Species<span class="w"> </span>Lineage<span class="w"> </span>length<span class="w">  </span>depth<span class="w">   </span>total_bases<span class="w">     </span>grand_total<span class="w">     </span>Sample<span class="w">  </span>Percentage
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>contig_282<span class="w">      </span>family<span class="w">  </span><span class="m">186803</span><span class="w">  </span><span class="m">59536</span><span class="w">   </span><span class="m">59536</span><span class="w">   </span><span class="m">259</span><span class="w">     </span><span class="m">22345</span><span class="w">   </span><span class="m">1</span><span class="w">       </span>unclassified<span class="w"> </span>Lachnospiraceae<span class="w"> </span>species<span class="w">    </span>unclassified<span class="w"> </span>cellular<span class="w"> </span>organisms<span class="w"> </span>superkingdom<span class="p">;</span>Bacillota<span class="p">;</span>Clostridia<span class="p">;</span>Lachnospirales<span class="p">;</span>Lachnospiraceae<span class="p">;</span>unclassified<span class="w"> </span>Lachnospiraceae<span class="w"> </span>genus<span class="p">;</span>unclassified<span class="w"> </span>Lachnospiraceae<span class="w"> </span>species<span class="w">    </span><span class="m">22345</span><span class="w">   </span><span class="m">61</span>.431<span class="w">  </span><span class="m">1372675</span>.6949999998<span class="w">      </span><span class="m">132539452</span>.71505<span class="w"> </span>SRR17232957_1<span class="w">   </span><span class="m">1</span>.0356732783189853
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="o">==</span>&gt;<span class="w"> </span>results/microbiota_profile/SRR17232957_1-strict-per_species.tsv<span class="w"> </span>&lt;<span class="o">==</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a>Sample<span class="w">  </span>Species<span class="w"> </span>Lineage<span class="w"> </span>total_bases<span class="w">     </span>Percentage
+</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a>SRR17232957_1<span class="w">   </span>NA<span class="w">      </span><span class="p">;;;;;;</span><span class="w">  </span><span class="m">123421656</span>.91637<span class="w"> </span><span class="m">93</span>.1206930375044
+</span></code></pre></div>
+<p>In the end, per contig classifications of all samples are collected in two files:
+<code>results/classifications-concatenated.tsv.gz</code> and
+<code>results/strict_classifications-concatenated.tsv.gz</code>.</p>
+<h2 id="6-plasmid-predictions">6. Plasmid predictions</h2>
+<p>Namaste uses geNomad to <a href="genomad.html">predict</a> whether contigs derive from
+chromosomal DNA, plasmids or viruses. Per sample results are saved in
+<code>results/plasmid_prediction/{sample}/</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>$<span class="w"> </span>ls<span class="w"> </span>-F<span class="w"> </span>results/plasmid_prediction/SRR17232957_1/
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>assembly_aggregated_classification/<span class="w">     </span>assembly_annotate.log<span class="w">         </span>assembly_marker_classification/<span class="w">     </span>assembly_nn_classification.log<span class="w">  </span>assembly_summary/
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>assembly_aggregated_classification.log<span class="w">  </span>assembly_find_proviruses/<span class="w">     </span>assembly_marker_classification.log<span class="w">  </span>assembly_score_calibration/<span class="w">     </span>assembly_summary.log
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>assembly_annotate/<span class="w">                      </span>assembly_find_proviruses.log<span class="w">  </span>assembly_nn_classification/<span class="w">         </span>assembly_score_calibration.log
+</span></code></pre></div>
+<p>A detailed description of the outputs created by geNomad can be found in
+<a href="https://portal.nersc.gov/genomad/quickstart.html#understanding-the-outputs">its documentation</a>.</p>
+<p>Output for contigs predicted to derive from plasmids and viruses are
+concatenated for all samples and saved under 'results':
+<code>results/plasmid_predictions-concatenated.tsv.gz</code> and
+<code>results/virus_predictions-concatenated.tsv.gz</code>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>$<span class="w"> </span>zless<span class="w"> </span>results/plasmid_predictions-concatenated.tsv.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>contig<span class="w">  </span>length<span class="w">  </span>plasmid_topology<span class="w">        </span>plasmid_genes<span class="w">   </span>genetic_code<span class="w">    </span>plasmid_score<span class="w">   </span>fdr<span class="w">     </span>n_hallmarks<span class="w">     </span>marker_enrichment<span class="w">       </span>conjugation_genes<span class="w">       </span>amr_genes<span class="w">       </span>sample
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>contig_1753<span class="w">     </span><span class="m">4328</span><span class="w">    </span>No<span class="w"> </span>terminal<span class="w"> </span>repeats<span class="w">     </span><span class="m">10</span><span class="w">      </span><span class="m">11</span><span class="w">      </span><span class="m">0</span>.999<span class="w">   </span><span class="m">0</span>.001<span class="w">   </span><span class="m">0</span><span class="w">       </span><span class="m">2</span>.1513<span class="w">  </span>NA<span class="w">      </span>NA<span class="w">      </span>SRR17232957_1
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>contig_1750<span class="w">     </span><span class="m">7896</span><span class="w">    </span>No<span class="w"> </span>terminal<span class="w"> </span>repeats<span class="w">     </span><span class="m">11</span><span class="w">      </span><span class="m">11</span><span class="w">      </span><span class="m">0</span>.999<span class="w">   </span><span class="m">0</span>.001<span class="w">   </span><span class="m">0</span><span class="w">       </span><span class="m">0</span>.8884<span class="w">  </span>NA<span class="w">      </span>NA<span class="w">      </span>SRR17232957_1
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>$<span class="w"> </span>zless<span class="w"> </span>results/virus_predictions-concatenated.tsv.gz<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-3
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>contig<span class="w">  </span>length<span class="w">  </span>virus_topology<span class="w">  </span>coordinates<span class="w">     </span>virus_genes<span class="w">     </span>genetic_code<span class="w">    </span>virus_score<span class="w">     </span>fdr<span class="w">     </span>n_hallmarks<span class="w">     </span>marker_enrichment<span class="w">       </span>virus_taxonomy<span class="w">  </span>sample
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>contig_941<span class="w">      </span><span class="m">8070</span><span class="w">    </span>No<span class="w"> </span>terminal<span class="w"> </span>repeats<span class="w">     </span>NA<span class="w">      </span><span class="m">13</span><span class="w">      </span><span class="m">11</span><span class="w">      </span><span class="m">0</span>.9989<span class="w">  </span><span class="m">0</span>.0011<span class="w">  </span><span class="m">4</span><span class="w">       </span><span class="m">13</span>.2017<span class="w"> </span>Viruses<span class="p">;</span>Duplodnaviria<span class="p">;</span>Heunggongvirae<span class="p">;</span>Uroviricota<span class="p">;</span>Caudoviricetes<span class="p">;;</span><span class="w">       </span>SRR17232957_1
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>contig_837<span class="w">      </span><span class="m">12674</span><span class="w">   </span>No<span class="w"> </span>terminal<span class="w"> </span>repeats<span class="w">     </span>NA<span class="w">      </span><span class="m">20</span><span class="w">      </span><span class="m">11</span><span class="w">      </span><span class="m">0</span>.9989<span class="w">  </span><span class="m">0</span>.0011<span class="w">  </span><span class="m">6</span><span class="w">       </span><span class="m">17</span>.1828<span class="w"> </span>Viruses<span class="p">;</span>Duplodnaviria<span class="p">;</span>Heunggongvirae<span class="p">;</span>Uroviricota<span class="p">;</span>Caudoviricetes<span class="p">;;</span><span class="w">       </span>SRR17232957_1
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["content.code.copy", "content.code.select"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
