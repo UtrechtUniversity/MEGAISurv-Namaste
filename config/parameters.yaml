@@ -15,9 +15,6 @@ flye:
 minimap2:
   threads: 8
 
-metaquast:
-  threads: 3
-
 simple_stats:
   threads: 4
 
