@@ -14,8 +14,9 @@ rule create_resfinder_database:
         "../envs/kma.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/create_resfinder_database.txt",
     benchmark:
@@ -48,8 +49,9 @@ rule screen_antibiotic_resistance_genes:
         "../envs/kma.yaml"
     threads: config["kma"]["threads"]
     resources:
-        mem=int(config["kma"]["memory"]),
-        time=int(config["kma"]["time"]),
+        mem_mb=int(config["kma"]["memory"]),
+        walltime=int(config["kma"]["time"]),
+        runtime=int(config["kma"]["time"]),
     log:
         "log/kma/{sample}.txt",
     benchmark:
@@ -72,8 +74,9 @@ rule mask_resistance_gene_positions:
         "../envs/bedtools.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/kma/{sample}-positions.txt",
     benchmark:
@@ -107,8 +110,9 @@ rule screen_antibiotic_resistance_genes_reads:
         "../envs/kma.yaml"
     threads: config["kma"]["threads"]
     resources:
-        mem=int(config["kma"]["memory"]),
-        time=int(config["kma"]["time"]),
+        mem_mb=int(config["kma"]["memory"]),
+        walltime=int(config["kma"]["time"]),
+        runtime=int(config["kma"]["time"]),
     log:
         "log/kma-reads/{sample}.txt",
     benchmark:
@@ -131,8 +135,9 @@ rule summarise_read_args:
         "../envs/R_tidyverse.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/summarise_read_args.txt",
     benchmark:

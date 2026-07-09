@@ -14,8 +14,9 @@ rule bin_assemblies_semibin:
         "../envs/semibin.yaml"
     threads: config["semibin"]["threads"]
     resources:
-        mem=int(config["semibin"]["memory"]),
-        time=int(config["semibin"]["time"]),
+        mem_mb=int(config["semibin"]["memory"]),
+        walltime=int(config["semibin"]["time"]),
+        runtime=int(config["semibin"]["time"]),
     log:
         "log/bin_assemblies_semibin/{sample}.txt",
     benchmark:
@@ -41,8 +42,9 @@ rule bin_assemblies_metabat:
         "../envs/metabat2.yaml"
     threads: config["metabat2"]["threads"]
     resources:
-        mem=int(config["metabat2"]["memory"]),
-        time=int(config["metabat2"]["time"]),
+        mem_mb=int(config["metabat2"]["memory"]),
+        walltime=int(config["metabat2"]["time"]),
+        runtime=int(config["metabat2"]["time"]),
     log:
         "log/bin_assemblies_metabat/{sample}.txt",
     benchmark:
@@ -67,8 +69,9 @@ rule bin_assemblies_vamb:
         "../envs/vamb.yaml"
     threads: config["vamb"]["threads"]
     resources:
-        mem=int(config["vamb"]["memory"]),
-        time=int(config["vamb"]["time"]),
+        mem_mb=int(config["vamb"]["memory"]),
+        walltime=int(config["vamb"]["time"]),
+        runtime=int(config["vamb"]["time"]),
     log:
         "log/bin_assemblies_vamb/{sample}.txt",
     benchmark:
@@ -95,8 +98,9 @@ rule classify_bins:
         "../envs/gtdbtk.yaml"
     threads: config["gtdbtk"]["threads"]
     resources:
-        mem=int(config["gtdbtk"]["memory"]),
-        time=int(config["gtdbtk"]["time"]),
+        mem_mb=int(config["gtdbtk"]["memory"]),
+        walltime=int(config["gtdbtk"]["time"]),
+        runtime=int(config["gtdbtk"]["time"]),
     log:
         "log/classify_bins/{sample}.txt",
     benchmark:

@@ -12,8 +12,9 @@ rule read_quality_control:
         "../envs/fastplong.yaml"
     threads: config["fastplong"]["threads"]
     resources:
-        mem=int(config["fastplong"]["memory"]),
-        time=int(config["fastplong"]["time"]),
+        mem_mb=int(config["fastplong"]["memory"]),
+        walltime=int(config["fastplong"]["time"]),
+        runtime=int(config["fastplong"]["time"]),
     log:
         "log/read_qc/{sample}.txt",
     benchmark:
@@ -36,8 +37,9 @@ rule extract_read_qc_summaries:
         "../envs/bash.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/extract_read_qc_summaries/{sample}.txt",
     benchmark:
@@ -55,8 +57,9 @@ rule summarise_read_qc_data:
         "../envs/R_tidyverse.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/summarise_read_qc_data.txt",
     benchmark:

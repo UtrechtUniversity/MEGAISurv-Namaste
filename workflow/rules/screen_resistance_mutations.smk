@@ -39,8 +39,9 @@ rule screen_antibiotic_resistance_mutations:
         "../envs/metapointfinder.yaml"
     threads: config["metapointfinder"]["threads"]
     resources:
-        mem=int(config["metapointfinder"]["memory"]),
-        time=int(config["metapointfinder"]["time"]),
+        mem_mb=int(config["metapointfinder"]["memory"]),
+        walltime=int(config["metapointfinder"]["time"]),
+        runtime=int(config["metapointfinder"]["time"]),
     log:
         "log/metapointfinder/{sample}.txt",
     benchmark:
@@ -62,8 +63,9 @@ rule match_mutations_to_contigs:
         "../envs/minimap2.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/match_mutations_to_contigs/{sample}.txt",
     benchmark:

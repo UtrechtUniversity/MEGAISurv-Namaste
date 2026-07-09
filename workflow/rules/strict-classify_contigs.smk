@@ -18,8 +18,9 @@ rule strict_taxonomic_classification:
         "../envs/centrifuger.yaml"
     threads: config["centrifuger"]["threads"]
     resources:
-        mem=int(config["centrifuger"]["memory"]),
-        time=int(config["centrifuger"]["time"]),
+        mem_mb=int(config["centrifuger"]["memory"]),
+        walltime=int(config["centrifuger"]["time"]),
+        runtime=int(config["centrifuger"]["time"]),
     log:
         "log/strict-centrifuger/{sample}.txt",
     benchmark:
@@ -44,8 +45,9 @@ rule strict_lookup_taxids:
         "results/taxonomic_classification/{sample}/centrifuger_masked-strict+taxa.tsv",
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     conda:
         "../envs/taxonkit.yaml"
     log:
@@ -73,8 +75,9 @@ rule strict_generate_microbiota_profiles:
         "../envs/R_tidyverse.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/strict-generate_profiles/{sample}.txt",
     benchmark:

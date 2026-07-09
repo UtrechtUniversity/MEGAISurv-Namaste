@@ -14,8 +14,9 @@ rule metagenomic_assembly:
         "../envs/flye.yaml"
     threads: config["flye"]["threads"]
     resources:
-        mem=int(config["flye"]["memory"]),
-        time=int(config["flye"]["time"]),
+        mem_mb=int(config["flye"]["memory"]),
+        walltime=int(config["flye"]["time"]),
+        runtime=int(config["flye"]["time"]),
     log:
         "log/assembly/{sample}.txt",
     benchmark:
@@ -36,8 +37,9 @@ rule simple_assembly_statistics:
         "../envs/seqkit.yaml"
     threads: config["simple_stats"]["threads"]
     resources:
-        mem=int(config["simple_stats"]["memory"]),
-        time=int(config["simple_stats"]["time"]),
+        mem_mb=int(config["simple_stats"]["memory"]),
+        walltime=int(config["simple_stats"]["time"]),
+        runtime=int(config["simple_stats"]["time"]),
     log:
         "log/simple_assembly_statistics.txt",
     benchmark:
@@ -59,8 +61,9 @@ rule map_reads_to_assembly:
         "../envs/minimap2.yaml"
     threads: config["minimap2"]["threads"]
     resources:
-        mem=int(config["minimap2"]["memory"]),
-        time=int(config["minimap2"]["time"]),
+        mem_mb=int(config["minimap2"]["memory"]),
+        walltime=int(config["minimap2"]["time"]),
+        runtime=int(config["minimap2"]["time"]),
     log:
         "log/map_reads_to_assembly/{sample}.txt",
     benchmark:
@@ -85,8 +88,9 @@ rule summarise_read_mapping:
         "../envs/R_tidyverse.yaml"
     threads: 1
     resources:
-        mem=int(config["default_job"]["memory"]),
-        time=int(config["default_job"]["time"]),
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
     log:
         "log/summarise_read_mapping.txt",
     benchmark:
