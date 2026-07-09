@@ -7,10 +7,16 @@ metapointfinder_database: "resources/metapointfinderdb"
 
 ### 2. Tool-specific parameters ###
 
+download_raw_reads:
+  threads: 4
+
 fastplong:
   threads: 3
   memory: 12288
   time: 300
+
+subsample_samples:
+  threads: 4
 
 flye:
   threads: 12

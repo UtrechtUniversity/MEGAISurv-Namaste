@@ -1,17 +1,58 @@
-## General helper functions: define input samples
 from pathlib import Path
 
-# Read the input directory and automatically discover
-# input files with '.fastq.gz' extension.
-INPUT_DIR = Path(config["input_directory"])
-INPUT_FILES = list(INPUT_DIR.glob("*.fastq.gz"))
-SAMPLES = [file.stem.replace(".fastq", "") for file in INPUT_FILES]
+# Check if input is text file or directory
+INPUT_PATH = Path(config["input"])
 
+if INPUT_PATH.is_dir() and not INPUT_PATH.samefile(""):
+    # If directory, list all files with .fastq.gz extension
+    INPUT_DIR = INPUT_PATH
+    INPUT_FILES = list(INPUT_DIR.glob("*.fastq.gz"))
+    SAMPLES = [file.stem.replace(".fastq", "") for file in INPUT_FILES]
+
+elif INPUT_PATH.is_file():
+    # If a file, try to read its content as input accessions
+    # Read accession IDs from a text file (list with one accession per line)
+    INPUT_DIR = Path("resources/public_metagenomes/")
+    SAMPLES = []
+    with open(INPUT_PATH, "r") as input_list:
+        for line in input_list:
+            SAMPLES.append(line.strip())
+
+else:
+    print(
+        f"No valid input found in {INPUT_PATH}.\n"
+        "This workflow requires the user to set an input file or directory.\n"
+        "Please provide one in 'config/parameters.yaml'."
+    )
+    exit(1)
+
+
+# Check if there are input samples
 assert len(SAMPLES) > 0, (
-    f"-----\nNo input samples found in {INPUT_DIR}.\n"
-    "Please make sure that there are gzipped FASTQ files in this directory!\n"
-    "(Note: they must have '.fastq.gz' as extension.)\n-----\n"
+    f"-----\nNo input samples found in {INPUT_PATH}.\n"
+    "Please make sure that the input is either one of:"
+    "1) a directory with gzipped FASTQ files (must have '.fastq.gz' extension)\n",
+    "2) a text file with SRA accession numbers (one per line).\n-----\n",
 )
+
+
+rule download_raw_reads:
+    output:
+        temp("resources/public_metagenomes/{sample}.fastq.gz"),
+    params:
+        out_dir=subpath(output[0], parent=True),
+    conda:
+        "../envs/sracha.yaml"
+    threads: config["download_raw_reads"]["threads"]
+    log:
+        "log/download_raw_reads/{sample}.txt",
+    benchmark:
+        "log/benchmark/download_raw_reads/{sample}.txt"
+    shell:
+        """
+bash workflow/scripts/download_from_sra.sh -s {wildcards.sample}\
+ -d {params.out_dir} -t {threads} > {log} 2>&1
+        """
 
 
 rule make_assembly_database:

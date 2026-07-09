@@ -1,0 +1,8 @@
+name: sracha
+
+dependencies:
+ - sracha=0.3.3
+
+channels:
+ - conda-forge
+ - bioconda
