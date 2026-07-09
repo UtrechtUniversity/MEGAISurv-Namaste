@@ -2,12 +2,18 @@
 
 ### 1. Input/output parameters ###
 
-input_directory: "data/"
+input_list: "resources/batches/batch_1.txt"
 
 ### 2. Tool-specific parameters ###
 
+download_raw_reads:
+  threads: 4
+
 fastplong:
   threads: 3
+
+subsample_samples:
+  threads: 4
 
 flye:
   threads: 12

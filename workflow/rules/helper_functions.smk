@@ -1,17 +1,29 @@
-## General helper functions: define input samples
-from pathlib import Path
-
-# Read the input directory and automatically discover
-# input files with '.fastq.gz' extension.
-INPUT_DIR = Path(config["input_directory"])
-INPUT_FILES = list(INPUT_DIR.glob("*.fastq.gz"))
-SAMPLES = [file.stem.replace(".fastq", "") for file in INPUT_FILES]
+# Read accession IDs from a text file (list with one accession per line)
+INPUT_LIST = config["input_list"]
+SAMPLES = []
+with open(INPUT_LIST, "r") as input_list:
+    for line in input_list:
+        SAMPLES.append(line.strip())
 
 assert len(SAMPLES) > 0, (
-    f"-----\nNo input samples found in {INPUT_DIR}.\n"
-    "Please make sure that there are gzipped FASTQ files in this directory!\n"
-    "(Note: they must have '.fastq.gz' as extension.)\n-----\n"
+    f"-----\nNo input samples found in {INPUT_LIST}.\n"
+    "Please make sure that there are SRA (sample) accession IDs in this file!\n"
+    "-----\n"
 )
+
+
+rule download_raw_reads:
+    output:
+        temp("resources/public_metagenomes/{sample}.fastq.gz"),
+    conda:
+        "../envs/sracha.yaml"
+    threads: config["download_raw_reads"]["threads"]
+    log:
+        "log/download_raw_reads/{sample}.txt",
+    benchmark:
+        "log/benchmark/download_raw_reads/{sample}.txt"
+    script:
+        "../scripts/download_from_sra.sh"
 
 
 rule make_assembly_database:
