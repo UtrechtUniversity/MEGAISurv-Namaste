@@ -53,6 +53,9 @@ rule make_assembly_database:
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/make_assembly_database.txt",
     benchmark:
@@ -82,6 +85,9 @@ rule make_mutation_database:
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/make_mutation_database.txt",
     benchmark:

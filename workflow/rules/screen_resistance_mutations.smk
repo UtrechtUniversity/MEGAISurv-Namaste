@@ -38,6 +38,9 @@ rule screen_antibiotic_resistance_mutations:
     conda:
         "../envs/metapointfinder.yaml"
     threads: config["metapointfinder"]["threads"]
+    resources:
+        mem=int(config["metapointfinder"]["memory"]),
+        time=int(config["metapointfinder"]["time"]),
     log:
         "log/metapointfinder/{sample}.txt",
     benchmark:
@@ -58,6 +61,9 @@ rule match_mutations_to_contigs:
     conda:
         "../envs/minimap2.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/match_mutations_to_contigs/{sample}.txt",
     benchmark:

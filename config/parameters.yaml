@@ -8,36 +8,65 @@ input_directory: "data/"
 
 fastplong:
   threads: 3
+  memory: 12288
+  time: 300
 
 flye:
   threads: 12
+  memory: 131072
+  time: 1200
 
 minimap2:
   threads: 8
+  memory: 30720
+  time: 600
 
 simple_stats:
   threads: 4
+  memory: 1024
+  time: 10
 
 kma:
   threads: 12
+  memory: 2048
+  time: 10
 
 metapointfinder:
   threads: 8
+  memory: 24576
+  time: 720
 
 centrifuger:
   threads: 12
+  memory: 49152
+  time: 15
 
 semibin:
   threads: 12
+  memory: 4096
+  time: 15
 
 metabat2:
   threads: 12
+  memory: 4096
+  time: 15
 
 vamb:
   threads: 12
+  memory: 8192
+  time: 15
 
 gtdbtk:
   threads: 12
+  memory: 131072
+  time: 60
 
 genomad:
   threads: 12
+  memory: 36864
+  time: 300
+
+default_job:
+  threads: 1
+  memory: 1024
+  time: 60

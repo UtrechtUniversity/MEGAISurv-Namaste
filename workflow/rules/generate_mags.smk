@@ -13,6 +13,9 @@ rule bin_assemblies_semibin:
     conda:
         "../envs/semibin.yaml"
     threads: config["semibin"]["threads"]
+    resources:
+        mem=int(config["semibin"]["memory"]),
+        time=int(config["semibin"]["time"]),
     log:
         "log/bin_assemblies_semibin/{sample}.txt",
     benchmark:
@@ -37,6 +40,9 @@ rule bin_assemblies_metabat:
     conda:
         "../envs/metabat2.yaml"
     threads: config["metabat2"]["threads"]
+    resources:
+        mem=int(config["metabat2"]["memory"]),
+        time=int(config["metabat2"]["time"]),
     log:
         "log/bin_assemblies_metabat/{sample}.txt",
     benchmark:
@@ -60,6 +66,9 @@ rule bin_assemblies_vamb:
     conda:
         "../envs/vamb.yaml"
     threads: config["vamb"]["threads"]
+    resources:
+        mem=int(config["vamb"]["memory"]),
+        time=int(config["vamb"]["time"]),
     log:
         "log/bin_assemblies_vamb/{sample}.txt",
     benchmark:
@@ -85,6 +94,9 @@ rule classify_bins:
     conda:
         "../envs/gtdbtk.yaml"
     threads: config["gtdbtk"]["threads"]
+    resources:
+        mem=int(config["gtdbtk"]["memory"]),
+        time=int(config["gtdbtk"]["time"]),
     log:
         "log/classify_bins/{sample}.txt",
     benchmark:

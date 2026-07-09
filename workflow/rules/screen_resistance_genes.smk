@@ -13,6 +13,9 @@ rule create_resfinder_database:
     conda:
         "../envs/kma.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/create_resfinder_database.txt",
     benchmark:
@@ -44,6 +47,9 @@ rule screen_antibiotic_resistance_genes:
     conda:
         "../envs/kma.yaml"
     threads: config["kma"]["threads"]
+    resources:
+        mem=int(config["kma"]["memory"]),
+        time=int(config["kma"]["time"]),
     log:
         "log/kma/{sample}.txt",
     benchmark:
@@ -65,6 +71,9 @@ rule mask_resistance_gene_positions:
     conda:
         "../envs/bedtools.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/kma/{sample}-positions.txt",
     benchmark:
@@ -97,6 +106,9 @@ rule screen_antibiotic_resistance_genes_reads:
     conda:
         "../envs/kma.yaml"
     threads: config["kma"]["threads"]
+    resources:
+        mem=int(config["kma"]["memory"]),
+        time=int(config["kma"]["time"]),
     log:
         "log/kma-reads/{sample}.txt",
     benchmark:
@@ -118,6 +130,9 @@ rule summarise_read_args:
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/summarise_read_args.txt",
     benchmark:

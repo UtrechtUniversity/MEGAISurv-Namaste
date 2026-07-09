@@ -11,6 +11,9 @@ rule read_quality_control:
     conda:
         "../envs/fastplong.yaml"
     threads: config["fastplong"]["threads"]
+    resources:
+        mem=int(config["fastplong"]["memory"]),
+        time=int(config["fastplong"]["time"]),
     log:
         "log/read_qc/{sample}.txt",
     benchmark:
@@ -32,6 +35,9 @@ rule extract_read_qc_summaries:
     conda:
         "../envs/bash.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/extract_read_qc_summaries/{sample}.txt",
     benchmark:
@@ -48,6 +54,9 @@ rule summarise_read_qc_data:
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/summarise_read_qc_data.txt",
     benchmark:

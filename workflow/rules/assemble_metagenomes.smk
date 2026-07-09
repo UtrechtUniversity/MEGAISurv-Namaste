@@ -13,6 +13,9 @@ rule metagenomic_assembly:
     conda:
         "../envs/flye.yaml"
     threads: config["flye"]["threads"]
+    resources:
+        mem=int(config["flye"]["memory"]),
+        time=int(config["flye"]["time"]),
     log:
         "log/assembly/{sample}.txt",
     benchmark:
@@ -32,6 +35,9 @@ rule simple_assembly_statistics:
     conda:
         "../envs/seqkit.yaml"
     threads: config["simple_stats"]["threads"]
+    resources:
+        mem=int(config["simple_stats"]["memory"]),
+        time=int(config["simple_stats"]["time"]),
     log:
         "log/simple_assembly_statistics.txt",
     benchmark:
@@ -52,6 +58,9 @@ rule map_reads_to_assembly:
     conda:
         "../envs/minimap2.yaml"
     threads: config["minimap2"]["threads"]
+    resources:
+        mem=int(config["minimap2"]["memory"]),
+        time=int(config["minimap2"]["time"]),
     log:
         "log/map_reads_to_assembly/{sample}.txt",
     benchmark:
@@ -75,6 +84,9 @@ rule summarise_read_mapping:
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/summarise_read_mapping.txt",
     benchmark:

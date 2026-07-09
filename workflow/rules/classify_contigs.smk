@@ -13,6 +13,9 @@ rule download_centrifuger_database:
     conda:
         "../envs/bash.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/download_centrifuger_database.txt",
     benchmark:
@@ -38,6 +41,9 @@ rule taxonomic_classification:
     conda:
         "../envs/centrifuger.yaml"
     threads: config["centrifuger"]["threads"]
+    resources:
+        mem=int(config["centrifuger"]["memory"]),
+        time=int(config["centrifuger"]["time"]),
     log:
         "log/centrifuger/{sample}.txt",
     benchmark:
@@ -61,6 +67,9 @@ rule download_taxdump:
             merged="merged.dmp",
         ),
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     conda:
         "../envs/bash.yaml"
     log:
@@ -83,6 +92,9 @@ rule lookup_taxids:
     output:
         "results/taxonomic_classification/{sample}/centrifuger_masked+taxa.tsv",
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     conda:
         "../envs/taxonkit.yaml"
     log:
@@ -109,6 +121,9 @@ rule generate_microbiota_profiles:
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/generate_profiles/{sample}.txt",
     benchmark:
@@ -126,6 +141,9 @@ rule download_genomad_database:
     conda:
         "../envs/genomad.yaml"
     threads: 1
+    resources:
+        mem=int(config["default_job"]["memory"]),
+        time=int(config["default_job"]["time"]),
     log:
         "log/download_genomad_database.txt",
     benchmark:
@@ -150,6 +168,9 @@ rule genomad:
     conda:
         "../envs/genomad.yaml"
     threads: config["genomad"]["threads"]
+    resources:
+        mem=int(config["genomad"]["memory"]),
+        time=int(config["genomad"]["time"]),
     log:
         "log/genomad/{sample}.txt",
     benchmark:
