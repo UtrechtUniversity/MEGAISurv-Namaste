@@ -3,7 +3,7 @@
 
 rule screen_antibiotic_resistance_mutations:
     input:
-        reads="results/filtered_reads/{sample}.fastq.gz",
+        reads="results/downsampled_reads/{sample}.fastq.gz",
     output:
         mpf_basics=expand(
             "results/resistance_mutations/{{sample}}/{file}",

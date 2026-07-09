@@ -3,11 +3,13 @@
 
 rule read_quality_control:
     input:
-        INPUT_DIR / "{sample}.fastq.gz",
+        "resources/public_metagenomes/{sample}.fastq.gz",
     output:
-        filtered="results/filtered_reads/{sample}.fastq.gz",
+        filtered=temp("results/filtered_reads/{sample}.fastq.gz"),
         json="results/read_qc/{sample}.json",
         html="results/read_qc/{sample}.html",
+    wildcard_constraints:
+        sample="SAM[A-Z]+[0-9]+",
     conda:
         "../envs/fastplong.yaml"
     threads: config["fastplong"]["threads"]
@@ -26,7 +28,7 @@ fastplong --in {input} --out {output.filtered}\
 
 rule extract_read_qc_summaries:
     input:
-        "results/read_qc/{sample}.json",
+        rules.read_quality_control.output.json,
     output:
         "results/read_qc/summary/{sample}.json",
     conda:
@@ -54,3 +56,22 @@ rule summarise_read_qc_data:
         "log/benchmark/summarise_read_qc_data.txt"
     script:
         "../scripts/collect_read_qc_data.R"
+
+
+rule subsample_large_samples:
+    input:
+        "results/filtered_reads/{sample}.fastq.gz",
+    output:
+        "results/downsampled_reads/{sample}.fastq.gz",
+    conda:
+        "../envs/seqkit.yaml"
+    threads: config["subsample_samples"]["threads"]
+    log:
+        "log/subsample_samples/{sample}.txt",
+    benchmark:
+        "log/benchmark/subsample_samples/{sample}.txt"
+    shell:
+        """
+seqkit seq -Q 10 --threads {threads} {input}\
+ seqkit sample2 --threads {threads} -n 1000000 -o {output}
+        """

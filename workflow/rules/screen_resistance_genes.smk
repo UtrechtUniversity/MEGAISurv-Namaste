@@ -85,7 +85,7 @@ rule screen_antibiotic_resistance_genes_reads:
             "resources/resfinder_db/all" + ".{extension}",
             extension=["comp.b", "fsa", "length.b", "seq.b"],
         ),
-        reads="results/filtered_reads/{sample}.fastq.gz",
+        reads="results/downsampled_reads/{sample}.fastq.gz",
     output:
         aln="results/resistance_genes-reads/{sample}.hmm.aln",
         frag="results/resistance_genes-reads/{sample}.hmm.frag.gz",

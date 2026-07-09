@@ -3,7 +3,7 @@
 
 rule metagenomic_assembly:
     input:
-        "results/filtered_reads/{sample}.fastq.gz",
+        "results/downsampled_reads/{sample}.fastq.gz",
     output:
         assembly="results/assembly/{sample}/assembly.fasta",
         info="results/assembly/{sample}/assembly_info.txt",
@@ -44,7 +44,7 @@ seqkit stats -Ta -j {threads} {input} > {output} 2> {log}
 
 rule map_reads_to_assembly:
     input:
-        reads="results/filtered_reads/{sample}.fastq.gz",
+        reads="results/downsampled_reads/{sample}.fastq.gz",
         assembly="results/assembly/{sample}/assembly.fasta",
     output:
         bam="results/assembly/{sample}/mapped_back/{sample}.bam",
