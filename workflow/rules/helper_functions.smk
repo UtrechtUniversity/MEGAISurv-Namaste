@@ -15,6 +15,8 @@ assert len(SAMPLES) > 0, (
 rule download_raw_reads:
     output:
         temp("resources/public_metagenomes/{sample}.fastq.gz"),
+    params:
+        out_dir=subpath(output[0], parent=True),
     conda:
         "../envs/sracha.yaml"
     threads: config["download_raw_reads"]["threads"]
@@ -22,8 +24,11 @@ rule download_raw_reads:
         "log/download_raw_reads/{sample}.txt",
     benchmark:
         "log/benchmark/download_raw_reads/{sample}.txt"
-    script:
-        "../scripts/download_from_sra.sh"
+    shell:
+        """
+bash workflow/scripts/download_from_sra.sh -s {wildcards.sample}\
+ -d {params.out_dir} -t {threads} > {log} 2>&1
+        """
 
 
 rule make_assembly_database:
