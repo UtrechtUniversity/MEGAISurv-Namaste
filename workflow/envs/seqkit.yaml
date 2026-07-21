@@ -5,4 +5,4 @@ channels:
  - conda-forge
 
 dependencies:
- - seqkit=2.9.0
+ - seqkit=2.13.0

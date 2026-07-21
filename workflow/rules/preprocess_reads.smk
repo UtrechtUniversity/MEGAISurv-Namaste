@@ -66,12 +66,14 @@ rule subsample_large_samples:
     conda:
         "../envs/seqkit.yaml"
     threads: config["subsample_samples"]["threads"]
+    resources:
+        mem_mb=int(20000),
+        runtime=int(30),
     log:
         "log/subsample_samples/{sample}.txt",
     benchmark:
         "log/benchmark/subsample_samples/{sample}.txt"
     shell:
         """
-seqkit seq -Q 10 --threads {threads} {input}\
- seqkit sample2 --threads {threads} -n 1000000 -o {output}
+seqkit sample2 -2 -n 1000000 -o {output} --threads {threads} {input}
         """
