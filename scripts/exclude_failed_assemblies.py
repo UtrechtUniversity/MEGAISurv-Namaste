@@ -9,12 +9,12 @@ them further.
 
 from pathlib import Path
 import pandas as pd
-from yaml import load, dump
+from yaml import load
 
 try:
-    from yaml import CLoader as Loader, CDumper as Dumper
+    from yaml import CLoader as Loader
 except ImportError:
-    from yaml import Loader, Dumper
+    from yaml import Loader
 
 # Read Snakemake's configuration file as YAML, using PyYAML following
 # its documentation: https://pyyaml.org/wiki/PyYAMLDocumentation
@@ -30,19 +30,34 @@ def parse_yaml(config_file=str):
             2) a Path object of the output directory
     """
     parameters_dict = load(open(config_file, "r"), Loader=Loader)
-    input_directory = Path(parameters_dict["input_directory"])
-    input_files = list(input_directory.glob("*.fastq.gz"))
-    samples = [file.stem.replace(".fastq", "") for file in input_files]
+    try:
+        input_directory = Path(parameters_dict["input_directory"])
+        input_files = list(input_directory.glob("*.fastq.gz"))
+        samples = [file.stem.replace(".fastq", "") for file in input_files]
 
-    samples_and_reads = {"Samples": samples, "Input_reads": input_files}
+        samples_and_reads = {"Samples": samples, "Input_reads": input_files}
 
-    return samples_and_reads
+        return "read_dir", samples_and_reads
+
+    except KeyError:
+        # If not given a directory, it's a text file for downloading!
+        input_list = Path(parameters_dict["input_list"])
+        print("Found list of accession IDs instead of input files.")
+
+        samples = []
+        with open(input_list, "r") as infile:
+            for line in infile:
+                samples.append(line.strip())
+
+        samples_dict = {"Samples": samples}
+
+        return "accession_list", samples_dict
 
 
 def find_assembly_files(samples=list):
     """
     Given a list of sample names, look for their corresponding assembly output
-    files in the directory that Snakemake uses (default=results/assembly)
+    files in the directory that Snakemake uses (default=results/assembly/)
     """
     file_list = []
     assembly_qc = []
@@ -79,15 +94,48 @@ def move_samples_without_assembly(qc_dict=dict):
 
         if qc_verdict == "exclude":
             target_dir = reads_file.parent / "cannot_assemble"
-            Path.mkdir(target_dir, parents=True, exist_ok=True)
+            target_dir.mkdir(parents=True, exist_ok=True)
             # method 'rename' actually moves files:
             reads_file.rename(target_dir / reads_file.name)
             print(
-                f"Assembly of sample {sample} failed. Moving input to subdirectory 'cannot_assemble'"
+                f"Assembly of sample {sample} failed."
+                "Moving input to subdirectory 'cannot_assemble'"
             )
         else:
             print(f"Assembly of sample {sample} passed.")
             continue
+
+
+def update_accession_list(config_file=str, qc_dict=dict):
+    """
+    Given the input path to the assembly files and QC data (include/exclude),
+    look up the list with input accessions, and update it so that
+    it contains only samples that assembled correctly. Move the other
+    accession IDs to a different file for backup.
+    """
+    parameters_dict = load(open(config_file, "r"), Loader=Loader)
+    input_list = Path(parameters_dict["input_list"])
+    updated_list = input_list.parent / (str(input_list.stem) + "-updated.txt")
+    failed_list = input_list.parent / (str(input_list.stem) + "-failed_assembly.txt")
+
+    with open(updated_list, "w") as updated:
+        with open(failed_list, "w") as failed:
+            for index in range(len(qc_dict["Samples"])):
+                sample = qc_dict["Samples"][index]
+                qc_verdict = qc_dict["Assembly_QC"][index]
+
+                if qc_verdict == "include":
+                    updated.write(f"{sample}\n")
+                elif qc_verdict == "exclude":
+                    failed.write(f"{sample}\n")
+                else:
+                    print(f"Found an unexpected QC result: {sample} - {qc_verdict}")
+                    exit(1)
+
+    # Move the old input list to "backup"
+    input_list.rename(input_list.parent / (str(input_list.stem) + "-BACKUP.txt"))
+    # And make the updated list the new 'current'
+    updated_list.rename(input_list)
 
 
 def write_assembly_qc_table(qc_dict=dict, outputfile=str):
@@ -102,17 +150,33 @@ def write_assembly_qc_table(qc_dict=dict, outputfile=str):
 
 def main():
     print("Looking for input reads by reading Snakemake parameters (YAML) file")
-    samples_and_reads_dict = parse_yaml(config_file="config/parameters.yaml")
-    print("Found:\n", pd.DataFrame.from_dict(samples_and_reads_dict), "\n")
+    method, samples_and_dict = parse_yaml(config_file="config/parameters.yaml")
+
+    print("Found:\n", pd.DataFrame.from_dict(samples_and_dict), "\n")
 
     print("Looking up assemblies")
-    assembly_dict = find_assembly_files(samples=samples_and_reads_dict["Samples"])
+    assembly_dict = find_assembly_files(samples=samples_and_dict["Samples"])
     print("Found:\n", pd.DataFrame.from_dict(assembly_dict), "\n")
 
-    combined_dict = {**samples_and_reads_dict, **assembly_dict}
+    combined_dict = {**samples_and_dict, **assembly_dict}
 
-    print("Moving reads that could not assemble")
-    move_samples_without_assembly(qc_dict=combined_dict)
+    if method == "read_dir":
+        print("Moving reads that could not assemble")
+        move_samples_without_assembly(qc_dict=combined_dict)
+
+    elif method == "accession_list":
+        print("Moving sample accessions that could not assemble from input list")
+        update_accession_list(
+            config_file="config/parameters.yaml", qc_dict=combined_dict
+        )
+
+    else:
+        print("Error:")
+        print(
+            "Something went wrong in reading Snakemake's input"
+            "from config/parameters.yaml"
+        )
+        exit(1)
 
     print("\nWriting summary report")
     write_assembly_qc_table(qc_dict=combined_dict, outputfile="results/assembly_qc.tsv")
