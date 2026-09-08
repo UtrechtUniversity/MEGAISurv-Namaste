@@ -71,7 +71,8 @@ rule map_reads_to_assembly:
     shell:
         """
 minimap2 -x map-ont -N 0 -t {threads} -a {input.assembly} {input.reads} 2> {log} |\
- samtools sort -o {output.bam} --write-index - > {log} 2>&1
+ samtools view -F 2308 -h - |\
+ samtools sort -o {output.bam} --write-index - >> {log} 2>&1
 samtools coverage -o {output.cov} {output.bam} >> {log} 2>&1
         """
 
