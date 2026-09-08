@@ -33,7 +33,7 @@ rule screen_antibiotic_resistance_mutations:
             prot="prot.updated_table_with_scores_and_mutations.tsv",
         ),
     params:
-        db="resources/AMRFinder",
+        db=config["metapointfinder_database"],
         output=subpath(output[0], parent=True),
     conda:
         "../envs/metapointfinder.yaml"

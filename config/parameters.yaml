@@ -3,6 +3,7 @@
 ### 1. Input/output parameters ###
 
 input_directory: "data/"
+metapointfinder_database: "resources/metapointfinderdb"
 
 ### 2. Tool-specific parameters ###
 
