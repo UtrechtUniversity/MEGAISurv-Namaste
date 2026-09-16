@@ -5,6 +5,13 @@ Create a list of samples that passed and failed assembly,
 and move the reads of those that failed to a new directory
 so that Snakemake will not fail while attempting to analyse
 them further.
+
+The script:
+1. Reads the input used by Snakemake (config["input"])
+2. Reads samples from the input file or directory
+3. Looks up assemblies for these samples
+4. Moves input files to 'cannot_assemble' subdirectory,
+    or removes samples from input list
 """
 
 from pathlib import Path
@@ -30,42 +37,39 @@ def parse_yaml(config_file=str):
             2) a Path object of the output directory
     """
     parameters_dict = load(open(config_file, "r"), Loader=Loader)
-    try:
-        input_path = Path(parameters_dict["input"])
-        if input_path.is_dir():
-            # If directory, list all files with .fastq.gz extension
-            input_files = list(input_path.glob("*.fastq.gz"))
+    input_path = Path(parameters_dict["input"])
 
-        elif input_path.is_file():
-            # If a file, try to read its content as input accessions
-            # Read accession IDs from a text file (one accession per line)
-            input_files = list(
-                Path("resources/public_metagenomes/".glob("*.fastq.gz"))
-            )
-
-        else:
-            print("Found no input files...")
-            exit(1)
+    if input_path.is_dir():
+        # If directory, list all files with .fastq.gz extension
+        print("Input is a directory")
+        method = "read_dir"
+        input_files = list(input_path.glob("*.fastq.gz"))
 
         samples = [file.stem.replace(".fastq", "") for file in input_files]
 
-        samples_and_reads = {"Samples": samples, "Input_reads": input_files}
-
-        return "read_dir", samples_and_reads
-
-    except KeyError:
-        # If not given a directory, it's a text file for downloading!
-        input_list = Path(parameters_dict["input_list"])
-        print("Found list of accession IDs instead of input files.")
-
+    elif input_path.is_file():
+        # If a file, try to read its content as input accessions
+        # Read accession IDs from a text file (one accession per line)
+        print("Input is list of accession numbers")
+        method = "accession_list"
         samples = []
-        with open(input_list, "r") as infile:
+        with open(input_path, "r") as infile:
             for line in infile:
                 samples.append(line.strip())
 
-        samples_dict = {"Samples": samples}
+        input_files = list(
+            Path("resources/public_metagenomes/".glob("*.fastq.gz"))
+        )
 
-        return "accession_list", samples_dict
+    else:
+        print("Found no input files...")
+        exit(1)
+
+    samples = [file.stem.replace(".fastq", "") for file in input_files]
+
+    samples_and_reads = {"Samples": samples, "Input_reads": input_files}
+
+    return method, samples_and_reads
 
 
 def find_assembly_files(samples=list):
@@ -128,7 +132,7 @@ def update_accession_list(config_file=str, qc_dict=dict):
     accession IDs to a different file for backup.
     """
     parameters_dict = load(open(config_file, "r"), Loader=Loader)
-    input_list = Path(parameters_dict["input_list"])
+    input_list = Path(parameters_dict["input"])
     updated_list = input_list.parent / (str(input_list.stem) + "-updated.txt")
     failed_list = input_list.parent / (
         str(input_list.stem) + "-failed_assembly.txt"
