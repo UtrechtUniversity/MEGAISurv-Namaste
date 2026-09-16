@@ -31,8 +31,22 @@ def parse_yaml(config_file=str):
     """
     parameters_dict = load(open(config_file, "r"), Loader=Loader)
     try:
-        input_directory = Path(parameters_dict["input_directory"])
-        input_files = list(input_directory.glob("*.fastq.gz"))
+        input_path = Path(parameters_dict["input"])
+        if input_path.is_dir():
+            # If directory, list all files with .fastq.gz extension
+            input_files = list(input_path.glob("*.fastq.gz"))
+
+        elif input_path.is_file():
+            # If a file, try to read its content as input accessions
+            # Read accession IDs from a text file (one accession per line)
+            input_files = list(
+                Path("resources/public_metagenomes/".glob("*.fastq.gz"))
+            )
+
+        else:
+            print("Found no input files...")
+            exit(1)
+
         samples = [file.stem.replace(".fastq", "") for file in input_files]
 
         samples_and_reads = {"Samples": samples, "Input_reads": input_files}
@@ -116,7 +130,9 @@ def update_accession_list(config_file=str, qc_dict=dict):
     parameters_dict = load(open(config_file, "r"), Loader=Loader)
     input_list = Path(parameters_dict["input_list"])
     updated_list = input_list.parent / (str(input_list.stem) + "-updated.txt")
-    failed_list = input_list.parent / (str(input_list.stem) + "-failed_assembly.txt")
+    failed_list = input_list.parent / (
+        str(input_list.stem) + "-failed_assembly.txt"
+    )
 
     with open(updated_list, "w") as updated:
         with open(failed_list, "w") as failed:
@@ -129,11 +145,16 @@ def update_accession_list(config_file=str, qc_dict=dict):
                 elif qc_verdict == "exclude":
                     failed.write(f"{sample}\n")
                 else:
-                    print(f"Found an unexpected QC result: {sample} - {qc_verdict}")
+                    print(
+                        "Found an unexpected QC result:"
+                        f"{sample} - {qc_verdict}"
+                    )
                     exit(1)
 
     # Move the old input list to "backup"
-    input_list.rename(input_list.parent / (str(input_list.stem) + "-BACKUP.txt"))
+    input_list.rename(
+        input_list.parent / (str(input_list.stem) + "-BACKUP.txt")
+    )
     # And make the updated list the new 'current'
     updated_list.rename(input_list)
 
@@ -149,7 +170,9 @@ def write_assembly_qc_table(qc_dict=dict, outputfile=str):
 
 
 def main():
-    print("Looking for input reads by reading Snakemake parameters (YAML) file")
+    print(
+        "Looking for input reads by reading Snakemake parameters (YAML) file"
+    )
     method, samples_and_dict = parse_yaml(config_file="config/parameters.yaml")
 
     print("Found:\n", pd.DataFrame.from_dict(samples_and_dict), "\n")
@@ -165,7 +188,9 @@ def main():
         move_samples_without_assembly(qc_dict=combined_dict)
 
     elif method == "accession_list":
-        print("Moving sample accessions that could not assemble from input list")
+        print(
+            "Moving sample accessions that could not assemble from input list"
+        )
         update_accession_list(
             config_file="config/parameters.yaml", qc_dict=combined_dict
         )
@@ -179,7 +204,9 @@ def main():
         exit(1)
 
     print("\nWriting summary report")
-    write_assembly_qc_table(qc_dict=combined_dict, outputfile="results/assembly_qc.tsv")
+    write_assembly_qc_table(
+        qc_dict=combined_dict, outputfile="results/assembly_qc.tsv"
+    )
 
     exit(0)
 
