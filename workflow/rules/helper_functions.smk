@@ -1,14 +1,38 @@
-# Read accession IDs from a text file (list with one accession per line)
-INPUT_LIST = config["input_list"]
-SAMPLES = []
-with open(INPUT_LIST, "r") as input_list:
-    for line in input_list:
-        SAMPLES.append(line.strip())
+from pathlib import Path
 
+# Check if input is text file or directory
+INPUT_PATH = Path(config["input"])
+
+if INPUT_PATH.is_dir() and not INPUT_PATH.samefile(""):
+    # If directory, list all files with .fastq.gz extension
+    INPUT_DIR = INPUT_PATH
+    INPUT_FILES = list(INPUT_DIR.glob("*.fastq.gz"))
+    SAMPLES = [file.stem.replace(".fastq", "") for file in INPUT_FILES]
+
+elif INPUT_PATH.is_file():
+    # If a file, try to read its content as input accessions
+    # Read accession IDs from a text file (list with one accession per line)
+    INPUT_DIR = Path("resources/public_metagenomes/")
+    SAMPLES = []
+    with open(INPUT_PATH, "r") as input_list:
+        for line in input_list:
+            SAMPLES.append(line.strip())
+
+else:
+    print(
+        f"No valid input found in {INPUT_PATH}.\n"
+        "This workflow requires the user to set an input file or directory.\n"
+        "Please provide one in 'config/parameters.yaml'."
+    )
+    exit(1)
+
+
+# Check if there are input samples
 assert len(SAMPLES) > 0, (
-    f"-----\nNo input samples found in {INPUT_LIST}.\n"
-    "Please make sure that there are SRA (sample) accession IDs in this file!\n"
-    "-----\n"
+    f"-----\nNo input samples found in {INPUT_PATH}.\n"
+    "Please make sure that the input is either one of:"
+    "1) a directory with gzipped FASTQ files (must have '.fastq.gz' extension)\n",
+    "2) a text file with SRA accession numbers (one per line).\n-----\n",
 )
 
 

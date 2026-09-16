@@ -2,7 +2,7 @@
 
 ### 1. Input/output parameters ###
 
-input_list: "resources/batches/batch_1.txt"
+input: "resources/metagenomes/"
 
 ### 2. Tool-specific parameters ###
 

@@ -3,13 +3,13 @@
 
 rule read_quality_control:
     input:
-        "resources/public_metagenomes/{sample}.fastq.gz",
+        INPUT_DIR / "{sample}.fastq.gz",
     output:
         filtered=temp("results/filtered_reads/{sample}.fastq.gz"),
         json="results/read_qc/{sample}.json",
         html="results/read_qc/{sample}.html",
     wildcard_constraints:
-        sample="SAM[A-Z]+[0-9]+",
+        sample="[A-Za-z0-9_-]+",
     conda:
         "../envs/fastplong.yaml"
     threads: config["fastplong"]["threads"]
