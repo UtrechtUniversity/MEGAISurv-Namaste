@@ -68,7 +68,7 @@ rule make_assembly_database:
             sample=SAMPLES,
         ),
         strict_classification=expand(
-            "results/taxonomic_classification/{sample}/centrifuger_masked-strict+taxa.tsv",
+            "results/taxonomic_classification-strict/{sample}/centrifuger_masked+taxa.tsv",
             sample=SAMPLES,
         ),
         genomad_scores=expand(

@@ -85,14 +85,14 @@ rule all:
         ),
         # Taxonomic classifications (by Centrifuger)
         expand(
-            "results/taxonomic_classification/{sample}/centrifuger_masked{strictness}{extension}",
+            "results/taxonomic_classification{strictness}/{sample}/centrifuger_masked{extension}",
             sample=SAMPLES,
             strictness=["", "-strict"],
             extension=[".tsv", "-quant.tsv"],
         ),
         # Microbiota profiles (TaxonKit + custom R script)
         expand(
-            "results/microbiota_profile/{sample}{strictness}-per_{unit}.tsv",
+            "results/microbiota_profile{strictness}/{sample}-per_{unit}.tsv",
             sample=SAMPLES,
             unit=["contig", "species"],
             strictness=["", "-strict"],

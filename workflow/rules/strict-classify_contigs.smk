@@ -10,8 +10,8 @@ rule strict_taxonomic_classification:
             suffix=["1.cfr", "2.cfr", "3.cfr"],
         ),
     output:
-        tsv="results/taxonomic_classification/{sample}/centrifuger_masked-strict.tsv",
-        quant="results/taxonomic_classification/{sample}/centrifuger_masked-strict-quant.tsv",
+        tsv="results/taxonomic_classification-strict/{sample}/centrifuger_masked.tsv",
+        quant="results/taxonomic_classification-strict/{sample}/centrifuger_masked-quant.tsv",
     params:
         db=subpath(input[1], strip_suffix=".1.cfr"),
     conda:
@@ -36,13 +36,13 @@ centrifuger-quant -x {params.db} -c {output.tsv} > {output.quant} 2> {log}
 
 rule strict_lookup_taxids:
     input:
-        assembly="results/taxonomic_classification/{sample}/centrifuger_masked-strict.tsv",
+        assembly="results/taxonomic_classification-strict/{sample}/centrifuger_masked.tsv",
         db=collect(
             "resources/taxdump/{dmp}",
             dmp=["names.dmp", "nodes.dmp", "delnodes.dmp", "merged.dmp"],
         ),
     output:
-        "results/taxonomic_classification/{sample}/centrifuger_masked-strict+taxa.tsv",
+        "results/taxonomic_classification-strict/{sample}/centrifuger_masked+taxa.tsv",
     threads: 1
     resources:
         mem_mb=int(config["default_job"]["memory"]),
@@ -65,10 +65,10 @@ taxonkit reformat {input.assembly} -I 3 --data-dir resources/taxdump\
 rule strict_generate_microbiota_profiles:
     input:
         coverage_info="results/assembly/{sample}/mapped_back/{sample}-coverage.tsv",
-        classifications="results/taxonomic_classification/{sample}/centrifuger_masked-strict+taxa.tsv",
+        classifications="results/taxonomic_classification-strict/{sample}/centrifuger_masked+taxa.tsv",
     output:
-        per_contig="results/microbiota_profile/{sample}-strict-per_contig.tsv",
-        per_species="results/microbiota_profile/{sample}-strict-per_species.tsv",
+        per_contig="results/microbiota_profile-strict/{sample}-per_contig.tsv",
+        per_species="results/microbiota_profile-strict/{sample}-per_species.tsv",
     params:
         sample="{sample}",
     conda:
