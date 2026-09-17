@@ -108,8 +108,12 @@ rule make_assembly_database:
 
 rule make_mutation_database:
     input:
-        arm_results=expand(
+        arm_dna=expand(
             "results/resistance_mutations/{sample}/{sample}.dna.updated_table_with_scores_and_mutations.tsv",
+            sample=SAMPLES,
+        ),
+        arm_protein=expand(
+            "results/resistance_mutations/{sample}/{sample}.prot.updated_table_with_scores_and_mutations.tsv",
             sample=SAMPLES,
         ),
         arm_contigs=expand(
@@ -124,6 +128,8 @@ rule make_mutation_database:
         virus="results/virus_predictions-concatenated.tsv.gz",
     output:
         mutation_database="results/mutation_database.csv.gz",
+        dna="results/resistance_mutations/concatenated_dna_table.tsv.gz",
+        protein="results/resistance_mutations/concatenated_protein_table.tsv.gz",
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1

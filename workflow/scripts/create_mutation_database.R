@@ -28,7 +28,8 @@ sink(
 ################################################################################
 
 
-arm_results_files <- snakemake@input[["arm_results"]] # MetaPointFinder's '.dna.updated_table_with_scores_and_mutations.tsv' files
+arm_dna_files <- snakemake@input[["arm_dna"]] # MetaPointFinder's '.dna.updated_table_with_scores_and_mutations.tsv' files
+arm_protein_files <- snakemake@input[["arm_protein"]] # MetaPointFinder's '.prot.updated_table_with_scores_and_mutations.tsv' files
 arm_to_contig_files <- snakemake@input[["arm_contigs"]] # Match reads back to contigs using minimap2's BAM files + samtools view
 
 read_stats <- function(filename, name_position) {
@@ -50,7 +51,25 @@ read_stats <- function(filename, name_position) {
 # Read MetaPointFinder's updated DNA tables
 arm_table <- do.call(
   rbind,
-  lapply(X = arm_results_files, FUN = read_stats, name_position = 2)
+  lapply(X = arm_dna_files, FUN = read_stats, name_position = 2)
+)
+
+write_delim(
+  x = arm_table,
+  file = snakemake@output[["dna"]],
+  delim = "\t"
+)
+
+# Read MetaPointFinder's updated protein tables
+protein_table <- do.call(
+  rbind,
+  lapply(X = arm_protein_files, FUN = read_stats, name_position = 2)
+)
+
+write_delim(
+  x = protein_table,
+  file = snakemake@output[["protein"]],
+  delim = "\t"
 )
 
 # Read the read-to-contig mapping files
@@ -59,47 +78,108 @@ arm_mapping <- do.call(
   lapply(X = arm_to_contig_files, FUN = read_stats, name_position = 2)
 )
 
-# Combine the two
-mapped_arm_df <- left_join(
-  x = arm_table,
-  y = arm_mapping,
-  by = c("sample", "read")
-)
+# Create a function to parse mutations per sample and gene,
+# returning only detected mutations or 'None' (once!)
+summarise_mutations <- function(mutations) {
+  if (all(mutations == "None")) {
+    return("None")
+  } else {
+    return(paste0(
+      unique(mutations[!mutations == "None"]),
+      collapse = ","
+    ))
+  }
+}
 
 # Summarise the number of reads with wildtype and resistant genotype
 columns <- c(Wildtype = 0, Resistant = 0)
 
-mutations <- mapped_arm_df %>%
-  group_by(sample, contig, class, gene) %>%
-  mutate(mutations = paste0(DetectedMutations, collapse = ",")) %>%
-  group_by(sample, contig, class, gene, mutations) %>%
-  count(Status) %>%
-  pivot_wider(names_from = Status, values_from = n) %>%
-  add_column(., !!!columns[setdiff(names(columns), colnames(.))]) %>%
-  mutate(
-    fraction_resistant = case_when(
-      # If there are zero resistant mutants, the fraction is always zero
-      Resistant == 0 ~ 0,
+prepare_mutations_list <- function(mut_df, mapping_df) {
+  mutation_df <- left_join(
+    x = mut_df, y = mapping_df,
+    by = c("sample", "read")
+  )
 
-      # If there are both wildtype reads and mutant reads,
-      #  (neither are NA), calculate fraction normally
-      ! is.na(Wildtype) & ! is.na(Resistant) ~ Resistant / (Resistant + Wildtype),
+  mapped_mutations <- mutation_df %>% filter(!is.na(contig))
+  unmapped_mutations <- mutation_df %>% filter(is.na(contig))
 
-      # If there are *no wildtypes* and there are resistant mutants,
-      #  the fraction is 1
-      is.na(Wildtype) & Resistant > 0 ~ 1,
+  mapped_summary <- mapped_mutations %>%
+    group_by(sample, contig, class, gene) %>%
+    mutate(mutations = summarise_mutations(DetectedMutations)) %>%
+    group_by(sample, contig, class, gene, mutations) %>%
+    count(Status) %>%
+    pivot_wider(names_from = Status, values_from = n) %>%
+    add_column(., !!!columns[setdiff(names(columns), colnames(.))]) %>%
+    mutate(
+      fraction_resistant = case_when(
+        # If there are zero resistant mutants, the fraction is always zero
+        Resistant == 0 ~ 0,
 
-      # If both are missing (NA), the fraction is 0
-      is.na(Wildtype) & is.na(Resistant) ~ 0,
+        # If there are both wildtype reads and mutant reads,
+        #  (neither are NA), calculate fraction normally
+        !is.na(Wildtype) & !is.na(Resistant) ~ Resistant / (Resistant + Wildtype),
 
-      # If a possible outcome is missed, fill in NA
-      TRUE ~ NA
-    )
-  ) %>%
-  mutate(fraction_resistant = if_else(!is.na(fraction_resistant),
-    fraction_resistant,
-    0
-  ))
+        # If there are *no wildtypes* and there are resistant mutants,
+        #  the fraction is 1
+        is.na(Wildtype) & Resistant > 0 ~ 1,
+
+        # If both are missing (NA), the fraction is 0
+        is.na(Wildtype) & is.na(Resistant) ~ 0,
+
+        # If a possible outcome is missed, fill in NA
+        TRUE ~ NA
+      )
+    ) %>%
+    mutate(fraction_resistant = if_else(!is.na(fraction_resistant),
+      fraction_resistant,
+      0
+    ))
+
+  unmapped_summary <- unmapped_mutations %>%
+    group_by(sample, class, gene) %>%
+    mutate(mutations = summarise_mutations(DetectedMutations)) %>%
+    group_by(sample, class, gene, mutations) %>%
+    count(Status) %>%
+    pivot_wider(names_from = Status, values_from = n) %>%
+    add_column(., !!!columns[setdiff(names(columns), colnames(.))]) %>%
+    mutate(
+      fraction_resistant = case_when(
+        # If there are zero resistant mutants, the fraction is always zero
+        Resistant == 0 ~ 0,
+
+        # If there are both wildtype reads and mutant reads,
+        #  (neither are NA), calculate fraction normally
+        !is.na(Wildtype) & !is.na(Resistant) ~ Resistant / (Resistant + Wildtype),
+
+        # If there are *no wildtypes* and there are resistant mutants,
+        #  the fraction is 1
+        is.na(Wildtype) & Resistant > 0 ~ 1,
+
+        # If both are missing (NA), the fraction is 0
+        is.na(Wildtype) & is.na(Resistant) ~ 0,
+
+        # If a possible outcome is missed, fill in NA
+        TRUE ~ NA
+      )
+    ) %>%
+    mutate(fraction_resistant = if_else(!is.na(fraction_resistant),
+      fraction_resistant,
+      0
+    ))
+
+  summary_df <- rbind(mapped_summary, unmapped_summary)
+
+  return(summary_df)
+}
+
+# Combine DNA with protein mutations
+mapped_arm_df <- rbind(
+  prepare_mutations_list(mut_df = arm_table, mapping_df = arm_mapping) %>%
+    mutate(detected_in = "DNA"),
+  prepare_mutations_list(mut_df = protein_table, mapping = arm_mapping) %>%
+    mutate(detected_in = "protein")
+) %>%
+  arrange(sample, detected_in, class, fraction_resistant)
 
 
 # Now append other information, starting with assembly statistics
@@ -118,7 +198,7 @@ assembly_stats_summary <- assembly_stats %>%
   )
 
 arm_and_assembly <- left_join(
-  x = mutations,
+  x = mapped_arm_df,
   y = assembly_stats_summary,
   by = "sample"
 ) %>%

@@ -46,6 +46,9 @@ def parse_yaml(config_file=str):
         input_files = list(input_path.glob("*.fastq.gz"))
 
         samples = [file.stem.replace(".fastq", "") for file in input_files]
+        samples_and_reads = {"Samples": samples, "Input_reads": input_files}
+
+        return method, samples_and_reads
 
     elif input_path.is_file():
         # If a file, try to read its content as input accessions
@@ -57,19 +60,13 @@ def parse_yaml(config_file=str):
             for line in infile:
                 samples.append(line.strip())
 
-        input_files = list(
-            Path("resources/public_metagenomes/".glob("*.fastq.gz"))
-        )
+        samples_dict = {"Samples": samples}
+
+        return method, samples_dict
 
     else:
         print("Found no input files...")
         exit(1)
-
-    samples = [file.stem.replace(".fastq", "") for file in input_files]
-
-    samples_and_reads = {"Samples": samples, "Input_reads": input_files}
-
-    return method, samples_and_reads
 
 
 def find_assembly_files(samples=list):

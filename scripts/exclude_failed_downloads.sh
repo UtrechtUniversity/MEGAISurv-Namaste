@@ -9,7 +9,7 @@
 batch_file="$(grep "input" config/parameters.yaml | sed -e 's/input: "//g' -e 's/"//g')"
 
 # Save a list of accession IDs from failed downloads
-failed_download="results/download_failed.txt"
+failed_download="results/download_failed.tsv"
 
 # Find accession IDs of samples that did not download from their log files
 grep "sracha cannot download" log/download_raw_reads/*txt |\
