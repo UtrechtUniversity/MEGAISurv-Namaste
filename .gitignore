@@ -1,8 +1,14 @@
-# Workflow (temporary) files
-.snakemake/
-data/tmp/
-log/
+# Reverse ignore: start with everything
+/*
 
-# pixi environments
-.pixi
-*.egg-info
+# Exclude what is useful for this repository:
+!/config
+!/doc
+!/scripts
+!/workflow
+!.gitignore
+!CITATION.cff
+!LICENSE
+!README.md
+!mkdocs.yaml
+!pyproject.toml
