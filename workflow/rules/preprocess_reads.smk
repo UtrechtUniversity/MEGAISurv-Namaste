@@ -9,7 +9,7 @@ rule read_quality_control:
         json="results/read_qc/{sample}.json",
         html="results/read_qc/{sample}.html",
     wildcard_constraints:
-        sample="[A-Za-z0-9_-]+",
+        sample="[A-Za-z0-9_]+",
     conda:
         "../envs/fastplong.yaml"
     threads: config["fastplong"]["threads"]
