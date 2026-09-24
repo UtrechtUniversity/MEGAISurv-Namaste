@@ -72,7 +72,7 @@ else
 
     {
         sracha get -t 4 --yes --no-progress --output-dir ${output_dir} ${run_accessions[@]} && {
-            if [ ${#run_accessions[@]} > 1 ]
+            if (( ${#run_accessions[@]} > 1 ))
             then
                 # If there are multiple runs per sample, concatenate to one file
                 > ${sample_file}
