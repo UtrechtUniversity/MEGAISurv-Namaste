@@ -34,7 +34,9 @@ rule bin_assemblies_metabat:
         masked_assembly="results/assembly/{sample}/assembly_ARG_masked.fasta",
         bam="results/assembly/{sample}/mapped_back/{sample}.bam",
     output:
-        depth=temp("results/assembly/{sample}/metabat/{sample}-metabat_depth.txt"),
+        depth=temp(
+            "results/assembly/{sample}/metabat/{sample}-metabat_depth.txt"
+        ),
         info="results/assembly/{sample}/metabat/{sample}-metabat.BinInfo.txt",
     params:
         prefix=subpath(output.info, strip_suffix=".BinInfo.txt"),

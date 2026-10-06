@@ -17,10 +17,14 @@ rule screen_antibiotic_resistance_mutations:
             gene_prot="gene.prot.summary.txt",
         ),
         mpf_log=multiext(
-            "results/resistance_mutations/{sample}/{sample}.", error="error", log="log"
+            "results/resistance_mutations/{sample}/{sample}.",
+            error="error",
+            log="log",
         ),
         mpf_kma=multiext(
-            "results/resistance_mutations/{sample}/{sample}.", "frag.gz", "res"
+            "results/resistance_mutations/{sample}/{sample}.",
+            "frag.gz",
+            "res",
         ),
         mpf_input=multiext(
             "results/resistance_mutations/{sample}/{sample}.",

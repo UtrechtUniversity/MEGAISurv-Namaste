@@ -75,6 +75,8 @@ rule subsample_large_samples:
         "results/filtered_reads/{sample}.fastq.gz",
     output:
         "results/downsampled_reads/{sample}.fastq.gz",
+    params:
+        max_reads=config["max_reads"],
     conda:
         "../envs/seqkit.yaml"
     threads: config["subsample_samples"]["threads"]
@@ -87,5 +89,5 @@ rule subsample_large_samples:
         "log/benchmark/subsample_samples/{sample}.txt"
     shell:
         """
-seqkit sample2 -2 -n 1000000 -o {output} --threads {threads} {input}
+seqkit sample2 -2 -n {params.max_reads} -o {output} --threads {threads} {input}
         """
