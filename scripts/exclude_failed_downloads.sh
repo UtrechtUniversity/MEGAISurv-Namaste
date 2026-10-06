@@ -13,7 +13,10 @@ failed_download="results/download_failed.tsv"
 
 # Find accession IDs of samples that did not download from their log files
 grep "sracha cannot download" log/download_raw_reads/*txt |\
- grep -o -e "SAM[A-Z0-9]*" > ${failed_download}
+ awk 'NF>1{print $NF}' > ${failed_download}
+# (use awk to extract the last word from the lines reading:
+#  '[timestamp] sracha cannot download [accession]', where 'NF'
+#  stands for number of fields)
 
 # Remove the accessions for which download failed from the snakemake input file
 mv ${batch_file} "${batch_file}_original"
