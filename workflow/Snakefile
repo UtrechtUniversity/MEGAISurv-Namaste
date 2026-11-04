@@ -68,6 +68,7 @@ rule all:
         # Antibiotic resistance gene screening (by KMA)
         "results/read-based_ARG_summary.tsv.gz",
         "results/read_database.csv.gz",
+        "results/read-based_gene_database.csv.gz",
         # Antibiotic resistance mutations (by MetaPointFinder)
         "results/mutation_database.csv.gz",
         # Taxonomic classifications (by Centrifuger)

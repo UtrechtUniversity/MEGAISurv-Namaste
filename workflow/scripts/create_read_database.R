@@ -353,3 +353,16 @@ write_csv(
   x = db_with_mge %>% distinct(),
   file = snakemake@output[["read_database"]],
 )
+
+# The above lists all reads. Multiple reads may match the same gene and this
+# duplicated information is not as relevant. So also save a per-gene summary:
+gene_based_db <- db_with_mge %>%
+  # Remove all columns relating to reads
+  select(-starts_with("read"), -ends_with("position"), -hit_length) %>%
+  # Take unique rows only (discarding duplicates of reads that match the same gene)
+  distinct()
+
+write_csv(
+  x = gene_based_db,
+  file = snakemake@output[["gene_database"]],
+)

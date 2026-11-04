@@ -132,6 +132,7 @@ rule make_read_database:
         genomad_virus=rules.make_assembly_database.output.virus_prediction,
     output:
         read_database="results/read_database.csv.gz",
+        gene_database="results/read-based_gene_database.csv.gz",
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1
