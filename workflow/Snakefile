@@ -66,30 +66,13 @@ rule all:
         # Per-contig coverage stats
         "results/contig_coverage.csv",
         # Antibiotic resistance gene screening (by KMA)
-        "results/resistance_genes-reads/summary.tsv",
-        expand(
-            "results/resistance_genes/{sample}.hmm.{suffix}",
-            sample=SAMPLES,
-            suffix=["aln", "frag.gz", "fsa", "res"],
-        ),
+        "results/read-based_ARG_summary.tsv.gz",
+        "results/read_database.csv.gz",
         # Antibiotic resistance mutations (by MetaPointFinder)
-        expand(
-            "results/resistance_mutations/{sample}/{sample}.{mol}.updated_table_with_scores_and_mutations.tsv",
-            sample=SAMPLES,
-            mol=["dna", "prot"],
-        ),
-        expand(
-            "results/resistance_mutations/{sample}/{sample}.{infix}.summary.txt",
-            sample=SAMPLES,
-            infix=["class.dna", "class.prot", "gene.dna", "gene.prot"],
-        ),
+        "results/mutation_database.csv.gz",
         # Taxonomic classifications (by Centrifuger)
-        expand(
-            "results/taxonomic_classification{strictness}/{sample}/centrifuger_masked{extension}",
-            sample=SAMPLES,
-            strictness=["", "-strict"],
-            extension=[".tsv", "-quant.tsv"],
-        ),
+        "results/classifications-concatenated.tsv.gz",
+        "results/strict_classifications-concatenated.tsv.gz",
         # Microbiota profiles (TaxonKit + custom R script)
         expand(
             "results/microbiota_profile{strictness}/{sample}-per_{unit}.tsv",
@@ -98,18 +81,11 @@ rule all:
             strictness=["", "-strict"],
         ),
         # Chromosome/plasmid/virus predictions (geNomad)
-        expand(
-            "results/plasmid_prediction/{sample}/assembly_aggregated_classification/assembly_aggregated_classification.tsv",
-            sample=SAMPLES,
-        ),
-        # Concatenated stats from Flye,
-        "results/assembly_stats-concatenated.tsv.gz",
-        # Centrifuger,
-        "results/classifications-concatenated.tsv.gz",
-        "results/strict_classifications-concatenated.tsv.gz",
-        # and geNomad
+        "results/plasmid_prediction/aggregated_classification_scores-concatenated.tsv.gz",
         "results/plasmid_predictions-concatenated.tsv.gz",
         "results/virus_predictions-concatenated.tsv.gz",
+        # Concatenated stats from Flye,
+        "results/assembly_stats-concatenated.tsv.gz",
         # And a complete summary of assembly, ARG screening, and classification
         "results/assembly_database.csv.gz",
         # Plus a summary of antibiotic resistance mutations with further annotations

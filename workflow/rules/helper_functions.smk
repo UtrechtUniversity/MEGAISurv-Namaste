@@ -110,6 +110,43 @@ rule make_assembly_database:
         "../scripts/create_assembly_database.R"
 
 
+rule make_read_database:
+    input:
+        assembly_info=rules.make_assembly_database.output.assembly_stats,
+        mapped_coverage="results/contig_coverage.csv",
+        read_to_contigs=expand(
+            "results/resistance_mutations/{sample}/matched_to_contigs.tsv",
+            sample=SAMPLES,
+        ),
+        arg_hits=expand(
+            "results/resistance_genes-reads/{sample}.hmm.frag.gz",
+            sample=SAMPLES,
+        ),
+        arg_results=expand(
+            "results/resistance_genes-reads/{sample}.hmm.res", sample=SAMPLES
+        ),
+        classification=rules.make_assembly_database.output.taxonomic_classification,
+        strict_classification=rules.make_assembly_database.output.strict_classification,
+        genomad_scores=rules.make_assembly_database.output.genomad_scores,
+        genomad_plasmid=rules.make_assembly_database.output.plasmid_prediction,
+        genomad_virus=rules.make_assembly_database.output.virus_prediction,
+    output:
+        read_database="results/read_database.csv.gz",
+    conda:
+        "../envs/R_tidyverse.yaml"
+    threads: 1
+    resources:
+        mem_mb=int(config["default_job"]["memory"]),
+        walltime=int(config["default_job"]["time"]),
+        runtime=int(config["default_job"]["time"]),
+    log:
+        "log/make_read_database.txt",
+    benchmark:
+        "log/benchmark/make_read_database.txt"
+    script:
+        "../scripts/create_read_database.R"
+
+
 rule make_mutation_database:
     input:
         arm_dna=expand(

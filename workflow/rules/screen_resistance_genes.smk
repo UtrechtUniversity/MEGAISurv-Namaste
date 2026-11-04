@@ -130,7 +130,7 @@ rule summarise_read_args:
             "results/resistance_genes-reads/{sample}.hmm.res", sample=SAMPLES
         ),
     output:
-        "results/resistance_genes-reads/summary.tsv",
+        "results/read-based_ARG_summary.tsv.gz",
     conda:
         "../envs/R_tidyverse.yaml"
     threads: 1

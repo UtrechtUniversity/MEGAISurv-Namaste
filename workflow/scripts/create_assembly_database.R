@@ -16,7 +16,7 @@ assembly_stats_files <- snakemake@input[["assembly_info"]] # Flye's assembly_inf
 coverage_file <- snakemake@input[["mapped_coverage"]] # minimap2 + samtools coverage-based CSV file
 arg_hits_files <- snakemake@input[["arg_hits"]] # KMA's *.frag.gz files
 arg_results_files <- snakemake@input[["arg_results"]] # KMA's .res files
-classification_files <- snakemake@input[["classification"]] # Centrifuger's output with annotated taxa Sys.glob(paths = here("data", "tmp", "centrifuger", "*", "centrifuger_masked+taxa.tsv"))
+classification_files <- snakemake@input[["classification"]] # Centrifuger's output with annotated taxa
 strict_class_files <- snakemake@input[["strict_classification"]] # Centrifuger's output with '--min-hitlen 100'
 genomad_scores_files <- snakemake@input[["genomad_scores"]] # geNomad's aggregated classification scores
 genomad_plasmid_files <- snakemake@input[["genomad_plasmid"]] # geNomad's plasmid summary
