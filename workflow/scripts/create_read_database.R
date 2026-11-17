@@ -359,6 +359,10 @@ write_csv(
 gene_based_db <- db_with_mge %>%
   # Remove all columns relating to reads
   select(-starts_with("read"), -ends_with("position"), -hit_length) %>%
+  # Deduplicate hits: only keep largest coverage
+  group_by(sample, arg) %>%
+  slice_max(arg_coverage, n = 1) %>%
+  ungroup() %>%
   # Take unique rows only (discarding duplicates of reads that match the same gene)
   distinct()
 
